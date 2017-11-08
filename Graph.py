@@ -7,9 +7,10 @@
 # By seperating stations and tracks into categories, different colors can be used to distinguish
 # between them.
 
+import csv
 import networkx as nx
 import pylab as py
-import csv
+import random
 
 critical_stations = []
 
@@ -165,13 +166,35 @@ print(critical_total // 60)
 print((not_critical_total % 60))
 print(not_critical_total // 60)
 
+# Laat python tussen 0 en 21 berekenen en kies beginstation uit lijst.
 
+# make list of all nodes (G.nodes() returns an object that is not accessable with nodes[i])
+nodelist = critical_node_list + non_critical_node_list
 
-min = (7*94)
-t = 7
-p = 0
-print(min/100000)
-S = 10000*p - (t*20 + min/100000)
-print(S)
+# rand number of tracks 1 up to including 7
+for x in range(random.randint(1,7)):
+
+	# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
+	starting_station = nodelist[random.randint(0,len(nodelist) - 1)]
+	print('Starting station is: ' + starting_station)
+	print('Neighbors are: {}'.format(G[starting_station]))
+	time = 0
+	
+	while time < 120:
+		
+		# DEBUG
+		print(random.choice(G[starting_station].keys()))
+
+		# chooses a random key from a dictionary (neighbors), is choosing a random neighbor
+		random_neighbor = random.choice(G[starting_station].keys())
+
+		# keeps track of time of the track
+		time += G[starting_station][random_neighbor]['weight']
+		
+		# updates the starting station
+		starting_station = G[starting_station][random_neighbor]
+		
+		print(time)
+
 
 py.show()
