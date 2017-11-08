@@ -176,25 +176,25 @@ for x in range(random.randint(1,7)):
 
 	# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
 	starting_station = nodelist[random.randint(0,len(nodelist) - 1)]
-	print('Starting station is: ' + starting_station)
-	print('Neighbors are: {}'.format(G[starting_station]))
+	print('+++++ Starting station is: ' + starting_station + ', of type: {}'.format(type(starting_station)))
+	print('+++++ Neighbors are: {}'.format(G[starting_station]))
 	time = 0
-	
-	while time < 120:
-		
-		# DEBUG
-		print(random.choice(G[starting_station].keys()))
 
+	while time < 120:
 		# chooses a random key from a dictionary (neighbors), is choosing a random neighbor
 		random_neighbor = random.choice(G[starting_station].keys())
 
+		print('Random choise is: ' + random_neighbor)
+
 		# keeps track of time of the track
 		time += G[starting_station][random_neighbor]['weight']
+
+		print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
 		
 		# updates the starting station
-		starting_station = G[starting_station][random_neighbor]
-		
-		print(time)
+		starting_station = random_neighbor
 
+		print('Updated starting station is: ' + starting_station)
+		print('Updated neighbors are: {}'.format(G[random_neighbor]))
 
 py.show()
