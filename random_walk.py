@@ -27,7 +27,7 @@ critical_stations = []
 G = nx.Graph()
 
 # read in stations from csv and put each station as node in graph
-with open('StationsHolland.csv') as csvfile:
+with open('csv_files/StationsHolland.csv') as csvfile:
     stations = csv.reader(csvfile, delimiter=',', quotechar='|')
 
     for row in stations:
@@ -45,7 +45,7 @@ with open('StationsHolland.csv') as csvfile:
 critical_neighbours = []
 
 # add connections between nodes (=stations) into graph
-with open('ConnectiesHolland.csv') as csvfile:
+with open('csv_files/ConnectiesHolland.csv') as csvfile:
     stations = csv.reader(csvfile, delimiter=',', quotechar='|')
 
     for row in stations:
