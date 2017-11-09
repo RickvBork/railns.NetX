@@ -105,14 +105,17 @@ print("Useless tracks: {}".format(len(non_critical_edge_list)))
 print("Critical tracks: {}".format(len(critical_edge_list)))
 print("Supercritical tracks: {}".format(len(super_critical_edge_list)))
 print("Total important tracks: {}".format(len(super_critical_edge_list + critical_edge_list)))
+print("Total tracks: {}".format(len(super_critical_edge_list + critical_edge_list + non_critical_edge_list)))
 
 # make dict keyed by tuple (from, to) : weight
 edge_labels = {}
-
+weight_list = []
 # iterate over tuples in edges (from, to) = (u,v) 
 # DEBUG: DOUBLE iterate edges earlier in code!
 for u,v in edges:
-	edge_labels[u,v] = G[u][v]['weight']
+	weight = G[u][v]['weight']
+	weight_list.append(weight)
+	edge_labels[u,v] = weight
 nx.draw_networkx_edge_labels(G, pos, edge_labels = edge_labels, font_size = 5)
 
 label_positions = {}
@@ -170,17 +173,25 @@ print(not_critical_total // 60)
 
 # make list of all nodes (G.nodes() returns an object that is not accessable with nodes[i])
 nodelist = critical_node_list + non_critical_node_list
+minimum_weight = min(weight for weight in weight_list)
 
 # rand number of tracks 1 up to including 7
-for x in range(random.randint(1,7)):
+random_tracks = random.randint(1,7)
+print('START track number is: ' + str(random_tracks))
+for track in range(random_tracks):
 
 	# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
 	starting_station = nodelist[random.randint(0,len(nodelist) - 1)]
-	print('+++++ Starting station is: ' + starting_station + ', of type: {}'.format(type(starting_station)))
-	print('+++++ Neighbors are: {}'.format(G[starting_station]))
+	print('+++NEW Starting station is: ' + starting_station)
+	print('+++NEW Neighbors are: {}'.format(G[starting_station]))
 	time = 0
 
-	while time < 120:
+	random_time = random.randint(minimum_weight,120)
+	print('+++NEW track length is going to be: ' + str(random_time))
+
+	counter = 0
+	while time < random_time:
+
 		# chooses a random key from a dictionary (neighbors), is choosing a random neighbor
 		random_neighbor = random.choice(G[starting_station].keys())
 
@@ -189,12 +200,19 @@ for x in range(random.randint(1,7)):
 		# keeps track of time of the track
 		time += G[starting_station][random_neighbor]['weight']
 
+		# always pick one track, catch exception of second track being larger than random time
+		if time > random_time and counter != 0:
+			print('		CAUGHT EXCEPTION')
+			break
+		counter += 1
+
 		print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
-		
+		print('The total time is: ' + str(time))
+
 		# updates the starting station
 		starting_station = random_neighbor
 
-		print('Updated starting station is: ' + starting_station)
-		print('Updated neighbors are: {}'.format(G[random_neighbor]))
+		print('		Updated starting station is: ' + starting_station)
+		print('		Updated neighbors are: {}'.format(G[random_neighbor]))
 
 py.show()
