@@ -169,18 +169,20 @@ for track in range(random_tracks):
         print('        Updated starting station is: ' + starting_station)
         print('        Updated neighbors are: {}'.format(G[random_neighbor]))
 
-py.show()
+
 
 
 '''
 determine critical connections and make list
 '''
-
+critical_lines = 0
 critical_connections = []
 for v in G:
-    for w in v.get_connections():
-        vid = v.get_id()
-        wid = w.get_id()
+    print v
+    for w in G[v]:
+        print w
+        vid = v
+        wid = w
         #print(w)
         #print(wid)
 
@@ -188,9 +190,9 @@ for v in G:
         if vid in critical_stations:
 
             # for every neighbour, add 1 critical line
-            for n in G.get_vertex(vid).get_connections():
+            for n in G[vid]:
                 critical_lines += 1
-            print('( %s , %s, %3d), CRITICAL'  % ( vid, wid, v.get_weight(w)))
+            print('( %s , %s, %3d), CRITICAL'  % ( vid, wid, G[v][w]['weight']))
             # add connection in list in both directions
             critical_connections.append([vid,wid,])
             critical_connections.append([wid,vid,])
@@ -198,14 +200,14 @@ for v in G:
         # check wether station name is critical
         elif wid in critical_stations:
             # for every neighbour, add 1 critical line
-            for n in G.get_vertex(wid).get_connections():
+            for n in G[wid]:
                 critical_lines += 1
-            print('( %s , %s, %3d), CRITICAL'  % ( vid, wid, v.get_weight(w)))
+            print('( %s , %s, %3d), CRITICAL'  % ( vid, wid, G[v][w]['weight']))
             # add connection in list in both directions
             critical_connections.append([vid,wid])
             critical_connections.append([wid,vid])
 
         else:
-            print('( %s , %s, %3d)'  % ( vid, wid, v.get_weight(w)))
+            print('( %s , %s, %3d)'  % ( vid, wid, G[v][w]['weight']))
             
 print(critical_connections)
