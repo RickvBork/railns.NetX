@@ -60,6 +60,48 @@ with open('csv_files/ConnectiesHolland.csv') as csvfile:
         else:
             # neither is critical, color edge black
             G.add_edge(row[0], row[1], weight=int(row[2]))
+            
+'''
+determine critical connections and make list
+'''
+critical_lines = 0
+critical_connections = []
+for v in G:
+    print v
+    for w in G[v]:
+        print w
+        vid = v
+        wid = w
+        #print(w)
+        #print(wid)
+
+        # check wether station name is critical
+        if vid in critical_stations and [vid, wid] not in critical_connections and [wid, vid] not in critical_connections:
+
+            # for every neighbour, add 1 critical line
+            for n in G[vid]:
+                critical_lines += 1
+            print('( %s , %s, %3d), CRITICAL'  % ( vid, wid, G[v][w]['weight']))
+            # add connection in list in both directions
+            critical_connections.append([vid,wid,])
+            
+        else:
+            print('( %s , %s, %3d)'  % ( vid, wid, G[v][w]['weight']))
+
+        '''# check wether station name is critical
+        elif wid in critical_stations and [wid, vid] not in critical_connections:
+            # for every neighbour, add 1 critical line
+            for n in G[wid]:
+                critical_lines += 1
+            print('( %s , %s, %3d), CRITICAL'  % ( vid, wid, G[v][w]['weight']))
+            # add connection in list in both directions
+            critical_connections.append([vid,wid])
+            critical_connections.append([wid,vid])
+        '''
+        
+            
+print(critical_connections)
+
 
 # link position attibute to node and call this 'pos'
 pos = nx.get_node_attributes(G,'pos')
@@ -131,6 +173,9 @@ minimum_weight = min(weight for weight in weight_list)
 
 # rand number of tracks 1 up to including 7
 random_tracks = random.randint(1,7)
+# keep track of critical connections that are not used yet
+critical_connections_not_traversed = critical_connections
+length_critical_connections = len(critical_connections)
 print('START track number is: ' + str(random_tracks))
 for track in range(random_tracks):
 
@@ -144,6 +189,7 @@ for track in range(random_tracks):
     print('+++NEW track length is going to be: ' + str(random_time))
 
     counter = 0
+    delete_counter = 0
     while time < random_time:
 
         # chooses a random key from a dictionary (neighbors), is choosing a random neighbor
@@ -162,6 +208,15 @@ for track in range(random_tracks):
 
         print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
         print('The total time is: ' + str(time))
+        
+        # delete connection from critical_connections_not_traversed
+        if [starting_station, random_neighbor] in critical_connections_not_traversed:
+            critical_connections_not_traversed.remove([starting_station, random_neighbor])
+            delete_counter += 1
+            print([starting_station, random_neighbor])
+        
+        if [random_neighbor, starting_station] in critical_connections_not_traversed:
+            critical_connections_not_traversed.remove([random_neighbor, starting_station])
 
         # updates the starting station
         starting_station = random_neighbor
@@ -172,42 +227,10 @@ for track in range(random_tracks):
 
 
 
-'''
-determine critical connections and make list
-'''
-critical_lines = 0
-critical_connections = []
-for v in G:
-    print v
-    for w in G[v]:
-        print w
-        vid = v
-        wid = w
-        #print(w)
-        #print(wid)
-
-        # check wether station name is critical
-        if vid in critical_stations:
-
-            # for every neighbour, add 1 critical line
-            for n in G[vid]:
-                critical_lines += 1
-            print('( %s , %s, %3d), CRITICAL'  % ( vid, wid, G[v][w]['weight']))
-            # add connection in list in both directions
-            critical_connections.append([vid,wid,])
-            critical_connections.append([wid,vid,])
-
-        # check wether station name is critical
-        elif wid in critical_stations:
-            # for every neighbour, add 1 critical line
-            for n in G[wid]:
-                critical_lines += 1
-            print('( %s , %s, %3d), CRITICAL'  % ( vid, wid, G[v][w]['weight']))
-            # add connection in list in both directions
-            critical_connections.append([vid,wid])
-            critical_connections.append([wid,vid])
-
-        else:
-            print('( %s , %s, %3d)'  % ( vid, wid, G[v][w]['weight']))
-            
 print(critical_connections)
+print(delete_counter)
+
+score = float(1 - float(len(critical_connections_not_traversed)) / float(length_critical_connections))
+print(score)
+print(float(len(critical_connections_not_traversed)))
+print(float(length_critical_connections))
