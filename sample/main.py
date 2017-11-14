@@ -18,4 +18,7 @@ path_tracks_file = '../data/ConnectiesHolland.csv'
 critical_list = Graph.add_csv_nodes(path_stations_file)
 Graph.add_csv_edges(path_tracks_file, critical_list)
 
-Graph.draw_graph()
+#Graph.draw_graph()
+
+# random walk:
+Graph.random_walk(critical_list)
