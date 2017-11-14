@@ -83,7 +83,7 @@ class Graph:
 		plt.show()
 
 
-	def random_walk(critical_station_list):
+	def info_for_random_walk(critical_station_list):
 		# determine critical connections and make list
 		critical_lines = 0
 		critical_connections = []
@@ -95,7 +95,7 @@ class Graph:
 					for n in G[w]:
 						critical_lines += 1
 						critical_connections.append([v,w])
-		print(critical_connections)
+		#print(critical_connections)
 		
 		# now start random walk:
 		# Laat python tussen 0 en 21 berekenen en kies beginstation uit lijst.
@@ -114,54 +114,62 @@ class Graph:
 		    weight = G[u][v]['weight']
 		    weight_list.append(weight)
 		edge_labels[u,v] = weight
-		print("++++++++++++++++++++++++++++++++++++++++++++++")
-		print(weight_list)
+		#print("++++++++++++++++++++++++++++++++++++++++++++++")
+		#print(weight_list)
 		minimum_weight = min(weight for weight in weight_list)
+		
+		return nodelist, weight_list, minimum_weight, critical_connections
 
-		# rand number of tracks 1 up to including 7
+
+	
+	def random_walk(nodelist, weight_list, minimum_weight, critical_connections):
+				# rand number of tracks 1 up to including 7
 		random_tracks = random.randint(1,7)
 
 		# keep track of critical connections that are not used yet
 		critical_connections_not_traversed = critical_connections
 		length_critical_connections = len(critical_connections)
-		print('START track number is: ' + str(random_tracks))
+		#print('START track number is: ' + str(random_tracks))
 		for track in range(random_tracks):
 
 			# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
 			starting_station = nodelist[random.randint(0,len(nodelist) - 1)]
-			print('+++NEW Starting station is: ' + starting_station)
-			print('+++NEW Neighbors are: {}'.format(G[starting_station]))
+			#print('+++NEW Starting station is: ' + starting_station)
+			#print('+++NEW Neighbors are: {}'.format(G[starting_station]))
 			time = 0
 
 			# rand time for a given track
 			random_time = random.randint(minimum_weight,120)
-			print('+++NEW track length is going to be: ' + str(random_time))
+			#print('+++NEW track length is going to be: ' + str(random_time))
 
 			counter = 0
 			delete_counter = 0
 			while time < random_time:
 
 				# chooses a random key from a dictionary (neighbors), is choosing a random neighbor
-				random_neighbor = random.choice(G[starting_station].keys())
-				print('Random choise is: ' + random_neighbor)
+				#print("_+++++++++++++++++++++++++++")
+				#print(G[starting_station])
+				#random_neighbor = random.choice(G[starting_station]).keys()
+				random_neighbor = random.choice(list(G[starting_station]))
+				#print('Random choise is: ' + random_neighbor)
 
 				# keeps track of time of the track
 				time += G[starting_station][random_neighbor]['weight']
 
 				# always pick one track, catch exception of second track being larger than random time
 				if time > random_time and counter != 0:
-					print('        CAUGHT EXCEPTION')
+					#print('        CAUGHT EXCEPTION')
 					break
 				counter += 1
 
-				print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
-				print('The total time is: ' + str(time))
+				#print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
+				#print('The total time is: ' + str(time))
 		
 				# delete connection from critical_connections_not_traversed
 				if [starting_station, random_neighbor] in critical_connections_not_traversed:
 					critical_connections_not_traversed.remove([starting_station, random_neighbor])
 					delete_counter += 1
-					print([starting_station, random_neighbor])
+					#print([starting_station, random_neighbor])
 		
 				if [random_neighbor, starting_station] in critical_connections_not_traversed:
 					critical_connections_not_traversed.remove([random_neighbor, starting_station])
@@ -169,16 +177,17 @@ class Graph:
 				# updates the starting station
 				starting_station = random_neighbor
 
-				print('        Updated starting station is: ' + starting_station)
-				print('        Updated neighbors are: {}'.format(G[random_neighbor]))
+				#print('        Updated starting station is: ' + starting_station)
+				#print('        Updated neighbors are: {}'.format(G[random_neighbor]))
 
-		print(critical_connections)
-		print(delete_counter)
+		#print(critical_connections)
+		#print(delete_counter)
 
 		score = float(1 - float(len(critical_connections_not_traversed)) / float(length_critical_connections))
-		print(score)
-		print(float(len(critical_connections_not_traversed)))
-		print(float(length_critical_connections))
+		#print(score)
+		#print(float(len(critical_connections_not_traversed)))
+		#print(float(length_critical_connections))
+		return score
 
 
 

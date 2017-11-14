@@ -23,4 +23,11 @@ print(critical_stations)
 #Graph.draw_graph()
 
 # random walk:
-Graph.random_walk(critical_list)
+print("randomwalks:")
+nodelist, weight_list, minimum_weight, critical_connections = Graph.info_for_random_walk(critical_stations)
+
+scores = []
+for i in range(10):
+	scores.append(Graph.random_walk(nodelist, weight_list, minimum_weight, critical_connections))
+	
+print(scores)
