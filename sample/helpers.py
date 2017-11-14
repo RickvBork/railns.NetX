@@ -39,4 +39,27 @@ class Graph:
 					G.add_edge(row[0], row[1], weight = int(row[2]))
 
 	def random_walk(self):
-		print('BRUTE FROCE!!!')
+		'''
+		determine critical connections and make list
+		'''
+		"""critical_lines = 0
+		critical_connections = []
+		for v in G:
+			print(v)
+		   	for w in G[v]:
+		    	print(w)
+		        vid = v
+		        wid = w
+		        #print(w)
+		        #print(wid)
+		
+		        # check wether station name is critical
+		        if vid in critical_stations and [vid, wid] not in critical_connections and [wid, vid] not in critical_connections:
+		
+		            # for every neighbour, add 1 critical line
+		            for n in G[vid]:
+		                critical_lines += 1
+		            print('( %s , %s, %3d), CRITICAL'  % ( vid, wid, G[v][w]['weight']))
+		            # add connection in list in both directions
+		            critical_connections.append([vid,wid,])
+				"""
