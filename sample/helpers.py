@@ -135,6 +135,8 @@ class Graph:
 
 		# rand number of tracks 1 up to including 7
 		random_tracks = random.randint(1,7)
+		# try max number of tracks
+		random_tracks = 7
 
 		# keep track of critical connections that are not used yet
 		delete_counter = 0
@@ -201,4 +203,4 @@ class Graph:
 		# rounds S to nearest 10, otherwhise the amount of columns in bar chart is insane...
 		S_10 = round(S, -1)
 
-		return S_10
+		return score, S_10

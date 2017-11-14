@@ -6,6 +6,7 @@ main.py
 # import the helpers file
 import helpers
 import barchart
+import csv
 
 # initialise graph class
 Graph = helpers.Graph
@@ -23,11 +24,23 @@ Graph.add_csv_edges(path_tracks_file, critical_stations)
 nodelist, critical_edge_list, minimum_edge_weight = Graph.spit_data_lists()
 
 scores = []
-for i in range(1):
-	scores.append(Graph.random_walk(nodelist, minimum_edge_weight, critical_edge_list))
+for i in range(500):
+	score, S10 = Graph.random_walk(nodelist, minimum_edge_weight, critical_edge_list)
+	print("score")
+	print(S10)
+	scores.append(S10)
+print("scoress:")
+print(scores)
+
+# write scores to csv
+# ref: https://stackoverflow.com/questions/39282516/python-list-to-csv-throws-error-iterable-expected-not-numpy-int64
+# ref: https://docs.python.org/3/library/csv.html
+with open('../data/results.csv', 'w', newline='') as myfile:
+	wr = csv.writer(myfile,delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+	wr.writerows(map(lambda x: [x], scores))
 
 #make bar chart of scores
-barchart.draw(scores)
+barchart.draw2(scores)
 
 #testing
 # nodelist, critical_edge_list, min_edge_weight = spit_data_list(nodelist, critical_edge_list, min_edge_weight)
