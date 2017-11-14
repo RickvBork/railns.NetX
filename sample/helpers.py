@@ -100,6 +100,22 @@ class Graph:
 
 		print('\nThe critical stations are: ')
 		
+<<<<<<< HEAD
+		            # for every neighbour, add 1 critical line
+		            for n in G[vid]:
+		                critical_lines += 1
+		            print('( %s , %s, %3d), CRITICAL'  % ( vid, wid, G[v][w]['weight']))
+		            # add connection in list in both directions
+		            critical_connections.append([vid,wid,])
+				"""
+	#def hierholzer(self):
+	#a directed graph has an Eulerian cycle if following conditions are true (1) All vertices with nonzero degree belong to a single strongly connected component. (2) In degree and out degree of every vertex is same. The algorithm assumes that the given graph has Eulerian Circuit.
+
+#Choose any starting vertex v, and follow a trail of edges from that vertex until returning to v. It is not possible to get stuck at any vertex other than v, because indegree and outdegree of every vertex must be same, when the trail enters another vertex w there must be an unused edge leaving w.
+#The tour formed in this way is a closed tour, but may not cover all the vertices and edges of the initial graph.
+#As long as there exists a vertex u that belongs to the current tour but that has adjacent edges not part of the tour, start another trail from u, following unused edges until returning to u, and join the tour formed in this way to the previous tour.
+#Thus the idea is to keep following unused edges and removing them until we get stuck. Once we get stuck, we back-track to the nearest vertex in our current path that has unused edges, and we repeat the process until all the edges have been used. We can use another container to maintain the final path.
+=======
 		count = 0
 		for key, value in nx.get_node_attributes(G, 'color').items():
 			if value == 'r':
@@ -200,3 +216,4 @@ class Graph:
 
 
 
+>>>>>>> 797f2ff8f0fe22ba24baa4c7012ae7413388e449
