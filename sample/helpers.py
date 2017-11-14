@@ -136,7 +136,7 @@ class Graph:
 		# rand number of tracks 1 up to including 7
 		random_tracks = random.randint(1,7)
 		# try max number of tracks
-		random_tracks = 7
+		#random_tracks = 7
 
 		# keep track of critical connections that are not used yet
 		delete_counter = 0
