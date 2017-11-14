@@ -17,14 +17,15 @@ critical_stations = []
 # define G
 G = nx.Graph()
 
+Graph.random_walk
+
 # read in stations from csv and put each station as node in graph
 with open('csv_files/StationsHolland.csv') as csvfile:
     stations = csv.reader(csvfile, delimiter=',', quotechar='|')
 
     for row in stations:
-
-		if row[3] == "Kritiek":
-			critical_stations.append(row[0])
+    	if row[3] == "Kritiek":
+    		critical_stations.append(row[0])
 			G.add_node(row[0],
 				pos = (float(row[2]), float(row[1])),
 				label = str(row[0]))

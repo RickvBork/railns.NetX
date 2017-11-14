@@ -173,6 +173,7 @@ minimum_weight = min(weight for weight in weight_list)
 
 # rand number of tracks 1 up to including 7
 random_tracks = random.randint(1,7)
+
 # keep track of critical connections that are not used yet
 critical_connections_not_traversed = critical_connections
 length_critical_connections = len(critical_connections)
@@ -185,6 +186,7 @@ for track in range(random_tracks):
     print('+++NEW Neighbors are: {}'.format(G[starting_station]))
     time = 0
 
+    # rand time for a given track
     random_time = random.randint(minimum_weight,120)
     print('+++NEW track length is going to be: ' + str(random_time))
 
@@ -223,9 +225,6 @@ for track in range(random_tracks):
 
         print('        Updated starting station is: ' + starting_station)
         print('        Updated neighbors are: {}'.format(G[random_neighbor]))
-
-
-
 
 print(critical_connections)
 print(delete_counter)
