@@ -26,9 +26,15 @@ print(min_edge_weight)
 print(critical_edge_list)
 
 scores = []
-for i in range(10):
+for i in range(1):
 	scores.append(Graph.random_walk(nodelist,min_edge_weight, critical_edge_list))
 print(scores)
+print("++++++++++++++++")
 
 #make bar chart of scores
 barchart.draw(scores)
+
+#testing
+nodelist, critical_edge_list, min_edge_weight = spit_data_list(nodelist, critical_edge_list, min_edge_weight)
+print(critical_edge_list)
+print('hoi')

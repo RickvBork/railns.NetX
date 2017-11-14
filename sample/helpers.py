@@ -126,18 +126,18 @@ class Graph:
 		# keep track of critical connections that are not used yet
 		critical_connections_not_traversed = critical_connections
 		length_critical_connections = len(critical_connections)
-		#print('START track number is: ' + str(random_tracks))
+		print('START track number is: ' + str(random_tracks))
 		for track in range(random_tracks):
 
 			# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
 			starting_station = nodelist[random.randint(0,len(nodelist) - 1)]
-			#print('+++NEW Starting station is: ' + starting_station)
-			#print('+++NEW Neighbors are: {}'.format(G[starting_station]))
+			print('+++NEW Starting station is: ' + starting_station)
+			print('+++NEW Neighbors are: {}'.format(G[starting_station]))
 			time = 0
 
 			# rand time for a given track
 			random_time = random.randint(minimum_weight,120)
-			#print('+++NEW track length is going to be: ' + str(random_time))
+			print('+++NEW track length is going to be: ' + str(random_time))
 
 			counter = 0
 			delete_counter = 0
