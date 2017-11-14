@@ -5,6 +5,7 @@ main.py
 
 # import the helpers file
 import helpers
+import barchart
 
 # initialise graph class
 Graph = helpers.Graph
@@ -23,3 +24,11 @@ nodelist, critical_edge_list, min_edge_weight = Graph.spit_data_lists()
 print(nodelist)
 print(min_edge_weight)
 print(critical_edge_list)
+
+scores = []
+for i in range(10):
+	scores.append(Graph.random_walk(nodelist, weight_list, minimum_weight, critical_connections))
+print(scores)
+
+#make bar chart of scores
+barchart.draw(scores)
