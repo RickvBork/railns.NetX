@@ -28,3 +28,8 @@ for i in range(1):
 
 #make bar chart of scores
 barchart.draw(scores)
+
+#testing
+# nodelist, critical_edge_list, min_edge_weight = spit_data_list(nodelist, critical_edge_list, min_edge_weight)
+# print(critical_edge_list)
+# print('hoi')

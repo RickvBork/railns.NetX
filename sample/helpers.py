@@ -141,6 +141,7 @@ class Graph:
 		total_time = 0
 
 		# print('START track number is: ' + str(random_tracks))
+
 		for track in range(random_tracks):
 
 			# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
