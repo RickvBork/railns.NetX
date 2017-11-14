@@ -109,14 +109,24 @@ class Graph:
 					print('\t' + str(count + 1) + ' ' + key)
 				count += 1
 
+	'''
+	Spits data in lists to be used for algorithms.
+	'''
 	def spit_data_lists():
+		
+		# make nodelist
 		nodelist = [node for node in G.nodes()]
+
+		# seek minimum weight
 		min_edge_weight = min([nx.get_edge_attributes(G,'weight')[edge] for edge in G.edges()])
+
+		# make unique critical edge list
 		critical_edge_list = []
 		for key, value in nx.get_edge_attributes(G, 'color').items():
 			if value == 'r':
 					critical_edge_list.append(key)
 
+		# return values
 		return nodelist, critical_edge_list, min_edge_weight
 
 	def random_walk(nodelist, minimum_weight, critical_connections):
