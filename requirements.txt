@@ -1,0 +1,5 @@
+To run code, the folllowing software and packages need to be installed on your computer:
+
+pyhton2.7
+python library networkx
+python library pylab
