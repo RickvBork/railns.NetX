@@ -99,7 +99,6 @@ class Graph:
 				print('\t' + str(i + 1) + ' ' + nodes[i])
 
 		print('\nThe critical stations are: ')
-		
 		count = 0
 		for key, value in nx.get_node_attributes(G, 'color').items():
 			if value == 'r':
@@ -109,23 +108,37 @@ class Graph:
 					print('\t' + str(count + 1) + ' ' + key)
 				count += 1
 
+	'''
+	Spits data in lists to be used for algorithms.
+	'''
 	def spit_data_lists():
+		
+		# make nodelist
 		nodelist = [node for node in G.nodes()]
+
+		# seek minimum weight
 		min_edge_weight = min([nx.get_edge_attributes(G,'weight')[edge] for edge in G.edges()])
+
+		# make unique critical edge list
 		critical_edge_list = []
 		for key, value in nx.get_edge_attributes(G, 'color').items():
 			if value == 'r':
 					critical_edge_list.append(key)
 
+		# return values
 		return nodelist, critical_edge_list, min_edge_weight
 
 	def random_walk(nodelist, minimum_weight, critical_connections):
-				# rand number of tracks 1 up to including 7
+		
+		# rand number of tracks 1 up to including 7
 		random_tracks = random.randint(1,7)
 
 		# keep track of critical connections that are not used yet
 		critical_connections_not_traversed = critical_connections
 		length_critical_connections = len(critical_connections)
+		
+		delete_counter = 0
+
 		print('START track number is: ' + str(random_tracks))
 		for track in range(random_tracks):
 
@@ -140,15 +153,13 @@ class Graph:
 			print('+++NEW track length is going to be: ' + str(random_time))
 
 			counter = 0
-			delete_counter = 0
 			while time < random_time:
 
 				# chooses a random key from a dictionary (neighbors), is choosing a random neighbor
-				#print("_+++++++++++++++++++++++++++")
-				#print(G[starting_station])
+
 				#random_neighbor = random.choice(G[starting_station]).keys()
 				random_neighbor = random.choice(list(G[starting_station]))
-				#print('Random choise is: ' + random_neighbor)
+				print('Random choise is: ' + random_neighbor)
 
 				# keeps track of time of the track
 				time += G[starting_station][random_neighbor]['weight']
@@ -159,34 +170,32 @@ class Graph:
 					break
 				counter += 1
 
-				#print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
-				#print('The total time is: ' + str(time))
+				print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
+				print('The total time is: ' + str(time))
 		
 				# delete connection from critical_connections_not_traversed
-				if [starting_station, random_neighbor] in critical_connections_not_traversed:
-					critical_connections_not_traversed.remove([starting_station, random_neighbor])
+				if (starting_station, random_neighbor) in critical_connections_not_traversed:
+					critical_connections_not_traversed.remove((starting_station, random_neighbor))
+
+					print('		DELETED: ' + str((starting_station, random_neighbor)))
+
 					delete_counter += 1
 					#print([starting_station, random_neighbor])
 		
-				if [random_neighbor, starting_station] in critical_connections_not_traversed:
-					critical_connections_not_traversed.remove([random_neighbor, starting_station])
+				if (random_neighbor, starting_station) in critical_connections_not_traversed:
+					critical_connections_not_traversed.remove((random_neighbor, starting_station))
+
+					print('		DELETED: ' + str((starting_station, random_neighbor)))
 
 				# updates the starting station
 				starting_station = random_neighbor
+				print('        Updated neighbors are: {}'.format(G[random_neighbor]))
 
-				#print('        Updated starting station is: ' + starting_station)
-				#print('        Updated neighbors are: {}'.format(G[random_neighbor]))
+		# print(critical_connections)
+		# print(delete_counter)
 
-		#print(critical_connections)
-		#print(delete_counter)
-
+		print("+++++++++++++++++++")
+		print(critical_connections_not_traversed)
 		score = float(1 - float(len(critical_connections_not_traversed)) / float(length_critical_connections))
-		#print(score)
-		#print(float(len(critical_connections_not_traversed)))
-		#print(float(length_critical_connections))
+		print(score)
 		return score
-
-
-
-
-
