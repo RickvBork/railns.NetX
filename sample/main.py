@@ -27,7 +27,7 @@ print(critical_edge_list)
 
 scores = []
 for i in range(10):
-	scores.append(Graph.random_walk(nodelist, weight_list, minimum_weight, critical_connections))
+	scores.append(Graph.random_walk(nodelist,min_edge_weight, critical_edge_list))
 print(scores)
 
 #make bar chart of scores
