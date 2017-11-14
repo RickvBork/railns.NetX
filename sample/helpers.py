@@ -1,6 +1,7 @@
 import csv
 import networkx as nx
 import matplotlib.pyplot as plt
+from termcolor import colored
 
 G = nx.Graph()
 
@@ -47,11 +48,9 @@ class Graph:
 
 			for row in rows:
 				if row[0] in list and row[1] in list:
-					print('AAA' + row[0], row[1])
 					G.add_edge(row[0], row[1], weight = int(row[2]), color = 'r')
 
 				elif row[0] in list or row[1] in list:
-					print('BBB' + row[0], row[1])
 					G.add_edge(row[0], row[1], weight = int(row[2]), color = 'r')
 
 				else:
@@ -61,7 +60,7 @@ class Graph:
 	Draws this instance of the graph. If an init is also implemented, multiple Graphs
 	can be stored and drawn.
 	'''
-	def draw_graph():
+	def draw():
 
 		# get positions of nodes and edges
 		pos = nx.get_node_attributes(G, 'pos')
@@ -78,10 +77,39 @@ class Graph:
 
 		# draw everything except labels and show plot
 		nx.draw_networkx(G, pos, node_color = node_color_map, node_size = node_size_map, edge_color = edge_color_map, with_labels = False)
+
+		# interrupts flow of code, user needs to terminate draw to proceed
 		plt.show()
 
+		# plt.savefig("path.png")
+
+	'''
+	Spits data about the graph in prettyprint
+	'''
+	def spit_graph_data():
+
+		print('\nThe stations are: ')
+		
+		nodes = [node for node in G.nodes()]
+		for i in range(len(nodes)):
+			if i < 9:
+				print('\t' + str(i + 1) + '  ' + nodes[i])
+			else:
+				print('\t' + str(i + 1) + ' ' + nodes[i])
+
+		print('\nThe critical stations are: ')
+		
+		count = 0
+		for key, value in nx.get_node_attributes(G, 'color').items():
+			if value == 'r':
+				if count < 9:
+					print('\t' + str(count + 1) + '  ' + key)
+				else:
+					print('\t' + str(count + 1) + ' ' + key)
+				count += 1
 
 	def random_walk(self):
+		
 		'''
 		determine critical connections and make list
 		'''
