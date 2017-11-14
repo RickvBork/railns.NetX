@@ -99,23 +99,6 @@ class Graph:
 				print('\t' + str(i + 1) + ' ' + nodes[i])
 
 		print('\nThe critical stations are: ')
-		
-<<<<<<< HEAD
-		            # for every neighbour, add 1 critical line
-		            for n in G[vid]:
-		                critical_lines += 1
-		            print('( %s , %s, %3d), CRITICAL'  % ( vid, wid, G[v][w]['weight']))
-		            # add connection in list in both directions
-		            critical_connections.append([vid,wid,])
-				"""
-	#def hierholzer(self):
-	#a directed graph has an Eulerian cycle if following conditions are true (1) All vertices with nonzero degree belong to a single strongly connected component. (2) In degree and out degree of every vertex is same. The algorithm assumes that the given graph has Eulerian Circuit.
-
-#Choose any starting vertex v, and follow a trail of edges from that vertex until returning to v. It is not possible to get stuck at any vertex other than v, because indegree and outdegree of every vertex must be same, when the trail enters another vertex w there must be an unused edge leaving w.
-#The tour formed in this way is a closed tour, but may not cover all the vertices and edges of the initial graph.
-#As long as there exists a vertex u that belongs to the current tour but that has adjacent edges not part of the tour, start another trail from u, following unused edges until returning to u, and join the tour formed in this way to the previous tour.
-#Thus the idea is to keep following unused edges and removing them until we get stuck. Once we get stuck, we back-track to the nearest vertex in our current path that has unused edges, and we repeat the process until all the edges have been used. We can use another container to maintain the final path.
-=======
 		count = 0
 		for key, value in nx.get_node_attributes(G, 'color').items():
 			if value == 'r':
@@ -146,35 +129,36 @@ class Graph:
 		return nodelist, critical_edge_list, min_edge_weight
 
 	def random_walk(nodelist, minimum_weight, critical_connections):
-				# rand number of tracks 1 up to including 7
+		
+		# rand number of tracks 1 up to including 7
 		random_tracks = random.randint(1,7)
 
 		# keep track of critical connections that are not used yet
 		critical_connections_not_traversed = critical_connections
 		length_critical_connections = len(critical_connections)
-		#print('START track number is: ' + str(random_tracks))
+		
+		delete_counter = 0
+		print('START track number is: ' + str(random_tracks))
 		for track in range(random_tracks):
 
 			# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
 			starting_station = nodelist[random.randint(0,len(nodelist) - 1)]
-			#print('+++NEW Starting station is: ' + starting_station)
-			#print('+++NEW Neighbors are: {}'.format(G[starting_station]))
+			print('+++NEW Starting station is: ' + starting_station)
+			print('+++NEW Neighbors are: {}'.format(G[starting_station]))
 			time = 0
 
 			# rand time for a given track
 			random_time = random.randint(minimum_weight,120)
-			#print('+++NEW track length is going to be: ' + str(random_time))
+			print('+++NEW track length is going to be: ' + str(random_time))
 
 			counter = 0
-			delete_counter = 0
 			while time < random_time:
 
 				# chooses a random key from a dictionary (neighbors), is choosing a random neighbor
-				#print("_+++++++++++++++++++++++++++")
-				#print(G[starting_station])
+
 				#random_neighbor = random.choice(G[starting_station]).keys()
 				random_neighbor = random.choice(list(G[starting_station]))
-				#print('Random choise is: ' + random_neighbor)
+				print('Random choise is: ' + random_neighbor)
 
 				# keeps track of time of the track
 				time += G[starting_station][random_neighbor]['weight']
@@ -185,35 +169,32 @@ class Graph:
 					break
 				counter += 1
 
-				#print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
-				#print('The total time is: ' + str(time))
+				print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
+				print('The total time is: ' + str(time))
 		
 				# delete connection from critical_connections_not_traversed
-				if [starting_station, random_neighbor] in critical_connections_not_traversed:
-					critical_connections_not_traversed.remove([starting_station, random_neighbor])
+				if (starting_station, random_neighbor) in critical_connections_not_traversed:
+					critical_connections_not_traversed.remove((starting_station, random_neighbor))
+
+					print('		DELETED: ' + str((starting_station, random_neighbor)))
+
 					delete_counter += 1
 					#print([starting_station, random_neighbor])
 		
-				if [random_neighbor, starting_station] in critical_connections_not_traversed:
-					critical_connections_not_traversed.remove([random_neighbor, starting_station])
+				if (random_neighbor, starting_station) in critical_connections_not_traversed:
+					critical_connections_not_traversed.remove((random_neighbor, starting_station))
+
+					print('		DELETED: ' + str((starting_station, random_neighbor)))
 
 				# updates the starting station
 				starting_station = random_neighbor
+				print('        Updated neighbors are: {}'.format(G[random_neighbor]))
 
-				#print('        Updated starting station is: ' + starting_station)
-				#print('        Updated neighbors are: {}'.format(G[random_neighbor]))
+		# print(critical_connections)
+		# print(delete_counter)
 
-		#print(critical_connections)
-		#print(delete_counter)
-
+		print("+++++++++++++++++++")
+		print(critical_connections_not_traversed)
 		score = float(1 - float(len(critical_connections_not_traversed)) / float(length_critical_connections))
-		#print(score)
-		#print(float(len(critical_connections_not_traversed)))
-		#print(float(length_critical_connections))
+		print(score)
 		return score
-
-
-
-
-
->>>>>>> 797f2ff8f0fe22ba24baa4c7012ae7413388e449

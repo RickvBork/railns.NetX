@@ -21,13 +21,9 @@ Graph.add_csv_edges(path_tracks_file, critical_stations)
 
 nodelist, critical_edge_list, min_edge_weight = Graph.spit_data_lists()
 
-print(nodelist)
-print(min_edge_weight)
-print(critical_edge_list)
-
 scores = []
-for i in range(10):
-	scores.append(Graph.random_walk(nodelist, weight_list, minimum_weight, critical_connections))
+for i in range(1):
+	scores.append(Graph.random_walk(nodelist, min_edge_weight, critical_edge_list))
 print(scores)
 
 #make bar chart of scores
