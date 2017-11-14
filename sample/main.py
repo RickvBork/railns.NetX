@@ -5,6 +5,7 @@ main.py
 
 # import the helpers file
 import helpers
+import barchart
 
 # initialise graph class
 Graph = helpers.Graph
@@ -29,5 +30,9 @@ nodelist, weight_list, minimum_weight, critical_connections = Graph.info_for_ran
 scores = []
 for i in range(10):
 	scores.append(Graph.random_walk(nodelist, weight_list, minimum_weight, critical_connections))
-	
 print(scores)
+
+#make bar chart of scores
+barchart.draw(scores)
+
+
