@@ -18,4 +18,8 @@ path_tracks_file = '../data/ConnectiesHolland.csv'
 critical_stations = Graph.add_csv_nodes(path_stations_file)
 Graph.add_csv_edges(path_tracks_file, critical_stations)
 
-Graph.spit_graph_data()
+nodelist, critical_edge_list, min_edge_weight = Graph.spit_data_lists()
+
+print(nodelist)
+print(min_edge_weight)
+print(critical_edge_list)
