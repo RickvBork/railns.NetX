@@ -37,7 +37,7 @@ class Graph:
 			    			color = 'k',
 			    			size = 10)
 
-			return critical_station_list
+			    return critical_station_list
 
 	'''
 	Adds the edges and attributes to the graph from a formatted csv file.
@@ -130,26 +130,28 @@ class Graph:
 
 	def random_walk(nodelist, minimum_weight, critical_connections):
 		
+		# start a list of unique critical tracks the random walk traverses
+		critical_connections_traversed = []
+
 		# rand number of tracks 1 up to including 7
 		random_tracks = random.randint(1,7)
 
 		# keep track of critical connections that are not used yet
-		critical_connections_not_traversed = critical_connections
-		length_critical_connections = len(critical_connections)
-		
 		delete_counter = 0
-		print('START track number is: ' + str(random_tracks))
+		total_time = 0
+
+		# print('START track number is: ' + str(random_tracks))
 		for track in range(random_tracks):
 
 			# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
 			starting_station = nodelist[random.randint(0,len(nodelist) - 1)]
-			print('+++NEW Starting station is: ' + starting_station)
-			print('+++NEW Neighbors are: {}'.format(G[starting_station]))
+			# print('+++NEW Starting station is: ' + starting_station)
+			# print('+++NEW Neighbors are: {}'.format(G[starting_station]))
 			time = 0
 
 			# rand time for a given track
 			random_time = random.randint(minimum_weight,120)
-			print('+++NEW track length is going to be: ' + str(random_time))
+			# print('+++NEW track length is going to be: ' + str(random_time))
 
 			counter = 0
 			while time < random_time:
@@ -158,43 +160,44 @@ class Graph:
 
 				#random_neighbor = random.choice(G[starting_station]).keys()
 				random_neighbor = random.choice(list(G[starting_station]))
-				print('Random choise is: ' + random_neighbor)
+				# print('Random choise is: ' + random_neighbor)
 
 				# keeps track of time of the track
 				time += G[starting_station][random_neighbor]['weight']
-
+				total_time += G[starting_station][random_neighbor]['weight']
 				# always pick one track, catch exception of second track being larger than random time
 				if time > random_time and counter != 0:
 					#print('        CAUGHT EXCEPTION')
 					break
 				counter += 1
 
-				print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
-				print('The total time is: ' + str(time))
+				# print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
+				# print('The total time is: ' + str(time))
 		
-				# delete connection from critical_connections_not_traversed
-				if (starting_station, random_neighbor) in critical_connections_not_traversed:
-					critical_connections_not_traversed.remove((starting_station, random_neighbor))
+				# make list of unique traversed critical connections
+				if ((starting_station, random_neighbor) in critical_connections) or ((random_neighbor, starting_station) in critical_connections):
+					if not ((starting_station, random_neighbor) in critical_connections_traversed) and not ((random_neighbor, starting_station) in critical_connections_traversed):
+						critical_connections_traversed.append((starting_station, random_neighbor))
 
-					print('		DELETED: ' + str((starting_station, random_neighbor)))
-
-					delete_counter += 1
-					#print([starting_station, random_neighbor])
-		
-				if (random_neighbor, starting_station) in critical_connections_not_traversed:
-					critical_connections_not_traversed.remove((random_neighbor, starting_station))
-
-					print('		DELETED: ' + str((starting_station, random_neighbor)))
+					# print('		DELETED: ' + str((starting_station, random_neighbor)))
 
 				# updates the starting station
 				starting_station = random_neighbor
-				print('        Updated neighbors are: {}'.format(G[random_neighbor]))
+				# print('        Updated neighbors are: {}'.format(G[random_neighbor]))
 
 		# print(critical_connections)
 		# print(delete_counter)
 
-		print("+++++++++++++++++++")
-		print(critical_connections_not_traversed)
-		score = float(1 - float(len(critical_connections_not_traversed)) / float(length_critical_connections))
-		print(score)
-		return score
+		# print("+++++++++++++++++++")
+		# print(critical_connections_not_traversed)
+		
+		# percentage of critical tracs traversed
+		score = float(len(critical_connections_traversed)) / float(len(critical_connections))
+		
+		# score function 1
+		S = score * 10000 - (random_tracks * 20 + total_time / 100000)
+
+		# rounds S to nearest 10, otherwhise the amount of columns in bar chart is insane...
+		S_10 = round(S, -1)
+
+		return S_10
