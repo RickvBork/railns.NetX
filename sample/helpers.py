@@ -134,7 +134,9 @@ class Graph:
 		critical_connections_traversed = []
 
 		# rand number of tracks 1 up to including 7
-		random_tracks = random.randint(1,7)
+		# random_tracks = random.randint(1,7)
+
+		random_tracks = 7
 
 		# keep track of critical connections that are not used yet
 		delete_counter = 0
@@ -164,8 +166,10 @@ class Graph:
 				# print('Random choise is: ' + random_neighbor)
 
 				# keeps track of time of the track
-				time += G[starting_station][random_neighbor]['weight']
-				total_time += G[starting_station][random_neighbor]['weight']
+				edge_time = G[starting_station][random_neighbor]['weight']
+				time += edge_time
+				total_time += edge_time
+
 				# always pick one track, catch exception of second track being larger than random time
 				if time > random_time and counter != 0:
 					#print('        CAUGHT EXCEPTION')
@@ -199,6 +203,6 @@ class Graph:
 		S = score * 10000 - (random_tracks * 20 + total_time / 100000)
 
 		# rounds S to nearest 10, otherwhise the amount of columns in bar chart is insane...
-		S_10 = round(S, -1)
+		S_10 = round(S, 1)
 
 		return S_10
