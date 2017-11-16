@@ -6,11 +6,35 @@ import random
 
 G = nx.Graph()
 
-def return_p(critical_tracks_covered, total_critical_tracks):
-	return float(len(critical_connections_traversed)) / float(len(critical_connections))
+def get_p(critical_connections_traversed, total_critical_connections):
+	# better to define as float?
+	return len(critical_connections_traversed) / len(total_critical_connections)
 
-def return_score(p, t, min):
-	return p * 10000 - (random_tracks * 20 + total_time / 100000)
+def get_score(p, t, m):
+	return round(p * 10000 - (t * 20 + m / 100000), -1)
+
+def print_score_information(score_list):
+
+	# get range of score list, ints otherwhise range(min, max) does not take floats
+	minimum = int(min(score_list))
+	maximum = int(max(score_list))
+
+	print('\nscore, amount\n++++++++++++++')
+
+	# loop over score list
+	for i in range(minimum, maximum + 1, 1):
+		
+		# count number of times a score is in the list
+		count = score_list.count(i)
+		
+		# if i does not exist as score, ignore
+		if count != 0:
+			print("{:<9}".format(i), end='')
+			print("{}".format(score_list.count(i)))
+
+	print("++++++++++++++\n")
+	print("minimum: {}".format(minimum))
+	print("minimum: {}\n".format(maximum))
 
 '''
 Graph class, mostly storage for functions. Can later be turned into a init Class,
@@ -135,85 +159,77 @@ class Graph:
 		return nodelist, critical_edge_list, min_edge_weight
 
 	def random_walk(nodelist, minimum_weight, critical_connections, simulations = 100):
+
+		# start a list of unique critical tracks the random walk traverses
+		critical_connections_traversed = []
+
+		# rand number of tracks 1 up to including 7
+		random_tracks = 7
+
+		# keep track of critical connections that are not used yet
+		delete_counter = 0
+		total_time = 0
+
+		# print('START track number is: ' + str(random_tracks))
+
+		for track in range(random_tracks):
+
+			# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
+			starting_station = nodelist[random.randint(0,len(nodelist) - 1)]
+			# print('+++NEW Starting station is: ' + starting_station)
+			# print('+++NEW Neighbors are: {}'.format(G[starting_station]))
+			time = 0
+
+			# rand time for a given track
+			random_time = random.randint(minimum_weight,120)
+			# print('+++NEW track length is going to be: ' + str(random_time))
+
+			counter = 0
+			while time < random_time:
+
+				# chooses a random key from a dictionary (neighbors), is choosing a random neighbor
+
+				#random_neighbor = random.choice(G[starting_station]).keys()
+				random_neighbor = random.choice(list(G[starting_station]))
+				# print('Random choise is: ' + random_neighbor)
+
+				# keeps track of time of the track
+				edge_time = G[starting_station][random_neighbor]['weight']
+				time += edge_time
+				total_time += edge_time
+
+				# always pick one track, catch exception of second track being larger than random time
+				if time > random_time and counter != 0:
+					#print('        CAUGHT EXCEPTION')
+					break
+				counter += 1
+
+				# print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
+				# print('The total time is: ' + str(time))
 		
-		score = []
-		critical_track_coverage = []
-		for i in range(simulations):
+				# make list of unique traversed critical connections
+				if ((starting_station, random_neighbor) in critical_connections) or ((random_neighbor, starting_station) in critical_connections):
+					if not ((starting_station, random_neighbor) in critical_connections_traversed) and not ((random_neighbor, starting_station) in critical_connections_traversed):
+						critical_connections_traversed.append((starting_station, random_neighbor))
 
-			# start a list of unique critical tracks the random walk traverses
-			critical_connections_traversed = []
+					# print('		DELETED: ' + str((starting_station, random_neighbor)))
 
-			# rand number of tracks 1 up to including 7
-			random_tracks = random.randint(1,7)
+				# updates the starting station
+				starting_station = random_neighbor
+				# print('        Updated neighbors are: {}'.format(G[random_neighbor]))
 
-			# keep track of critical connections that are not used yet
-			delete_counter = 0
-			total_time = 0
+		# print(critical_connections)
+		# print(delete_counter)
 
-			# print('START track number is: ' + str(random_tracks))
+		# print("+++++++++++++++++++")
+		# print(critical_connections_not_traversed)
+		
+		# percentage of critical tracs traversed
+		p = get_p(critical_connections_traversed, critical_connections)
 
-			for track in range(random_tracks):
+		score = get_score(p, random_tracks, total_time)
 
-				# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
-				starting_station = nodelist[random.randint(0,len(nodelist) - 1)]
-				# print('+++NEW Starting station is: ' + starting_station)
-				# print('+++NEW Neighbors are: {}'.format(G[starting_station]))
-				time = 0
-
-				# rand time for a given track
-				random_time = random.randint(minimum_weight,120)
-				# print('+++NEW track length is going to be: ' + str(random_time))
-
-				counter = 0
-				while time < random_time:
-
-					# chooses a random key from a dictionary (neighbors), is choosing a random neighbor
-
-					#random_neighbor = random.choice(G[starting_station]).keys()
-					random_neighbor = random.choice(list(G[starting_station]))
-					# print('Random choise is: ' + random_neighbor)
-
-					# keeps track of time of the track
-					edge_time = G[starting_station][random_neighbor]['weight']
-					time += edge_time
-					total_time += edge_time
-
-					# always pick one track, catch exception of second track being larger than random time
-					if time > random_time and counter != 0:
-						#print('        CAUGHT EXCEPTION')
-						break
-					counter += 1
-
-					# print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
-					# print('The total time is: ' + str(time))
-			
-					# make list of unique traversed critical connections
-					if ((starting_station, random_neighbor) in critical_connections) or ((random_neighbor, starting_station) in critical_connections):
-						if not ((starting_station, random_neighbor) in critical_connections_traversed) and not ((random_neighbor, starting_station) in critical_connections_traversed):
-							critical_connections_traversed.append((starting_station, random_neighbor))
-
-						# print('		DELETED: ' + str((starting_station, random_neighbor)))
-
-					# updates the starting station
-					starting_station = random_neighbor
-					# print('        Updated neighbors are: {}'.format(G[random_neighbor]))
-
-			# print(critical_connections)
-			# print(delete_counter)
-
-			# print("+++++++++++++++++++")
-			# print(critical_connections_not_traversed)
-			
-			# percentage of critical tracs traversed
-			p = return_p(critical_connections_traversed, critical_connections)
-
-			score = return_score(p, random_tracks, total_time)
-
-			# append to lists
-			score.append(return_score(p, random_tracks, total_time))
-			critical_track_coverage.append(p)
-
-		return score, critical_track_coverage
+		return p, score
 
 		
 		# voor commit even checken of dat hierboven nog klopt!!
