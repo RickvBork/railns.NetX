@@ -205,7 +205,7 @@ class Graph:
 
 		return score, S_10
 
-		
+
 		# voor commit even checken of dat hierboven nog klopt!!
 	def hierholzer(self, critical_station_list):
 		#a directed graph has an Eulerian cycle if following conditions are true 
@@ -221,7 +221,6 @@ class Graph:
 		# ensure that starting node is critical station
 		while current_node not in critical_station_list:
 			current_node = random.choice(G.nodes())
-			# BUT: in critical_edge_list there are tuples: does this work? see also below with used_edge_list
 			# BUT: there might be repetitions in random choice... something with range()? Because of repetitions, this might be slower
 			# de random choice etc. ook bij randomwalk
 			# print(current_node)
@@ -234,12 +233,14 @@ class Graph:
 			# to check if current_node has any unused edges
 			while boolean_edges_unused == False:
 
-				for current node in G.edges():
+				for current_node in G.edges():
 				# BUT: saved in G.edges as tuple, does this search work?
+				# item for item in G.edges if current_node in item
 					counter1 += 1
 
 				for current_node in used_edge_list:
-				# BUT: saved as tuple..
+				# BUT: saved as tuple..: ?
+				# item for item in G.edges if current_node in item
 				# zorgen dat het beneden bij append aan deze lijst wel zo opgeslagen wordt als de G.edges, anders werkt dat met de counter niet.
 					counter2 += 1
 
@@ -268,7 +269,10 @@ class Graph:
 
 			# change current_node to random_neighbor_node
 			current_node = random_neighbor_node
-								
+			
+			# possible break;
+			# 
+
 		# returns list of tuples so you can, "by hand" follow the path
 		return used_edge_list
 
