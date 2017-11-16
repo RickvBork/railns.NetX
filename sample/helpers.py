@@ -6,6 +6,36 @@ import random
 
 G = nx.Graph()
 
+def get_p(critical_connections_traversed, total_critical_connections):
+	# better to define as float?
+	return len(critical_connections_traversed) / len(total_critical_connections)
+
+def get_score(p, t, m):
+	return round(p * 10000 - (t * 20 + m / 100000), -1)
+
+def print_score_information(score_list):
+
+	# get range of score list, ints otherwhise range(min, max) does not take floats
+	minimum = int(min(score_list))
+	maximum = int(max(score_list))
+
+	print('\nscore, amount\n++++++++++++++')
+
+	# loop over score list
+	for i in range(minimum, maximum + 1, 1):
+		
+		# count number of times a score is in the list
+		count = score_list.count(i)
+		
+		# if i does not exist as score, ignore
+		if count != 0:
+			print("{:<9}".format(i), end='')
+			print("{}".format(score_list.count(i)))
+
+	print("++++++++++++++\n")
+	print("minimum: {}".format(minimum))
+	print("minimum: {}\n".format(maximum))
+
 '''
 Graph class, mostly storage for functions. Can later be turned into a init Class,
 storing multiple graphs from multiple csv files.
@@ -128,15 +158,13 @@ class Graph:
 		# return values
 		return nodelist, critical_edge_list, min_edge_weight
 
-	def random_walk(nodelist, minimum_weight, critical_connections):
-		
+	def random_walk(nodelist, minimum_weight, critical_connections, simulations = 100):
+
 		# start a list of unique critical tracks the random walk traverses
 		critical_connections_traversed = []
 
 		# rand number of tracks 1 up to including 7
-		random_tracks = random.randint(1,7)
-		# try max number of tracks
-		#random_tracks = 7
+		random_tracks = 7
 
 		# keep track of critical connections that are not used yet
 		delete_counter = 0
@@ -166,8 +194,10 @@ class Graph:
 				# print('Random choise is: ' + random_neighbor)
 
 				# keeps track of time of the track
-				time += G[starting_station][random_neighbor]['weight']
-				total_time += G[starting_station][random_neighbor]['weight']
+				edge_time = G[starting_station][random_neighbor]['weight']
+				time += edge_time
+				total_time += edge_time
+
 				# always pick one track, catch exception of second track being larger than random time
 				if time > random_time and counter != 0:
 					#print('        CAUGHT EXCEPTION')
@@ -195,15 +225,11 @@ class Graph:
 		# print(critical_connections_not_traversed)
 		
 		# percentage of critical tracs traversed
-		score = float(len(critical_connections_traversed)) / float(len(critical_connections))
-		
-		# score function 1
-		S = score * 10000 - (random_tracks * 20 + total_time / 100000)
+		p = get_p(critical_connections_traversed, critical_connections)
 
-		# rounds S to nearest 10, otherwhise the amount of columns in bar chart is insane...
-		S_10 = round(S, -1)
+		score = get_score(p, random_tracks, total_time)
 
-		return score, S_10
+		return p, score
 
 
 		# voor commit even checken of dat hierboven nog klopt!!
