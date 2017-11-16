@@ -204,3 +204,89 @@ class Graph:
 		S_10 = round(S, -1)
 
 		return score, S_10
+
+		
+		# voor commit even checken of dat hierboven nog klopt!!
+	def hierholzer(self, critical_station_list):
+		#a directed graph has an Eulerian cycle if following conditions are true 
+		#(1) All vertices with nonzero degree belong to a single strongly connected component. 
+		#(2) In degree and out degree of every vertex is same. The algorithm assumes that the given graph has Eulerian Circuit.
+
+		# list of tuples: to add used edges, that is two nodes that share that edge
+		used_edge_list = []
+		# in Hierholzer's they use a complete list of edges, and delete edges from this. Is that faster? Don't know how to do this... 
+
+		current_node;
+
+		# ensure that starting node is critical station
+		while current_node not in critical_station_list:
+			current_node = random.choice(G.nodes())
+			# BUT: in critical_edge_list there are tuples: does this work? see also below with used_edge_list
+			# BUT: there might be repetitions in random choice... something with range()? Because of repetitions, this might be slower
+			# de random choice etc. ook bij randomwalk
+			# print(current_node)
+
+		# BUT: needs to stop when all edges are used: misschien met time? 
+		while True:
+
+			boolean_edges_unused = False
+
+			# to check if current_node has any unused edges
+			while boolean_edges_unused == False:
+
+				for current node in G.edges():
+				# BUT: saved in G.edges as tuple, does this search work?
+					counter1 += 1
+
+				for current_node in used_edge_list:
+				# BUT: saved as tuple..
+				# zorgen dat het beneden bij append aan deze lijst wel zo opgeslagen wordt als de G.edges, anders werkt dat met de counter niet.
+					counter2 += 1
+
+				# if current_node has no unused edges
+				if counter1 == counter2:
+					current_node = random.choice(G.nodes())
+					# BUT: the node now chosen might not be critical: is this bad? no, because after first current_node, it doesn't really matter I think.
+					# BUT: the node can have been critical already.
+					# misschien: hier een break doen. Op dit punt misschien een heel nieuw startpunt nemen (wel met een nieuwe current, dus op zich oet je zo verder.
+					# maar het is gewoon niet erg duidelijk aangegeven.)
+					# misschien2: backtracken om zo een langer traject te maken? Maar dat is wel lastig denk ik, en dan duurt het langer..
+				# if current_node has some unused edges
+				else:
+					boolean_edges_unused = True
+
+			random_neighbor_node;
+
+			# choose random new neighbor node until you find one with unused edge.
+			while (current_node, random_neighbor_node) in used_edge_list or (random_neighbor_node, current_node) in used_edge_list:
+				random_neighbor_node = random.choice(all_neighbors(G, current_node))
+				# in random_walk: random_neighbor = random.choice(list(G[current_node])); welke list? nog even checken.
+
+			# add now used edge to used_edge_list
+			used_edge_list.append(current_node, random_neighbor_node)
+			# BUT: hoe wordt het precies opgeslagen in G.edges? wordt de tuple daar ook andersom opgeslagen? voor de boolean_unused_edges
+
+			# change current_node to random_neighbor_node
+			current_node = random_neighbor_node
+								
+		# returns list of tuples so you can, "by hand" follow the path
+		return used_edge_list
+
+
+	# after while loop: check if all edges are in used_edge_list
+	# if so, yee!
+	# if not, new current node that is not in list?
+
+		
+
+
+#It is not possible to get stuck at any vertex other than v, because indegree and outdegree of every vertex must be same, 
+#when the trail enters another vertex w there must be an unused edge leaving w. ---- lijkt mij: it is not possible to get stuck, because it is a 
+# Eulerian cycle.
+
+#The tour formed in this way is a closed tour, but may not cover all the vertices and edges of the initial graph.
+#As long as there exists a vertex u that belongs to the current tour but that has adjacent edges not part of the tour, 
+#start another trail from u, following unused edges until returning to u, and join the tour formed in this way to the previous tour.
+
+#Thus the idea is to keep following unused edges and removing them until we get stuck. Once we get stuck, we back-track to 
+#the nearest vertex in our current path that has unused edges, and we repeat the process until all the edges have been used. We can use another container to maintain the final path.
