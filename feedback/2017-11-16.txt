@@ -1,0 +1,12 @@
+structuur
+route returnen (top5)
+numba
+improved walks
+---------------
+cProfile (test run tijd)
+of import time
+if __name__ = "main"
+archief bijhouden (voor walks en om (top5) route te returnen)
+magic numbers
+
+functies aanmaken
