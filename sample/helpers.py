@@ -6,6 +6,12 @@ import random
 
 G = nx.Graph()
 
+def return_p(critical_tracks_covered, total_critical_tracks):
+	return float(len(critical_connections_traversed)) / float(len(critical_connections))
+
+def return_score(p, t, min):
+	return p * 10000 - (random_tracks * 20 + total_time / 100000)
+
 '''
 Graph class, mostly storage for functions. Can later be turned into a init Class,
 storing multiple graphs from multiple csv files.
@@ -128,81 +134,169 @@ class Graph:
 		# return values
 		return nodelist, critical_edge_list, min_edge_weight
 
-	def random_walk(nodelist, minimum_weight, critical_connections):
+	def random_walk(nodelist, minimum_weight, critical_connections, simulations = 100):
 		
-		# start a list of unique critical tracks the random walk traverses
-		critical_connections_traversed = []
+		score = []
+		critical_track_coverage = []
+		for i in range(simulations):
 
-		# rand number of tracks 1 up to including 7
-		# random_tracks = random.randint(1,7)
+			# start a list of unique critical tracks the random walk traverses
+			critical_connections_traversed = []
 
-		random_tracks = 7
+			# rand number of tracks 1 up to including 7
+			random_tracks = random.randint(1,7)
 
-		# keep track of critical connections that are not used yet
-		delete_counter = 0
-		total_time = 0
+			# keep track of critical connections that are not used yet
+			delete_counter = 0
+			total_time = 0
 
-		# print('START track number is: ' + str(random_tracks))
+			# print('START track number is: ' + str(random_tracks))
 
-		for track in range(random_tracks):
+			for track in range(random_tracks):
 
-			# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
-			starting_station = nodelist[random.randint(0,len(nodelist) - 1)]
-			# print('+++NEW Starting station is: ' + starting_station)
-			# print('+++NEW Neighbors are: {}'.format(G[starting_station]))
-			time = 0
+				# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
+				starting_station = nodelist[random.randint(0,len(nodelist) - 1)]
+				# print('+++NEW Starting station is: ' + starting_station)
+				# print('+++NEW Neighbors are: {}'.format(G[starting_station]))
+				time = 0
 
-			# rand time for a given track
-			random_time = random.randint(minimum_weight,120)
-			# print('+++NEW track length is going to be: ' + str(random_time))
+				# rand time for a given track
+				random_time = random.randint(minimum_weight,120)
+				# print('+++NEW track length is going to be: ' + str(random_time))
 
-			counter = 0
-			while time < random_time:
+				counter = 0
+				while time < random_time:
 
-				# chooses a random key from a dictionary (neighbors), is choosing a random neighbor
+					# chooses a random key from a dictionary (neighbors), is choosing a random neighbor
 
-				#random_neighbor = random.choice(G[starting_station]).keys()
-				random_neighbor = random.choice(list(G[starting_station]))
-				# print('Random choise is: ' + random_neighbor)
+					#random_neighbor = random.choice(G[starting_station]).keys()
+					random_neighbor = random.choice(list(G[starting_station]))
+					# print('Random choise is: ' + random_neighbor)
 
-				# keeps track of time of the track
-				edge_time = G[starting_station][random_neighbor]['weight']
-				time += edge_time
-				total_time += edge_time
+					# keeps track of time of the track
+					edge_time = G[starting_station][random_neighbor]['weight']
+					time += edge_time
+					total_time += edge_time
 
-				# always pick one track, catch exception of second track being larger than random time
-				if time > random_time and counter != 0:
-					#print('        CAUGHT EXCEPTION')
-					break
-				counter += 1
+					# always pick one track, catch exception of second track being larger than random time
+					if time > random_time and counter != 0:
+						#print('        CAUGHT EXCEPTION')
+						break
+					counter += 1
 
-				# print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
-				# print('The total time is: ' + str(time))
+					# print('The time from: ' + starting_station + ' to ' + random_neighbor + ' is: {}'.format(G[starting_station][random_neighbor]['weight']))
+					# print('The total time is: ' + str(time))
+			
+					# make list of unique traversed critical connections
+					if ((starting_station, random_neighbor) in critical_connections) or ((random_neighbor, starting_station) in critical_connections):
+						if not ((starting_station, random_neighbor) in critical_connections_traversed) and not ((random_neighbor, starting_station) in critical_connections_traversed):
+							critical_connections_traversed.append((starting_station, random_neighbor))
+
+						# print('		DELETED: ' + str((starting_station, random_neighbor)))
+
+					# updates the starting station
+					starting_station = random_neighbor
+					# print('        Updated neighbors are: {}'.format(G[random_neighbor]))
+
+			# print(critical_connections)
+			# print(delete_counter)
+
+			# print("+++++++++++++++++++")
+			# print(critical_connections_not_traversed)
+			
+			# percentage of critical tracs traversed
+			p = return_p(critical_connections_traversed, critical_connections)
+
+			score = return_score(p, random_tracks, total_time)
+
+			# append to lists
+			score.append(return_score(p, random_tracks, total_time))
+			critical_track_coverage.append(p)
+
+		return score, critical_track_coverage
+
 		
-				# make list of unique traversed critical connections
-				if ((starting_station, random_neighbor) in critical_connections) or ((random_neighbor, starting_station) in critical_connections):
-					if not ((starting_station, random_neighbor) in critical_connections_traversed) and not ((random_neighbor, starting_station) in critical_connections_traversed):
-						critical_connections_traversed.append((starting_station, random_neighbor))
+		# voor commit even checken of dat hierboven nog klopt!!
+	def hierholzer(self, critical_station_list):
+		#a directed graph has an Eulerian cycle if following conditions are true 
+		#(1) All vertices with nonzero degree belong to a single strongly connected component. 
+		#(2) In degree and out degree of every vertex is same. The algorithm assumes that the given graph has Eulerian Circuit.
 
-					# print('		DELETED: ' + str((starting_station, random_neighbor)))
+		# list of tuples: to add used edges, that is two nodes that share that edge
+		used_edge_list = []
+		# in Hierholzer's they use a complete list of edges, and delete edges from this. Is that faster? Don't know how to do this... 
 
-				# updates the starting station
-				starting_station = random_neighbor
-				# print('        Updated neighbors are: {}'.format(G[random_neighbor]))
+		current_node;
 
-		# print(critical_connections)
-		# print(delete_counter)
+		# ensure that starting node is critical station
+		while current_node not in critical_station_list:
+			current_node = random.choice(G.nodes())
+			# BUT: in critical_edge_list there are tuples: does this work? see also below with used_edge_list
+			# BUT: there might be repetitions in random choice... something with range()? Because of repetitions, this might be slower
+			# de random choice etc. ook bij randomwalk
+			# print(current_node)
 
-		# print("+++++++++++++++++++")
-		# print(critical_connections_not_traversed)
+		# BUT: needs to stop when all edges are used: misschien met time? 
+		while True:
+
+			boolean_edges_unused = False
+
+			# to check if current_node has any unused edges
+			while boolean_edges_unused == False:
+
+				for current node in G.edges():
+				# BUT: saved in G.edges as tuple, does this search work?
+					counter1 += 1
+
+				for current_node in used_edge_list:
+				# BUT: saved as tuple..
+				# zorgen dat het beneden bij append aan deze lijst wel zo opgeslagen wordt als de G.edges, anders werkt dat met de counter niet.
+					counter2 += 1
+
+				# if current_node has no unused edges
+				if counter1 == counter2:
+					current_node = random.choice(G.nodes())
+					# BUT: the node now chosen might not be critical: is this bad? no, because after first current_node, it doesn't really matter I think.
+					# BUT: the node can have been critical already.
+					# misschien: hier een break doen. Op dit punt misschien een heel nieuw startpunt nemen (wel met een nieuwe current, dus op zich oet je zo verder.
+					# maar het is gewoon niet erg duidelijk aangegeven.)
+					# misschien2: backtracken om zo een langer traject te maken? Maar dat is wel lastig denk ik, en dan duurt het langer..
+				# if current_node has some unused edges
+				else:
+					boolean_edges_unused = True
+
+			random_neighbor_node;
+
+			# choose random new neighbor node until you find one with unused edge.
+			while (current_node, random_neighbor_node) in used_edge_list or (random_neighbor_node, current_node) in used_edge_list:
+				random_neighbor_node = random.choice(all_neighbors(G, current_node))
+				# in random_walk: random_neighbor = random.choice(list(G[current_node])); welke list? nog even checken.
+
+			# add now used edge to used_edge_list
+			used_edge_list.append(current_node, random_neighbor_node)
+			# BUT: hoe wordt het precies opgeslagen in G.edges? wordt de tuple daar ook andersom opgeslagen? voor de boolean_unused_edges
+
+			# change current_node to random_neighbor_node
+			current_node = random_neighbor_node
+								
+		# returns list of tuples so you can, "by hand" follow the path
+		return used_edge_list
+
+
+	# after while loop: check if all edges are in used_edge_list
+	# if so, yee!
+	# if not, new current node that is not in list?
+
 		
-		# percentage of critical tracs traversed
-		score = float(len(critical_connections_traversed)) / float(len(critical_connections))
-		
-		# score function 1
-		S = score * 10000 - (random_tracks * 20 + total_time / 100000)
 
-		# rounds S to nearest 10, otherwhise the amount of columns in bar chart is insane...
-		S_10 = round(S, 1)
 
-		return S_10
+#It is not possible to get stuck at any vertex other than v, because indegree and outdegree of every vertex must be same, 
+#when the trail enters another vertex w there must be an unused edge leaving w. ---- lijkt mij: it is not possible to get stuck, because it is a 
+# Eulerian cycle.
+
+#The tour formed in this way is a closed tour, but may not cover all the vertices and edges of the initial graph.
+#As long as there exists a vertex u that belongs to the current tour but that has adjacent edges not part of the tour, 
+#start another trail from u, following unused edges until returning to u, and join the tour formed in this way to the previous tour.
+
+#Thus the idea is to keep following unused edges and removing them until we get stuck. Once we get stuck, we back-track to 
+#the nearest vertex in our current path that has unused edges, and we repeat the process until all the edges have been used. We can use another container to maintain the final path.

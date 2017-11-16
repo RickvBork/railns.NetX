@@ -6,6 +6,7 @@ main.py
 # import the helpers file
 import helpers
 import barchart
+import csv
 
 # initialise graph class
 Graph = helpers.Graph
@@ -23,8 +24,8 @@ Graph.add_csv_edges(path_tracks_file, critical_stations)
 nodelist, critical_edge_list, minimum_edge_weight = Graph.spit_data_lists()
 
 scores = []
-for i in range(100000):
-	scores.append(Graph.random_walk(nodelist, minimum_edge_weight, critical_edge_list))
+for i in range(500):
+	score, S10 = Graph.random_walk(nodelist, minimum_edge_weight, critical_edge_list)
 
 print('score, amount\n++++++++++++')
 
@@ -38,17 +39,5 @@ print("++++++++++++\n")
 print(min(scores))
 print(max(scores))
 
-# for i in range(len(scores)):
-# 	scores_dict[score[i]]
-
-# print(scores)
-# print(min(scores))
-# print(max(scores))
-
 # make bar chart of scores
 # barchart.draw(scores)
-
-#testing
-# nodelist, critical_edge_list, min_edge_weight = spit_data_list(nodelist, critical_edge_list, min_edge_weight)
-# print(critical_edge_list)
-# print('hoi')
