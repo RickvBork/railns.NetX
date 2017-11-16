@@ -34,7 +34,7 @@ def print_score_information(score_list):
 
 	print("++++++++++++++\n")
 	print("minimum: {}".format(minimum))
-	print("minimum: {}\n".format(maximum))
+	print("maximum: {}\n".format(maximum))
 
 '''
 Graph class, mostly storage for functions. Can later be turned into a init Class,
