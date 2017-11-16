@@ -7,6 +7,7 @@ main.py
 import helpers
 import barchart
 import csv
+import walks
 
 # initialise graph class
 Graph = helpers.Graph
@@ -22,6 +23,8 @@ critical_stations = Graph.add_csv_nodes(path_stations_file)
 Graph.add_csv_edges(path_tracks_file, critical_stations)
 
 nodelist, critical_edge_list, minimum_edge_weight = Graph.spit_data_lists()
+
+print(walks.walk1(nodelist, minimum_edge_weight, critical_edge_list))
 
 scores = []
 for i in range(500):

@@ -234,7 +234,7 @@ class Graph:
 			# to check if current_node has any unused edges
 			while boolean_edges_unused == False:
 
-				for current node in G.edges():
+				for current_node in G.edges():
 				# BUT: saved in G.edges as tuple, does this search work?
 					counter1 += 1
 
