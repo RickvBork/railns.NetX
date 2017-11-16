@@ -35,5 +35,8 @@ for i in range(10000):
 
 helpers.print_score_information(scores)
 
+# test for requirements...
+Graph.draw()
+
 # make bar chart of scores
 # barchart.draw(scores)
