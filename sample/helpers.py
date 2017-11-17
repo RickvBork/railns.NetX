@@ -3,6 +3,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import tkinter # by thom, because of some run errors
 import random
+from collections import Counter
 
 G = nx.Graph()
 
@@ -19,18 +20,20 @@ def print_score_information(score_list):
 	minimum = int(min(score_list))
 	maximum = int(max(score_list))
 
+	# make count dict
+	count_dict = Counter(score_list)
+
 	print('\nscore, amount\n++++++++++++++')
 
-	# loop over score list
+	# loop through all possible scores
 	for i in range(minimum, maximum + 1, 1):
-		
-		# count number of times a score is in the list
-		count = score_list.count(i)
-		
-		# if i does not exist as score, ignore
-		if count != 0:
-			print("{:<9}".format(i), end='')
-			print("{}".format(score_list.count(i)))
+
+		score_count = count_dict[i]
+
+		# only print relevant scores
+		if score_count != 0:
+			print("{:<10}".format(i), end='')
+			print(count_dict[i])
 
 	print("++++++++++++++\n")
 	print("minimum: {}".format(minimum))
@@ -174,7 +177,7 @@ class Graph:
 		critical_connections_traversed = []
 
 		# rand number of tracks 1 up to including 7
-		random_tracks = 7
+		random_tracks = random.randint(1, 7)
 
 		# keep track of critical connections that are not used yet
 		delete_counter = 0
