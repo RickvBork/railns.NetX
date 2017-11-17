@@ -1,0 +1,5 @@
+-Hard constraints:
+	Track duration <= 120 min
+	Track number n 0 <= n <= 8
+	One track is defined as one way e.g.
+		(Den Haag Centraal -> Amsterdam Centraal) == (Amsterdam Centraal -> Den Haag Centraal)

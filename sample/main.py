@@ -28,10 +28,9 @@ nodelist, critical_edge_list, minimum_edge_weight = Graph.spit_data_lists()
 
 scores = []
 p = []
-for i in range(10000):
+for i in range(1000000):
 	p, score = Graph.random_walk(nodelist, minimum_edge_weight, critical_edge_list)
 	scores.append(score)
-	print(p)
 
 helpers.print_score_information(scores)
 

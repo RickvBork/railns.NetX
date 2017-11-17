@@ -1,1 +1,4 @@
+# ignore pyc files
 *.pyc
+.address
+.constraints

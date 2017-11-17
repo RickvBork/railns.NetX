@@ -34,7 +34,7 @@ def print_score_information(score_list):
 
 	print("++++++++++++++\n")
 	print("minimum: {}".format(minimum))
-	print("minimum: {}\n".format(maximum))
+	print("maximum: {}\n".format(maximum))
 
 '''
 Graph class, mostly storage for functions. Can later be turned into a init Class,
@@ -143,20 +143,30 @@ class Graph:
 	'''
 	def spit_data_lists():
 		
+		# set datas
+		nodes = G.nodes()
+		edges = G.edges()
+		weight_dict = nx.get_edge_attributes(G,'weight')
+		critical_dict = nx.get_edge_attributes(G, 'color')
+
 		# make nodelist
-		nodelist = [node for node in G.nodes()]
+		node_list = [node for node in nodes]
 
 		# seek minimum weight
-		min_edge_weight = min([nx.get_edge_attributes(G,'weight')[edge] for edge in G.edges()])
+		edge_weight_list = [weight_dict[edge] for edge in edges]
+
+		# seek minimum weight
+		min_edge_weight = min(edge_weight_list)
 
 		# make unique critical edge list
-		critical_edge_list = []
-		for key, value in nx.get_edge_attributes(G, 'color').items():
-			if value == 'r':
-					critical_edge_list.append(key)
+		critical_edge_list = [edge for edge in critical_dict if critical_dict[edge] == 'r']
+
+		# seek total critical edge time
+		critical_edge_weight_list = [weight_dict[edge] for edge in critical_edge_list]
+
 
 		# return values
-		return nodelist, critical_edge_list, min_edge_weight
+		return node_list, critical_edge_list, min_edge_weight
 
 	def random_walk(nodelist, minimum_weight, critical_connections, simulations = 100):
 

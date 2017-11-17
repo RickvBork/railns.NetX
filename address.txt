@@ -1,0 +1,2 @@
+cd /.
+cd D:\SBI\MPROG\Heuristieken

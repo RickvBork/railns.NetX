@@ -1,3 +1,7 @@
-networkx=
-pylab
-matplotlib
+####### Requirements with Version Specifiers #######
+
+# python == 3.6.*, other versions not known to work
+
+# pip install:
+networkx >= 2.0
+matplotlib >= 2.1.0
