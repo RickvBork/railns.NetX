@@ -14,10 +14,15 @@ class Graph:
 		self.G = nx.Graph()
 		self.critical_station_list = self.add_csv_nodes(node_file)
 		self.add_csv_edges(edge_file, self.critical_station_list)
-		self.data_lists = self.spit_data_lists()
-		self.nodes = self.data_lists[0]
-		self.critical_edge_list = self.data_lists[1]
-		self.min_edge_weight = self.data_lists[2]
+		self.nodes = self.get_nodes()
+		self.critical_edge_list = self.get_critical_edges()
+		self.minimal_edge_weight = min(self.get_edge_weights())
+
+	'''
+	print(Object) now returns this string, usefull for profiding short descriptions
+	'''
+	def __str__(self):
+		return "Maybe something for later..."
 
 	'''
 	Adds nodes from the csv files passed to a specific instance 
@@ -62,45 +67,39 @@ class Graph:
 				station_1 = row[1]
 				weight = row[2]
 
+				# these edges are 'super' critical
 				if station_0 in list and station_1 in list:
 					self.G.add_edge(station_0, station_1, 
 						weight = int(weight), color = 'r')
 
+				# these edges are critical
 				elif station_0 in list or station_1 in list:
 					self.G.add_edge(station_0, station_1, 
 						weight = int(weight), color = 'r')
 
+				# these edges are not critical
 				else:
 					self.G.add_edge(station_0, station_1, 
 						weight = int(weight), color = 'k')
 
 	'''
-	Retrieves valuable data from the edges and nodes for a specific
-	instance of the graph class.
+	Get the nodes from this specific instance of the graph class
 	'''
-	def spit_data_lists(self):
-		
-		# set datas
+	def get_nodes(self):
 		nodes = self.G.nodes()
+		return [node for node in nodes]
+
+	'''
+	Get the edges from this specific instance of the graph class
+	'''
+	def get_critical_edges(self):
+		critical_dict = nx.get_edge_attributes(self.G, 'color')
+		return [edge for edge in critical_dict if critical_dict[edge] == 'r']
+
+	'''
+	Get the edges weights from this specific instance of the graph class
+	'''
+	def get_edge_weights(self):
 		edges = self.G.edges()
 		weight_dict = nx.get_edge_attributes(self.G,'weight')
-		critical_dict = nx.get_edge_attributes(self.G, 'color')
-
-		# make nodelist
-		node_list = [node for node in nodes]
-
-		# seek minimum weight
-		edge_weight_list = [weight_dict[edge] for edge in edges]
-
-		# seek minimum weight
-		min_edge_weight = min(edge_weight_list)
-
-		# make unique critical edge list
-		critical_edge_list = [edge for edge in critical_dict if critical_dict[edge] == 'r']
-
-		# seek total critical edge time
-		critical_edge_weight_list = [weight_dict[edge] for edge in critical_edge_list]
-
-
-		# return values
-		return [node_list, critical_edge_list, min_edge_weight]
+		return [weight_dict[edge] for edge in edges]
