@@ -252,7 +252,7 @@ class Graph:
 		#(2) In degree and out degree of every vertex is same. The algorithm assumes that the given graph has Eulerian Circuit.
 
 		# list of tuples: to add used edges, that is two nodes that share that edge
-		used_edge_list = []
+		connections_traversed = []
 		# in Hierholzer's they use a complete list of edges, and delete edges from this. Is that faster? Don't know how to do this... 
 
 		current_node;
@@ -275,13 +275,13 @@ class Graph:
 				for current_node in G.edges():
 				# BUT: saved in G.edges as tuple, does this search work?
 				# item for item in G.edges if current_node in item
-					counter1 += 1
+					node_in_edges += 1
 
 				for current_node in used_edge_list:
 				# BUT: saved as tuple..: ?
 				# item for item in G.edges if current_node in item
 				# zorgen dat het beneden bij append aan deze lijst wel zo opgeslagen wordt als de G.edges, anders werkt dat met de counter niet.
-					counter2 += 1
+					node_in_used_edges += 1
 
 				# if current_node has no unused edges
 				if counter1 == counter2:
@@ -298,29 +298,27 @@ class Graph:
 			random_neighbor_node;
 
 			# choose random new neighbor node until you find one with unused edge.
-			while (current_node, random_neighbor_node) in used_edge_list or (random_neighbor_node, current_node) in used_edge_list:
+			while ((current_node, random_neighbor_node) in connections_traversed) or ((random_neighbor_node, current_node) in connections_traversed):
 				random_neighbor_node = random.choice(all_neighbors(G, current_node))
 				# in random_walk: random_neighbor = random.choice(list(G[current_node])); welke list? nog even checken.
 
-			# add now used edge to used_edge_list
-			used_edge_list.append(current_node, random_neighbor_node)
+			# add now used edge to critical_connections_traversed
+			connections_traversed.append(current_node, random_neighbor_node)
 			# BUT: hoe wordt het precies opgeslagen in G.edges? wordt de tuple daar ook andersom opgeslagen? voor de boolean_unused_edges
 
 			# change current_node to random_neighbor_node
 			current_node = random_neighbor_node
 			
-			# possible break;
-			# 
+			if len(critical_connections) == len(G.edges):
+				break;	
 
 		# returns list of tuples so you can, "by hand" follow the path
 		return used_edge_list
-
 
 	# after while loop: check if all edges are in used_edge_list
 	# if so, yee!
 	# if not, new current node that is not in list?
 
-		
 
 
 #It is not possible to get stuck at any vertex other than v, because indegree and outdegree of every vertex must be same, 
