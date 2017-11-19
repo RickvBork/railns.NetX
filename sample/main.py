@@ -7,6 +7,7 @@ main.py
 import helpers
 import barchart
 import csv
+import cProfile, pstats, io
 # import walks TODO IGNORE FOR NOW!
 
 # initialise graph class
@@ -26,12 +27,12 @@ nodelist, critical_edge_list, minimum_edge_weight = Graph.spit_data_lists()
 
 # print(walks.walk1(nodelist, minimum_edge_weight, critical_edge_list)) TODO IGNORE FOR NOW!
 
+iterations = 10000
 scores = []
 p = []
-for i in range(10000):
+for i in range(iterations):
 	p, score = Graph.random_walk(nodelist, minimum_edge_weight, critical_edge_list)
 	scores.append(score)
-	print(p)
 
 helpers.print_score_information(scores)
 

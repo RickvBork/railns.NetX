@@ -1,0 +1,5 @@
+cd /.
+cd D:\SBI\MPROG\Heuristieken
+
+cd /.
+cd C:\SBI\"Minor Programmeren"\Heuristieken
