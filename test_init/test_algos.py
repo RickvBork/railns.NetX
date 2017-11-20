@@ -5,68 +5,86 @@ import random
 Pure, random walk. No heuristics.
 Takes a graph object and an iterator.
 '''
-def random_walk(graph_object, iterator):
+def random_walk(graph, iterator):
+
+	# get information from graph to perform algorithm
+	nodelist = graph.nodes
+	minimum_weight = graph.minimal_edge_weight
+	critical_connections = graph.critical_edge_list
+	total_critical_connections = graph.total_critical_edges
+	G = graph.G
+
+	# set lists
+	p_list = []
+	s_list = []
+	best_tracks = []
+	best_score = -141
+
+	# do the walk iterator amount of times
+	for i in range(iterator):
+
+		# start a list of unique critical tracks the random walk traverses
+		critical_connections_traversed = []
+
+		# begin new track dict
+		all_connections = {}
+
+		# rand number of tracks 1 up to including 7
+		random_tracks = 7 # random.randint(1, 7)
+
+		# keep track of critical connections that are not used yet
+		total_time = 0
+
+		for track in range(random_tracks):
+
+			# begin new dict with lists
+			all_connections[str(track)] = []
+
+			# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
+			starting_station = random.choice(nodelist)
+			time = 0
+
+			# rand time for a given track
+			random_time = random.randint(minimum_weight, 120)
+
+			counter = 0
+			while time < random_time:
+
+				#random_neighbor = random.choice(G[starting_station]).keys()
+				random_neighbor = random.choice(list(G[starting_station]))
+
+				# append each new edge to track
+				all_connections[str(track)].append((starting_station, random_neighbor))
+
+				# keeps track of time of the track
+				time += G[starting_station][random_neighbor]['weight']
+				total_time += G[starting_station][random_neighbor]['weight']
+				
+				# always pick one track, catch exception of second track being larger than random time
+				if time > random_time and counter != 0:
+					break
+				counter += 1	
+
+				# update traversed critical connections as long as not all have been covered
+				if len(critical_connections_traversed) != total_critical_connections:
+					critical_connections_traversed = test_helpers.update_critical_connections_travesed((starting_station, random_neighbor), critical_connections, critical_connections_traversed)
+				else:
+					print("`GOT EM!") # yeah right...
+
+				# updates the starting station
+				starting_station = random_neighbor
 		
-		# get information from graph to perform algorithm
-		nodelist = graph_object.nodes
-		minimum_weight = graph_object.minimal_edge_weight
-		critical_connections = graph_object.critical_edge_list
-		G = graph_object.G
+		# percentage of critical tracs traversed
+		p = test_helpers.get_p(critical_connections_traversed, critical_connections)
+		p_list.append(p)
 
-		# set lists
-		p_list = []
-		s_list = []
-		for i in range(iterator):
-		
-			# start a list of unique critical tracks the random walk traverses
-			critical_connections_traversed = []
+		# append score
+		s = test_helpers.get_score(p, random_tracks, total_time)
+		s_list.append(s)
 
-			# rand number of tracks 1 up to including 7
-			random_tracks = random.randint(1,7)
+		# update best track if its score is better than previous best
+		if s > best_score:
+			best_tracks.append(all_connections)
+			best_score = s
 
-			# keep track of critical connections that are not used yet
-			delete_counter = 0
-			total_time = 0
-
-			for track in range(random_tracks):
-
-				# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
-				starting_station = nodelist[random.randint(0,len(nodelist) - 1)]
-				time = 0
-
-				# rand time for a given track
-				random_time = random.randint(minimum_weight,120)
-
-				counter = 0
-				while time < random_time:
-
-					# chooses a random key from a dictionary (neighbors), is choosing a random neighbor
-
-					#random_neighbor = random.choice(G[starting_station]).keys()
-					random_neighbor = random.choice(list(G[starting_station]))
-
-					# keeps track of time of the track
-					time += G[starting_station][random_neighbor]['weight']
-					total_time += G[starting_station][random_neighbor]['weight']
-					
-					# always pick one track, catch exception of second track being larger than random time
-					if time > random_time and counter != 0:
-						break
-					counter += 1
-
-					# make list of unique traversed critical connections
-					if ((starting_station, random_neighbor) in critical_connections) or ((random_neighbor, starting_station) in critical_connections):
-						if not ((starting_station, random_neighbor) in critical_connections_traversed) and not ((random_neighbor, starting_station) in critical_connections_traversed):
-							critical_connections_traversed.append((starting_station, random_neighbor))
-
-					# updates the starting station
-					starting_station = random_neighbor
-			
-			# percentage of critical tracs traversed
-			p = test_helpers.get_p(critical_connections_traversed, critical_connections)
-			p_list.append(p)
-
-			# append score
-			s_list.append(test_helpers.get_score(p, random_tracks, total_time))
-
-		return s_list, p_list
+	return s_list, p_list, best_tracks

@@ -9,8 +9,16 @@ path_tracks_file = '../data/ConnectiesHolland.csv'
 # initialise graph class
 Graph = test_class.Graph
 alg = test_algos
+hlp = test_helpers
 
 # make graph instance (Noord Holland)
 g = Graph("NH", path_stations_file, path_tracks_file)
 
-scores = alg.random_walk(g, 1000)[0]
+scores, p_scores, best_tracks = alg.random_walk(g, 10)
+
+hlp.print_score_information(scores)
+
+# print best tracks
+for track in best_tracks:
+	for key in track:
+		print("{}: {}".format(key, track[key]))

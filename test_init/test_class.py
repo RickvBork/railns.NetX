@@ -17,6 +17,7 @@ class Graph:
 		self.nodes = self.get_nodes()
 		self.critical_edge_list = self.get_critical_edges()
 		self.minimal_edge_weight = min(self.get_edge_weights())
+		self.total_critical_edges = len(self.critical_edge_list)
 
 	'''
 	print(Object) now returns this string, usefull for profiding short descriptions
@@ -30,27 +31,27 @@ class Graph:
 	'''
 	def add_csv_nodes(self, file_name):
 
-			with open(file_name) as csvfile:
-			    rows = csv.reader(csvfile)
+		with open(file_name) as csvfile:
+			rows = csv.reader(csvfile)
 
-			    critical_station_list = []
-			    for row in rows:
+			critical_station_list = []
+			for row in rows:
 
-			    	# immidiately single out stations for efficiency
-			    	if row[3] == "Kritiek":
-			    		critical_station_list.append(row[0])
-			    		self.G.add_node(row[0],
-			    			pos = (float(row[2]), float(row[1])), 
-			    			color = 'r',
-			    			size = 40)
+				# immidiately single out stations for efficiency
+				if row[3] == "Kritiek":
+					critical_station_list.append(row[0])
+					self.G.add_node(row[0],
+						pos = (float(row[2]), float(row[1])), 
+						color = 'r',
+						size = 40)
 
-			    	else:
-			    		self.G.add_node(row[0], 
-			    			pos = (float(row[2]), float(row[1])),
-			    			color = 'k',
-			    			size = 10)
+				else:
+					self.G.add_node(row[0], 
+						pos = (float(row[2]), float(row[1])),
+						color = 'k',
+						size = 10)
 
-			    return critical_station_list
+			return critical_station_list
 
 	'''
 	Adds edges from the csv files passed to a specific instance 
