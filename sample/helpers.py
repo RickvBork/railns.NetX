@@ -244,8 +244,6 @@ class Graph:
 
 		return p, score
 
-
-		# voor commit even checken of dat hierboven nog klopt!!
 	def hierholzer(self, critical_station_list):
 		#a directed graph has an Eulerian cycle if following conditions are true 
 		#(1) All vertices with nonzero degree belong to a single strongly connected component. 
