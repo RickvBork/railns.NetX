@@ -1,4 +1,4 @@
-from collections import Counter
+import collections as col
 
 '''
 Helpers file.
@@ -41,7 +41,7 @@ def print_score_information(score_list):
 	maximum = int(max(score_list))
 
 	# make count dict
-	count_dict = Counter(score_list)
+	count_dict = col.Counter(score_list)
 
 	print('\nscore, amount\n++++++++++++++')
 
@@ -58,3 +58,15 @@ def print_score_information(score_list):
 	print("++++++++++++++\n")
 	print("minimum: {}".format(minimum))
 	print("maximum: {}\n".format(maximum))
+
+	print(count_dict)
+
+def ordered_counter(score_list):
+
+	# count the number of times an integer is in list
+	count_dict = col.Counter(score_list)
+
+	# sort list by integer
+	ordered_dict = col.OrderedDict(sorted(count_dict.items()))
+
+	return ordered_dict
