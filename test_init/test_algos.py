@@ -182,14 +182,41 @@ def smart_random_walk(graph, iterator):
 			counter = 0
 			while track_time < random_time:
 				
-				# get list of critical neighbours of starting_station
+				# get list of neighbors of starting station
+				neighbors = [station for station in list(graph.G[starting_station])]
+				# get list of  critical neighbors of starting_station
 				critical_neighbors = [station for station in list(graph.G[starting_station]) if station in graph.critical_station_list]
+				# get list of possible critical connections
+				if starting_station in graph.critical_station_list:
+					possible_critical_connections = [[starting_station, neighbor] for neighbor in neighbors]
+				else:
+					possible_critical_connections = [[starting_station, critical_neighbor] for critical_neighbor in critical_neighbors]
+					
+				# get list of what possible_critical_conenctions are not traversed yet
+				print(all_connections["tracks"])
+				for i in range(track + 1):
+					print(all_connections["tracks"][str(i)])
+				print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+				prefered_neighbors = list(neighbors)
+				for i in range(track + 1):	
+					for neighbor in neighbors:
+						if ((starting_station, neighbor) in all_connections["tracks"][str(i)] or (starting_station, neighbor) in all_connections["tracks"][str(i)]):
+							#print(starting_station, neighbor)
+							if neighbor in prefered_neighbors:
+								prefered_neighbors.remove(neighbor)
+				print(prefered_neighbors)
+							
+				'''if ((starting_station, critical_neighbor) in all_connections["tracks"] for critical_neightbor in critical_neighbors):
+					print("TRUE!!!")
+				else:
+					print("False")'''
 				
-
-				if critical_neighbors == []:
+				
+				# choose random critical neighbor, if any. else choose random station
+				if prefered_neighbors == []:
 					random_neighbor = random.choice(list(G[starting_station]))
 				else: 
-					random_neighbor = random.choice(critical_neighbors)
+					random_neighbor = random.choice(prefered_neighbors)
 
 				# keeps track of time of the track
 				edge_time = G[starting_station][random_neighbor]['weight']
@@ -273,7 +300,8 @@ def hierholzer(graph):
 			# to check if current_node has any unused edges
 		while boolean_edges_unused == False:
 
-			for current_node in G.edges():
+			# error: hoe krijg ik alle edges?
+			for current_node in graph.edges:
 				# BUT: saved in G.edges as tuple, does this search work?
 				node_in_edges += 1
 
@@ -285,7 +313,7 @@ def hierholzer(graph):
 
 				# if current_node has no unused edges
 			if node_in_edges == node_in_used_edges:
-				current_node = random.choice(G.nodes())
+				current_node = random.choice(graph.nodes)
 				# if current_node has some unused edges
 			else:
 				boolean_edges_unused = True
@@ -305,7 +333,7 @@ def hierholzer(graph):
 			# change current_node to random_neighbor_node
 		current_node = random_neighbor_node
 			
-		if len(connections_traversed) == len(G.edges):
+		if len(connections_traversed) == len(graph.edges):
 			break;	
 
 		# returns list of tuples so you can, "by hand" follow the path
