@@ -19,7 +19,7 @@ def random_walk(graph, iterator):
 	p_list = []
 	s_list = []
 	best_tracks = []
-	best_score = -141
+	best_score = - 141
 
 	# do the walk iterator amount of times
 	for i in range(iterator):
@@ -28,7 +28,7 @@ def random_walk(graph, iterator):
 		critical_connections_traversed = []
 
 		# begin new track dict
-		all_connections = {}
+		all_connections = {"tracks": {}, "score": None}
 
 		# rand number of tracks 1 up to including 7
 		random_tracks = random.randint(1, 7)
@@ -38,10 +38,11 @@ def random_walk(graph, iterator):
 		# keep track of critical connections that are not used yet
 		total_time = 0
 
+		# builds the service of multiple tracks
 		for track in range(random_tracks):
 
 			# begin new dict with lists
-			all_connections[str(track)] = []
+			all_connections["tracks"][str(track)] = []
 
 			# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
 			starting_station = random.choice(nodelist)
@@ -62,16 +63,16 @@ def random_walk(graph, iterator):
 				#random_neighbor = random.choice(G[starting_station]).keys()
 				random_neighbor = random.choice(list(G[starting_station]))
 
-				# append each new edge to track
-				all_connections[str(track)].append((starting_station, random_neighbor))
-
 				# keeps track of time of the track
 				edge_time = G[starting_station][random_neighbor]['weight']
 				track_time += edge_time
+
+				# append each new edge to track
+				all_connections["tracks"][str(track)].append((starting_station, random_neighbor))
 				
 				# always pick one track
-				if edge_time > random_time and counter != 0:
-					print("		Exception!\nTime: {} > Edge Time: {}\n{} tracks walked".format(edge_time, random_time, counter))
+				if ((edge_time > random_time) and counter != 0) or (edge_time > random_time - track_time):
+					print("		Exception!")
 					break
 				counter += 1
 
@@ -89,16 +90,16 @@ def random_walk(graph, iterator):
 				print("-------------------------------------------------")
 
 			# total time of the service
-			total_time += track_time
+			total_time = track_time
 
 			print("This service will take {}min\n".format(track_time))
 		
 		# percentage of critical tracs traversed
-		p = test_helpers.get_p(critical_connections_traversed, critical_connections)
+		p = hlp.get_p(critical_connections_traversed, critical_connections)
 		p_list.append(p)
 
 		# append score
-		s = test_helpers.get_score(p, random_tracks, total_time)
+		s = hlp.get_score(p, random_tracks, total_time)
 		s_list.append(s)
 
 		# update best track if its score is better than previous best
@@ -106,11 +107,15 @@ def random_walk(graph, iterator):
 			best_tracks.append(all_connections)
 			best_score = s
 
+		all_connections["score"] = s
+
 		print("Connections made:")
 		for i in range(random_tracks):
 			print("Track {}:	".format(i + 1))
-			edgeList = all_connections[str(i)]
+			edgeList = all_connections["tracks"][str(i)]
+			score = all_connections["score"]
 			for edge in edgeList:
 				print("		{}".format(edge))
+		print("Score: {}".format(score))
 
 	return s_list, p_list, best_tracks
