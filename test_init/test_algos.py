@@ -30,7 +30,9 @@ def random_walk(graph, iterator):
 		all_connections = {}
 
 		# rand number of tracks 1 up to including 7
-		random_tracks = 7 # random.randint(1, 7)
+		random_tracks = random.randint(1, 7)
+
+		print("Track number: {}".format(random_tracks))
 
 		# keep track of critical connections that are not used yet
 		total_time = 0
@@ -42,13 +44,19 @@ def random_walk(graph, iterator):
 
 			# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
 			starting_station = random.choice(nodelist)
-			time = 0
 
-			# rand time for a given track
+			print("Begin walk: {}".format(starting_station))
+
+			# keeps track of the time of one track of a service
+			track_time = 0
+
+			# random time for a given track
 			random_time = random.randint(minimum_weight, 120)
 
+			print("Track maximum time: {}".format(random_time))
+
 			counter = 0
-			while time < random_time:
+			while track_time < random_time:
 
 				#random_neighbor = random.choice(G[starting_station]).keys()
 				random_neighbor = random.choice(list(G[starting_station]))
@@ -57,13 +65,14 @@ def random_walk(graph, iterator):
 				all_connections[str(track)].append((starting_station, random_neighbor))
 
 				# keeps track of time of the track
-				time += G[starting_station][random_neighbor]['weight']
-				total_time += G[starting_station][random_neighbor]['weight']
+				edge_time = G[starting_station][random_neighbor]['weight']
+				track_time += edge_time
 				
-				# always pick one track, catch exception of second track being larger than random time
-				if time > random_time and counter != 0:
+				# always pick one track
+				if edge_time > random_time and counter != 0:
+					print("		Exception!\nTime: {} > Edge Time: {}\n{} tracks walked".format(edge_time, random_time, counter))
 					break
-				counter += 1	
+				counter += 1
 
 				# update traversed critical connections as long as not all have been covered
 				if len(critical_connections_traversed) != total_critical_connections:
@@ -73,6 +82,15 @@ def random_walk(graph, iterator):
 
 				# updates the starting station
 				starting_station = random_neighbor
+				print("		Next station: {}".format(random_neighbor))
+				print("			Edge time is: {}".format(edge_time))
+				print("			Total time is: {}".format(track_time))
+				print("-------------------------------------------------")
+
+			# total time of the service
+			total_time += track_time
+
+			print("This service will take {}min".format(track_time))
 		
 		# percentage of critical tracs traversed
 		p = test_helpers.get_p(critical_connections_traversed, critical_connections)
@@ -86,5 +104,13 @@ def random_walk(graph, iterator):
 		if s > best_score:
 			best_tracks.append(all_connections)
 			best_score = s
+
+		print("Connections made:\n")
+		for i in range(random_tracks):
+			print("Track {}:	".format(i + 1), end = '')
+			edgeList = all_connections[str(i)]
+			for edge in edgeList:
+				print("{} -> ".format(edge), end = '')
+			print("End")
 
 	return s_list, p_list, best_tracks

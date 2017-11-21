@@ -14,11 +14,11 @@ hlp = test_helpers
 # make graph instance (Noord Holland)
 g = Graph("NH", path_stations_file, path_tracks_file)
 
-scores, p_scores, best_tracks = alg.random_walk(g, 10)
+scores, p_scores, best_tracks = alg.random_walk(g, 1)
 
 hlp.print_score_information(scores)
 
 # print best tracks
-for track in best_tracks:
-	for key in track:
-		print("{}: {}".format(key, track[key]))
+# for track in best_tracks:
+# 	for key in track:
+# 		print("{}: {}".format(key, track[key]))
