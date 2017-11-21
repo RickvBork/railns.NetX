@@ -277,7 +277,6 @@ def hierholzer(graph):
 		# to check if current_node has any unused edges
 		while boolean_edges_unused == False:
 
-<<<<<<< HEAD
 			current_node_check = current_node
 
 			for current_node_check in graph.edges:
@@ -285,10 +284,6 @@ def hierholzer(graph):
 				print(current_node_check)
 				print("for current_node in graph.edges")
 				print(current_node)
-=======
-			for current_node in G.edges():
-				# BUT: saved in G.edges as tuple, does this search work?
->>>>>>> 20bdb04b366d3c3189f826ee279168b66cf89ec3
 				node_in_edges += 1
 
 			for current_node_check in connections_traversed:
@@ -299,15 +294,10 @@ def hierholzer(graph):
 
 			# if current_node has no unused edges pick new current_node
 			if node_in_edges == node_in_used_edges:
-<<<<<<< HEAD
 				current_node = random.choice(graph.nodes)
 				print(current_node)
 				print("de node hierboven is random veranderd in while loop 2")
 			# if current_node has some unused edges, continue
-=======
-				current_node = random.choice(G.nodes())
-				# if current_node has some unused edges
->>>>>>> 20bdb04b366d3c3189f826ee279168b66cf89ec3
 			else:
 				boolean_edges_unused = True
 
