@@ -70,3 +70,24 @@ def ordered_counter(score_list):
 	ordered_dict = col.OrderedDict(sorted(count_dict.items()))
 
 	return ordered_dict
+
+def get_prefered_neighbors(graph, starting_station, all_connections, track):
+	# get list of neighbors of starting station
+	neighbors = [station for station in list(graph.G[starting_station])]
+	# get list of  critical neighbors of starting_station
+	critical_neighbors = [station for station in list(graph.G[starting_station]) if station in graph.critical_station_list]
+
+	for i in range(track + 1):
+		print(all_connections["tracks"][str(i)])
+	print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+	prefered_neighbors = list(neighbors)
+	for i in range(track + 1):	
+		for neighbor in neighbors:
+			if ((starting_station, neighbor) in all_connections["tracks"][str(i)] or (starting_station, neighbor) in all_connections["tracks"][str(i)]):
+				#print(starting_station, neighbor)
+				if neighbor in prefered_neighbors:
+					prefered_neighbors.remove(neighbor)
+					
+	print(prefered_neighbors)
+	
+	return prefered_neighbors

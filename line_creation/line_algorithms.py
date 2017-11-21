@@ -133,7 +133,7 @@ def smart_random_walk(graph, iterator):
 	critical_connections = graph.critical_edge_list
 	total_critical_connections = graph.total_critical_edges
 	G = graph.G
-	hlp = test_helpers
+	#hlp = test_helpers
 
 	# set lists
 	p_list = []
@@ -184,11 +184,12 @@ def smart_random_walk(graph, iterator):
 				# get list of critical neighbours of starting_station
 				critical_neighbors = [station for station in list(graph.G[starting_station]) if station in graph.critical_station_list]
 				
+				prefered_neighbors = hlp.get_prefered_neighbors(graph, starting_station, all_connections, track)
 
-				if critical_neighbors == []:
+				if prefered_neighbors == []:
 					random_neighbor = random.choice(list(G[starting_station]))
 				else: 
-					random_neighbor = random.choice(critical_neighbors)
+					random_neighbor = random.choice(prefered_neighbors)
 
 				# keeps track of time of the track
 				edge_time = G[starting_station][random_neighbor]['weight']
