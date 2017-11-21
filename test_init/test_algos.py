@@ -128,12 +128,12 @@ def hierholzer(graph):
 	list = graph.critical_station_list
 	connections_traversed = []
 
-	current_node;
+	current_node = random.choice(graph.nodes)
 
 		# ensure that starting node is critical station
 	while current_node not in list:
 		current_node = random.choice(G.nodes())
-		print(current_node)
+		#print(current_node)
 			
 	while True:
 
@@ -159,7 +159,7 @@ def hierholzer(graph):
 			else:
 				boolean_edges_unused = True
 
-		random_neighbor_node;
+		random_neighbor_node = random.choice(all_neighbors(G, current_node))
 
 			# choose random new neighbor node until you find one with unused edge.
 		while ((current_node, random_neighbor_node) in connections_traversed) or ((random_neighbor_node, current_node) in connections_traversed):
