@@ -185,7 +185,7 @@ def smart_random_walk(graph, iterator):
 				# get list of critical neighbours of starting_station
 				critical_neighbors = [station for station in list(graph.G[starting_station]) if station in graph.critical_station_list]
 				
-
+				# choose random critical neighbor, if any. else choose random station
 				if critical_neighbors == []:
 					random_neighbor = random.choice(list(G[starting_station]))
 				else: 

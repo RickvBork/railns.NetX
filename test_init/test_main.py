@@ -14,11 +14,14 @@ hlp = test_helpers
 # make graph instance (Noord Holland)
 g = Graph("NH", path_stations_file, path_tracks_file)
 
-scores, p_scores, best_tracks = alg.random_walk(g, 1)
+#scores, p_scores, best_tracks = alg.random_walk(g, 1)
+
+# get score of smart random walk
+scores, p_scores, best_tracks = alg.smart_random_walk(g, 1)
 
 hlp.print_score_information(scores)
 
-score_list = alg.hierholzer(g)
+#score_list = alg.hierholzer(g)
 #print(score_list)
 
 # print best tracks
