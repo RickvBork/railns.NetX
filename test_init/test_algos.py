@@ -182,14 +182,41 @@ def smart_random_walk(graph, iterator):
 			counter = 0
 			while track_time < random_time:
 				
-				# get list of critical neighbours of starting_station
+				# get list of neighbors of starting station
+				neighbors = [station for station in list(graph.G[starting_station])]
+				# get list of  critical neighbors of starting_station
 				critical_neighbors = [station for station in list(graph.G[starting_station]) if station in graph.critical_station_list]
+				# get list of possible critical connections
+				if starting_station in graph.critical_station_list:
+					possible_critical_connections = [[starting_station, neighbor] for neighbor in neighbors]
+				else:
+					possible_critical_connections = [[starting_station, critical_neighbor] for critical_neighbor in critical_neighbors]
+					
+				# get list of what possible_critical_conenctions are not traversed yet
+				print(all_connections["tracks"])
+				for i in range(track + 1):
+					print(all_connections["tracks"][str(i)])
+				print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+				prefered_neighbors = list(neighbors)
+				for i in range(track + 1):	
+					for neighbor in neighbors:
+						if ((starting_station, neighbor) in all_connections["tracks"][str(i)] or (starting_station, neighbor) in all_connections["tracks"][str(i)]):
+							#print(starting_station, neighbor)
+							if neighbor in prefered_neighbors:
+								prefered_neighbors.remove(neighbor)
+				print(prefered_neighbors)
+							
+				'''if ((starting_station, critical_neighbor) in all_connections["tracks"] for critical_neightbor in critical_neighbors):
+					print("TRUE!!!")
+				else:
+					print("False")'''
 				
-
-				if critical_neighbors == []:
+				
+				# choose random critical neighbor, if any. else choose random station
+				if prefered_neighbors == []:
 					random_neighbor = random.choice(list(G[starting_station]))
 				else: 
-					random_neighbor = random.choice(critical_neighbors)
+					random_neighbor = random.choice(prefered_neighbors)
 
 				# keeps track of time of the track
 				edge_time = G[starting_station][random_neighbor]['weight']

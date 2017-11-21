@@ -1,6 +1,9 @@
 import networkx as nx
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt; plt.rcdefaults()
 import numpy as np
+import matplotlib.pyplot as plt
+import collections
+import test_helpers as hlp
 
 '''
 Draws this instance of the graph. If an init is also implemented, multiple Graphs
@@ -30,36 +33,44 @@ def draw_graph(Graph):
 	edge_color_map = [nx.get_edge_attributes(G,'color')[edge] for edge in G.edges()]
 
 	# draw everything except labels and show plot
-	nx.draw_networkx(G, pos, node_color = node_color_map, node_size = node_size_map, edge_color = edge_color_map, with_labels = False)
+	nx.draw_networkx(G, pos, node_color = node_color_map, node_size = node_size_map, edge_color = edge_color_map, with_labels = True)
 
 	# show plot
 	plt.show()
 
-def draw_p_barchart(scores):
-	#list = [element for element in scores if element <= 0.5]
-	#print(list)
-	list = []
-	objects = ("0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9","1.0")
+def draw_barchart(scores):
+
+	print(hlp.ordered_counter(scores))
+
+	minimum = min(scores)
+	maximum = max(scores)
+
 	counter = 0
-	categories = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
+
+	# sums everything smaller than or equal to next bar value
+	if minimum >= 0.0 and maximum <= 1.0:
+
+		# optimalization possible... (0, 0.1, ..., 1.0)
+		objects = tuple([str(i) for i in np.arange(0.0, 1.1, 0.1)])
+		categories = [i for i in np.arange(0.0, 1.1, 0.1)]
+		print(objects)
+	else:
+		objects = tuple([str(i) for i in range(-500, 11000, 500)])
+		categories = [i for i in range(-500, 11000, 500)]
+
 	number_of_categories = len(categories)	
 	performance = []
 	for i in range(number_of_categories):
-		list = [element for element in scores if element >= categories[counter] and element < categories[counter + 1]]
+		list = [score for score in scores if score >= categories[counter] and score < categories[counter + 1]]
 		performance.append(len(list))
 		counter += 1
-		
-	#print(performance)
-	#print(scores)
+
 	y_pos = np.arange(len(objects))
-	#y_pos = np.arange(9)
-	#y_pos = categories
-	#performance = [10,8,6,4,2,1]
-	 
-	plt.bar(y_pos, performance, align = 'center', alpha = 0.5)
+
+	plt.bar(y_pos, performance, align='center', alpha=0.5)
 	plt.xticks(y_pos, objects)
 	plt.ylabel('Frequency')
 	plt.xlabel('Score')
 	plt.title('Scores')
-	 
+
 	plt.show()

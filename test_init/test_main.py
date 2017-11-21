@@ -15,22 +15,24 @@ hlp = test_helpers
 # make graph instance (Noord Holland)
 g = Graph("NH", path_stations_file, path_tracks_file)
 
-scores, p_scores, best_tracks = alg.random_walk(g, 5)
+scores, p_scores, best_tracks = alg.random_walk(g, 50)
 
-print(p_scores)
+scores, p_scores, best_tracks = alg.random_walk(g, 1)
 
-count = 0
-for i in range(len(p_scores)):
-	if (p_scores[i] > 0.7) and (p_scores[i] < 0.8):
-		count += 1
-print(count)
+# get score of smart random walk
+scores, p_scores, best_tracks = alg.smart_random_walk(g, 1)
 
 hlp.print_score_information(scores)
+
+analysis.draw_barchart(p_scores)
+
+#score_list = alg.hierholzer(g)
 
 # analysis.draw_graph(g)
 analysis.draw_p_barchart(p_scores)
 
 score_list = alg.hierholzer(g)
+
 #print(score_list)
 
 # print best tracks
