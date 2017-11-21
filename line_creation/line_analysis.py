@@ -2,8 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt; plt.rcdefaults()
 import numpy as np
 import matplotlib.pyplot as plt
-import collections
-import test_helpers as hlp
+import helpers as hlp
 
 '''
 Draws this instance of the graph. If an init is also implemented, multiple Graphs
@@ -51,6 +50,7 @@ def draw_barchart(scores):
 	if minimum >= 0.0 and maximum <= 1.0:
 
 		# optimalization possible... (0, 0.1, ..., 1.0)
+		# 1.2 as the structure broke when scores of 1.0 where encountered, the list must count to 1.1 (range(x, 1.2, x))
 		objects = tuple([str(i) for i in np.arange(0.0, 1.2, 0.1)])
 		categories = [i for i in np.arange(0.0, 1.2, 0.1)]
 	else:

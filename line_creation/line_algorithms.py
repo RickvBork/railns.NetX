@@ -1,4 +1,4 @@
-import test_helpers
+import helpers as hlp
 import random
 
 '''
@@ -13,7 +13,6 @@ def random_walk(Graph, iterator):
 	critical_connections = Graph.critical_edge_list
 	total_critical_connections = Graph.total_critical_edges
 	G = Graph.G
-	hlp = test_helpers
 
 	# set lists
 	p_list = []
@@ -257,6 +256,7 @@ def hierholzer(graph):
 		# list of tuples: to add used edges, that is two nodes that share that edge
 	critical_list = graph.critical_station_list
 	connections_traversed = []
+	G = graph.G
 
 	current_node = random.choice(graph.nodes)
 	print("======HIERHOLZER======")
@@ -308,7 +308,7 @@ def hierholzer(graph):
 
 		print(current_node)
 		
-		random_neighbor_node = random.choice(list(graph.G[current_node]))
+		random_neighbor_node = random.choice(list(G[current_node]))
 
 		# lukt, en is ook neighbor
 		print(random_neighbor_node)
@@ -317,7 +317,7 @@ def hierholzer(graph):
 
 		# choose random new neighbor node until you find one with unused edge.
 		while ((current_node, random_neighbor_node) in connections_traversed) or ((random_neighbor_node, current_node) in connections_traversed):
-			random_neighbor_node = random.choice(list(graph.G[current_node]))
+			random_neighbor_node = random.choice(list(G[current_node]))
 			print(random_neighbor_node)
 
 		# # add now used edge to critical_connections_traversed: error hier: ik wil een tupple toevoegen.
