@@ -13,6 +13,7 @@ def random_walk(graph, iterator):
 	critical_connections = graph.critical_edge_list
 	total_critical_connections = graph.total_critical_edges
 	G = graph.G
+	hlp = test_helpers
 
 	# set lists
 	p_list = []
@@ -76,7 +77,7 @@ def random_walk(graph, iterator):
 
 				# update traversed critical connections as long as not all have been covered
 				if len(critical_connections_traversed) != total_critical_connections:
-					critical_connections_traversed = test_helpers.update_critical_connections_travesed((starting_station, random_neighbor), critical_connections, critical_connections_traversed)
+					critical_connections_traversed = hlp.update_critical_connections_travesed((starting_station, random_neighbor), critical_connections, critical_connections_traversed)
 				else:
 					print("`GOT EM!") # yeah right...
 
@@ -90,7 +91,7 @@ def random_walk(graph, iterator):
 			# total time of the service
 			total_time += track_time
 
-			print("This service will take {}min".format(track_time))
+			print("This service will take {}min\n".format(track_time))
 		
 		# percentage of critical tracs traversed
 		p = test_helpers.get_p(critical_connections_traversed, critical_connections)
@@ -105,12 +106,11 @@ def random_walk(graph, iterator):
 			best_tracks.append(all_connections)
 			best_score = s
 
-		print("Connections made:\n")
+		print("Connections made:")
 		for i in range(random_tracks):
-			print("Track {}:	".format(i + 1), end = '')
+			print("Track {}:	".format(i + 1))
 			edgeList = all_connections[str(i)]
 			for edge in edgeList:
-				print("{} -> ".format(edge), end = '')
-			print("End")
+				print("		{}".format(edge))
 
 	return s_list, p_list, best_tracks
