@@ -5,14 +5,14 @@ import random
 Pure, random walk. No heuristics.
 Takes a graph object and an iterator.
 '''
-def random_walk(graph, iterator):
+def random_walk(Graph, iterator):
 
 	# get information from graph to perform algorithm
-	nodelist = graph.nodes
-	minimum_weight = graph.minimal_edge_weight
-	critical_connections = graph.critical_edge_list
-	total_critical_connections = graph.total_critical_edges
-	G = graph.G
+	nodelist = Graph.nodes
+	minimum_weight = Graph.minimal_edge_weight
+	critical_connections = Graph.critical_edge_list
+	total_critical_connections = Graph.total_critical_edges
+	G = Graph.G
 	hlp = test_helpers
 
 	# set lists
