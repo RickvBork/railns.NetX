@@ -5,14 +5,14 @@ import random
 Pure, random walk. No heuristics.
 Takes a graph object and an iterator.
 '''
-def random_walk(graph, iterator):
+def random_walk(Graph, iterator):
 
 	# get information from graph to perform algorithm
-	nodelist = graph.nodes
-	minimum_weight = graph.minimal_edge_weight
-	critical_connections = graph.critical_edge_list
-	total_critical_connections = graph.total_critical_edges
-	G = graph.G
+	nodelist = Graph.nodes
+	minimum_weight = Graph.minimal_edge_weight
+	critical_connections = Graph.critical_edge_list
+	total_critical_connections = Graph.total_critical_edges
+	G = Graph.G
 	hlp = test_helpers
 
 	# set lists
@@ -273,7 +273,8 @@ def hierholzer(graph):
 			# to check if current_node has any unused edges
 		while boolean_edges_unused == False:
 
-			for current_node in G.edges():
+			# error: hoe krijg ik alle edges?
+			for current_node in graph.edges:
 				# BUT: saved in G.edges as tuple, does this search work?
 				node_in_edges += 1
 
@@ -285,7 +286,7 @@ def hierholzer(graph):
 
 				# if current_node has no unused edges
 			if node_in_edges == node_in_used_edges:
-				current_node = random.choice(G.nodes())
+				current_node = random.choice(graph.nodes)
 				# if current_node has some unused edges
 			else:
 				boolean_edges_unused = True
@@ -305,7 +306,7 @@ def hierholzer(graph):
 			# change current_node to random_neighbor_node
 		current_node = random_neighbor_node
 			
-		if len(connections_traversed) == len(G.edges):
+		if len(connections_traversed) == len(graph.edges):
 			break;	
 
 		# returns list of tuples so you can, "by hand" follow the path

@@ -15,6 +15,7 @@ class Graph:
 		self.critical_station_list = self.add_csv_nodes(node_file)
 		self.add_csv_edges(edge_file, self.critical_station_list)
 		self.nodes = self.get_nodes()
+		self.edges = self.G.edges()
 		self.critical_edge_list = self.get_critical_edges()
 		self.minimal_edge_weight = min(self.get_edge_weights())
 		self.total_critical_edges = len(self.critical_edge_list)
@@ -85,9 +86,12 @@ class Graph:
 
 	'''
 	Get the nodes from this specific instance of the graph class
+	Network x won't allow self.nodes = self.G.nodes()...
 	'''
 	def get_nodes(self):
 		nodes = self.G.nodes()
+
+		# force into list
 		return [node for node in nodes]
 
 	'''
