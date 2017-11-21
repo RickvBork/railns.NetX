@@ -258,10 +258,11 @@ def hierholzer(graph):
 	connections_traversed = []
 
 	current_node = random.choice(graph.nodes)
+	print(current_node)
 
 		# ensure that starting node is critical station
 	while current_node not in list:
-		current_node = random.choice(G.nodes())
+		current_node = random.choice(graph.nodes)
 		#print(current_node)
 			
 	while True:
