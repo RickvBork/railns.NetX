@@ -126,7 +126,7 @@ def random_walk(graph, iterator):
 Smart 'random' walk
 '''
 
-def random_walk(graph, iterator):
+def smart_random_walk(graph, iterator):
 
 	# get information from graph to perform algorithm
 	nodelist = graph.nodes
@@ -187,8 +187,9 @@ def random_walk(graph, iterator):
 				
 
 				if critical_neighbors == []:
-					
-				random_neighbor = random.choice(list(G[starting_station]))
+					random_neighbor = random.choice(list(G[starting_station]))
+				else: 
+					random_neighbor = random.choice(critical_neighbors)
 
 				# keeps track of time of the track
 				edge_time = G[starting_station][random_neighbor]['weight']
