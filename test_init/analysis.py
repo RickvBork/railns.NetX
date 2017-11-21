@@ -51,14 +51,13 @@ def draw_barchart(scores):
 	if minimum >= 0.0 and maximum <= 1.0:
 
 		# optimalization possible... (0, 0.1, ..., 1.0)
-		objects = tuple([str(i) for i in np.arange(0.0, 1.1, 0.1)])
-		categories = [i for i in np.arange(0.0, 1.1, 0.1)]
-		print(objects)
+		objects = tuple([str(i) for i in np.arange(0.0, 1.2, 0.1)])
+		categories = [i for i in np.arange(0.0, 1.2, 0.1)]
 	else:
 		objects = tuple([str(i) for i in range(-500, 11000, 500)])
 		categories = [i for i in range(-500, 11000, 500)]
 
-	number_of_categories = len(categories)	
+	number_of_categories = len(categories)
 	performance = []
 	for i in range(number_of_categories):
 		list = [score for score in scores if score >= categories[counter] and score < categories[counter + 1]]
