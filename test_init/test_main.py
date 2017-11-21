@@ -30,7 +30,8 @@ hlp.print_score_information(scores)
 # analysis.draw_graph(g)
 analysis.draw_p_barchart(p_scores)
 
-
+score_list = alg.hierholzer(g)
+#print(score_list)
 
 # print best tracks
 # for track in best_tracks:
