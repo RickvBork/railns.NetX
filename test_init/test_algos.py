@@ -249,58 +249,82 @@ def smart_random_walk(graph, iterator):
 	return s_list, p_list, best_tracks
 
 ''''
-HIERHOLZER
+Hierholzer's algorithm
 '''
 
 def hierholzer(graph):
 
 		# list of tuples: to add used edges, that is two nodes that share that edge
-	list = graph.critical_station_list
+	critical_list = graph.critical_station_list
 	connections_traversed = []
 
 	current_node = random.choice(graph.nodes)
+	print("======HIERHOLZER======")
 	print(current_node)
 
-		# ensure that starting node is critical station
-	while current_node not in list:
+	# ensure that starting node is critical station
+	while current_node not in critical_list:
 		current_node = random.choice(graph.nodes)
-		#print(current_node)
+		print("in 1e while loop om te zorgen dat het critical station is")
+		print(current_node)
 			
 	while True:
 
 		boolean_edges_unused = False
+		node_in_edges = 0;
+		node_in_used_edges = 0;
 
-			# to check if current_node has any unused edges
+		# to check if current_node has any unused edges
 		while boolean_edges_unused == False:
 
-			# error: hoe krijg ik alle edges?
-			for current_node in graph.edges:
-				# BUT: saved in G.edges as tuple, does this search work?
+			current_node_check = current_node
+
+			for current_node_check in graph.edges:
+				print("for current_node in graph.edges")
+				print(current_node)
 				node_in_edges += 1
 
-			for current_node in connections_traversed:
-				# BUT: saved as tuple..: ?
-				# item for item in G.edges if current_node in item
+			for current_node_check in connections_traversed:
+				print("for current_node in connections_traversed")
+				print(current_node)
 				# zorgen dat het beneden bij append aan deze lijst wel zo opgeslagen wordt als de G.edges, anders werkt dat met de counter niet.
 				node_in_used_edges += 1
 
-				# if current_node has no unused edges
+			# if current_node has no unused edges pick new current_node
 			if node_in_edges == node_in_used_edges:
 				current_node = random.choice(graph.nodes)
-				# if current_node has some unused edges
+				print(current_node)
+				print("de node hierboven is random veranderd in while loop 2")
+			# if current_node has some unused edges, continue
 			else:
 				boolean_edges_unused = True
 
-		random_neighbor_node = random.choice(all_neighbors(G, current_node))
+		print("ZZZZZ")
 
-			# choose random new neighbor node until you find one with unused edge.
+		# test_iterator = graph.G.all_neighbors(graph, current_node)
+		# random_neighbor_node = random.choice(graph.G.all_neighbors(graph, current_node))
+
+		print(current_node)
+		
+		random_neighbor_node = random.choice(list(graph.G[current_node]))
+
+		# lukt, en is ook neighbor
+		print(random_neighbor_node)
+
+		print("next while loop")
+
+		# choose random new neighbor node until you find one with unused edge.
 		while ((current_node, random_neighbor_node) in connections_traversed) or ((random_neighbor_node, current_node) in connections_traversed):
-			random_neighbor_node = random.choice(all_neighbors(G, current_node))
+			random_neighbor_node = random.choice(list(graph.G[current_node]))
 			print(random_neighbor_node)
-				# in random_walk: random_neighbor = random.choice(list(G[current_node])); welke list? nog even checken.
 
-			# add now used edge to critical_connections_traversed
+		# # add now used edge to critical_connections_traversed: error hier: ik wil een tupple toevoegen.
 		connections_traversed.append(current_node, random_neighbor_node)
+
+		print("connect")
+		print(connections_traversed)
+		print("conn")
+
 			# BUT: hoe wordt het precies opgeslagen in G.edges? wordt de tuple daar ook andersom opgeslagen? voor de boolean_unused_edges
 
 			# change current_node to random_neighbor_node
@@ -311,16 +335,3 @@ def hierholzer(graph):
 
 		# returns list of tuples so you can, "by hand" follow the path
 	return connections_traversed
-
-	
-#It is not possible to get stuck at any vertex other than v, because indegree and outdegree of every vertex must be same, 
-#when the trail enters another vertex w there must be an unused edge leaving w. ---- lijkt mij: it is not possible to get stuck, because it is a 
-# Eulerian cycle.
-
-#The tour formed in this way is a closed tour, but may not cover all the vertices and edges of the initial graph.
-#As long as there exists a vertex u that belongs to the current tour but that has adjacent edges not part of the tour, 
-#start another trail from u, following unused edges until returning to u, and join the tour formed in this way to the previous tour.
-
-#Thus the idea is to keep following unused edges and removing them until we get stuck. Once we get stuck, we back-track to 
-#the nearest vertex in our current path that has unused edges, and we repeat the process until all the edges have been used. We can use another container to mainta
-
