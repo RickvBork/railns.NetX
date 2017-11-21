@@ -18,6 +18,8 @@ scores, p_scores, best_tracks = alg.random_walk(g, 1)
 
 hlp.print_score_information(scores)
 
+score_list = alg.hierholzer(g)
+
 # print best tracks
 # for track in best_tracks:
 # 	for key in track:
