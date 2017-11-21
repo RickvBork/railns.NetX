@@ -307,6 +307,8 @@ def hierholzer(graph):
 			current_node_check = current_node
 
 			for current_node_check in graph.edges:
+				print("error")
+				print(current_node_check)
 				print("for current_node in graph.edges")
 				print(current_node)
 				node_in_edges += 1
@@ -346,7 +348,7 @@ def hierholzer(graph):
 			print(random_neighbor_node)
 
 		# # add now used edge to critical_connections_traversed: error hier: ik wil een tupple toevoegen.
-		connections_traversed.append(current_node, random_neighbor_node)
+		connections_traversed.append((current_node, random_neighbor_node))
 
 		print("connect")
 		print(connections_traversed)

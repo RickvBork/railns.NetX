@@ -24,12 +24,12 @@ scores, p_scores, best_tracks = alg.smart_random_walk(g, 1)
 
 hlp.print_score_information(scores)
 
-analysis.draw_barchart(p_scores)
+#analysis.draw_barchart(p_scores)
 
 #score_list = alg.hierholzer(g)
 
 # analysis.draw_graph(g)
-analysis.draw_p_barchart(p_scores)
+#analysis.draw_p_barchart(p_scores)
 
 score_list = alg.hierholzer(g)
 
