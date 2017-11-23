@@ -12,9 +12,14 @@ class Graph:
 	def __init__(self, name, node_file, edge_file):
 		self.name = name
 		self.G = nx.Graph()
+
+		# load csv files into this specific instance of nx
 		self.critical_station_list = self.add_csv_nodes(node_file)
 		self.add_csv_edges(edge_file, self.critical_station_list)
-		self.nodes = self.get_nodes()
+
+		# force iterator object from nx to list
+		self.nodes = list(self.G.nodes())
+
 		self.edges = self.G.edges()
 		self.critical_edge_list = self.get_critical_edges()
 		self.minimal_edge_weight = min(self.get_edge_weights())
@@ -83,16 +88,6 @@ class Graph:
 				else:
 					self.G.add_edge(station_0, station_1, 
 						weight = int(weight), color = 'k')
-
-	'''
-	Get the nodes from this specific instance of the graph class
-	Network x won't allow self.nodes = self.G.nodes()...
-	'''
-	def get_nodes(self):
-		nodes = self.G.nodes()
-
-		# force into list
-		return [node for node in nodes]
 
 	'''
 	Get the edges from this specific instance of the graph class

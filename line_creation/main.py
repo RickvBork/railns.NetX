@@ -13,7 +13,7 @@ Graph = line_graph_class.Graph
 # make graph instance (Noord Holland)
 g = Graph("NH", path_stations_file, path_tracks_file)
 
-scores, p_scores, best_tracks = alg.random_walk(g, 1)
+scores, p_scores, best_tracks = alg.random_walk(g, 2)
 
 print(p_scores)
 
@@ -29,7 +29,7 @@ print(p_scores)
 # analysis.draw_graph(g)
 #analysis.draw_p_barchart(p_scores)
 
-score_list = alg.hierholzer(g)
+# score_list = alg.hierholzer(g)
 
 #print(score_list)
 
