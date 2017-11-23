@@ -47,6 +47,6 @@ ana.draw_barchart(p_scores)
 # ref: https://docs.python.org/3/library/csv.html
 with open('../data/results.csv', 'w', newline='') as myfile:
 	wr = csv.writer(myfile,delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-wr.writerows(map(lambda x: [x], scores))
+	wr.writerows(map(lambda x: [x], scores))
 
 
