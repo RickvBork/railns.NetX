@@ -10,5 +10,5 @@ Finally the function returns two lists of two different scores of all the trains
 The *line_graph_class* file contains the code class with the structure of the Graph. A Graph consists of a graph, defined using networkX. Also a Graph has a name, a list of critical stations, the number of critical edges and the minimal_edge_weight, representing the shortest distance between two stations in minutes.
 The *main* contains the code that initialises a Graph and then calls functions on it to generate trainservices. The scores of these trainservices are returned and are passed to a barchar function that gives a graphical visualisation of the scores of the different trainservices.
 
-ref:
+ref: https://gist.github.com/jxson/1784669
 
