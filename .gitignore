@@ -3,6 +3,10 @@
 # ignore pyc file types
 *.pyc
 
+# ignore content folders
+trash/
+visualization/
+
 # ignore all .txt files, except requirements & feedback
 *.txt
 !requirements.txt
