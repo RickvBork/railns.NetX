@@ -5,13 +5,13 @@
 
 # ignore whole folders
 **/trash
-**/Graaf_vis
+**/visualization
 **/data
 
 # ignore all .txt files, except requirements & feedback
-#*.txt
-#!requirements.txt
-#!feedback[0-9].txt
+*.txt
+!requirements.txt
+!feedback[0-9].txt
 
 # ignore all .test.py files
 *.test.py
