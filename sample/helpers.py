@@ -174,7 +174,9 @@ class Graph:
 		critical_connections_traversed = []
 
 		# rand number of tracks 1 up to including 7
-		random_tracks = 7
+		# random_tracks = random.randint(1, 7)
+
+		random_tracks = 1
 
 		# keep track of critical connections that are not used yet
 		delete_counter = 0
