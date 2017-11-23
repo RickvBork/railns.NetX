@@ -4,14 +4,12 @@
 *.pyc
 
 # ignore whole folders
-**/trash
-**/Graaf_vis
-**/data
+trash/
 
 # ignore all .txt files, except requirements & feedback
-#*.txt
-#!requirements.txt
-#!feedback[0-9].txt
+*.txt
+!requirements.txt
+!feedback[0-9].txt
 
 # ignore all .test.py files
 *.test.py
