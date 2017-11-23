@@ -12,3 +12,6 @@
 *.txt
 !requirements.txt
 !feedback[0-9].txt
+
+# ignore all .test.py files
+*.test.py
