@@ -3,9 +3,6 @@
 # ignore pyc file types
 *.pyc
 
-# ignore whole folders
-trash/*
-
 # ignore all .txt files, except requirements & feedback
 *.txt
 !requirements.txt
