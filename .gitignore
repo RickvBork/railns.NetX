@@ -4,9 +4,7 @@
 *.pyc
 
 # ignore whole folders
-**/trash
-**/visualization
-**/data
+trash/
 
 # ignore all .txt files, except requirements & feedback
 *.txt
