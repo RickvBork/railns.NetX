@@ -1,5 +1,6 @@
 import helpers as hlp
 import random
+import line_analysis as ana
 
 '''
 Pure, random walk. No heuristics.
@@ -32,7 +33,7 @@ def random_walk(Graph, iterator):
 		# rand number of tracks 1 up to including 7
 		random_tracks = random.randint(1, 7)
 
-		print("Track number: {}".format(random_tracks))
+		# print("Track number: {}".format(random_tracks))
 
 		# keep track of critical connections that are not used yet
 		total_time = 0
@@ -46,7 +47,7 @@ def random_walk(Graph, iterator):
 			# rand start station 0 up to nodelist length - 1 to pick a node in nodelist
 			starting_station = random.choice(nodelist)
 
-			print("Begin walk: {}".format(starting_station))
+			# print("Begin walk: {}".format(starting_station))
 
 			# keeps track of the time of one track of a service
 			track_time = 0
@@ -54,7 +55,7 @@ def random_walk(Graph, iterator):
 			# random time for a given track
 			random_time = random.randint(minimum_weight, 120)
 
-			print("Track maximum time: {}".format(random_time))
+			# print("Track maximum time: {}".format(random_time))
 
 			counter = 0
 			while track_time < random_time:
@@ -71,7 +72,7 @@ def random_walk(Graph, iterator):
 				
 				# always pick one track
 				if ((edge_time > random_time) and counter != 0) or (edge_time > random_time - track_time):
-					print("		Exception!")
+					# print("		Exception!")
 					break
 				counter += 1
 
@@ -83,15 +84,15 @@ def random_walk(Graph, iterator):
 
 				# updates the starting station
 				starting_station = random_neighbor
-				print("		Next station: {}".format(random_neighbor))
-				print("			Edge time is: {}".format(edge_time))
-				print("			Total time is: {}".format(track_time))
-				print("-------------------------------------------------")
+				# print("		Next station: {}".format(random_neighbor))
+				# print("			Edge time is: {}".format(edge_time))
+				# print("			Total time is: {}".format(track_time))
+				# print("-------------------------------------------------")
 
 			# total time of the service
 			total_time = track_time
 
-			print("This service will take {}min\n".format(track_time))
+			# print("This service will take {}min\n".format(track_time))
 		
 		# percentage of critical tracs traversed
 		p = hlp.get_p(critical_connections_traversed, critical_connections)
@@ -106,16 +107,16 @@ def random_walk(Graph, iterator):
 			best_tracks.append(all_connections)
 			best_score = s
 
-		all_connections["score"] = s
+		# all_connections["score"] = s
 
-		print("Connections made:")
-		for i in range(random_tracks):
-			print("Track {}:	".format(i + 1))
-			edgeList = all_connections["tracks"][str(i)]
-			score = all_connections["score"]
-			for edge in edgeList:
-				print("		{}".format(edge))
-		print("Score: {}".format(score))
+		# print("Connections made:")
+		# for i in range(random_tracks):
+		# 	print("Track {}:	".format(i + 1))
+		# 	edgeList = all_connections["tracks"][str(i)]
+		# 	score = all_connections["score"]
+		# 	for edge in edgeList:
+		# 		print("		{}".format(edge))
+		# print("Score: {}".format(score))
 
 	return s_list, p_list, best_tracks
 
