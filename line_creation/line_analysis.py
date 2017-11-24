@@ -39,8 +39,6 @@ def draw_graph(Graph):
 
 def draw_barchart(scores):
 
-	print(hlp.ordered_counter(scores))
-
 	minimum = min(scores)
 	maximum = max(scores)
 
@@ -49,16 +47,15 @@ def draw_barchart(scores):
 	# sums everything smaller than or equal to next bar value
 	if minimum >= 0.0 and maximum <= 1.0:
 
-		# optimalization possible... (0, 0.1, ..., 1.0)
-		# 1.2 as the structure broke when scores of 1.0 where encountered, the list must count to 1.1 (range(x, 1.2, x))
-		objects = tuple([str(i) for i in np.arange(0.0, 1.2, 0.1)])
-		categories = [i for i in np.arange(0.0, 1.2, 0.1)]
+		objects = tuple([str(i) for i in np.arange(0.0, 1.05, 0.05)])
+		categories = [int(i * 100) / 100.0 for i in np.arange(0.0, 1.05, 0.05)]
 	else:
 		objects = tuple([str(i) for i in range(-500, 11000, 500)])
 		categories = [i for i in range(-500, 11000, 500)]
 
 	number_of_categories = len(categories)
 	performance = []
+	print(categories)
 	for i in range(number_of_categories):
 		list = [score for score in scores if score >= categories[counter] and score < categories[counter + 1]]
 		performance.append(len(list))
