@@ -45,6 +45,7 @@ def draw_barchart(scores):
 	counter = 0
 
 	# sums everything smaller than or equal to next bar value
+	# SET interval to something relating to data!
 	if minimum >= 0.0 and maximum <= 1.0:
 
 		objects = tuple([str(i) for i in np.arange(0.0, 1.05, 0.05)])
@@ -55,7 +56,7 @@ def draw_barchart(scores):
 
 	number_of_categories = len(categories)
 	performance = []
-	print(categories)
+
 	for i in range(number_of_categories):
 		list = [score for score in scores if score >= categories[counter] and score < categories[counter + 1]]
 		performance.append(len(list))
