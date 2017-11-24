@@ -3,10 +3,9 @@
 # ignore pyc file types
 *.pyc
 
-# ignore whole folders
-**/trash
-**/Graaf_vis
-**/data
+# ignore content folders
+trash/
+visualization/
 
 # ignore all .txt files, except requirements & feedback
 *.txt

@@ -1,0 +1,23 @@
+feedback 23-11-2017
+
+probeer nu ook met andere data set (heel nederland)
+*.test.py aangemaakt.
+README per foder
+numba
+iteratieve aanpak proberen
+functie die zevende traject maakt gegeven zes trajecten.
+hill climben: zevende traject beetje aanpassen
+gebruik hiervoor hilholzer
+
+IDEA punten (check nieuwe dropbox bestand: https://www.dropbox.com/sh/pd31uu1tp0drzr1/AADX2iX-QKZWhHkkBrWxR261a?dl=0&preview=IDEA.pdf )
+state space: upper bound
+score: upper and lower bound met berekening (onder experimentatie)
+
+smart walk:
+onder algoritme, maar misschien niet genoeg verchillend van random walk
+hierholzer wel
+
+infrastructuur:README.md kan duidelijker en uitgebreider. Is ook een soort handleiding voor installeren enzo.
+in readme, leg git structuur uit: Graaf vis, datafolder, feedback folder, line creation bevat code.
+readme in line_creation: wat doet elk .py bestand
+
