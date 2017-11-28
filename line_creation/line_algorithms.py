@@ -249,71 +249,163 @@ def smart_random_walk(graph, iterator):
 
 	return s_list, p_list, best_tracks
 
+
 ''''
-Hierholzer's algorithm
+Hierholzer's algorithm (v2)
 '''
 
 def hierholzer(graph):
 
-		# list of tuples: to add used edges, that is two nodes that share that edge
+	print("======HIERHOLZER======")
+	# list of tuples: to add used edges, that is two nodes that share that edge
 	critical_list = graph.critical_station_list
 	connections_traversed = []
+	one_edge_list = []
+	#all_edges_list = graph.edges
 	G = graph.G
 
-	current_node = random.choice(graph.nodes)
-	print("======HIERHOLZER======")
-	print(current_node)
+	# setting all edges in list
+	tuple_list = []
+	all_edge_list = []
+	for tuple in graph.edges:
+	 	all_edge_list.append(tuple_list)
+	 	tuple_list = []
+	 	for item in tuple:
+	 		tuple_list.append(item)
+	 		print("item")
+	 		print(item)
 
-	# ensure that starting node is critical station
-	while current_node not in critical_list:
-		current_node = random.choice(graph.nodes)
-		print("in 1e while loop om te zorgen dat het critical station is")
-		print(current_node)
+	print("all_edges_list:")
+	print(all_edge_list)
+
+
+	## checking which station have only one connection, and adding those to one_edge_list
+	# iterate over every station
+	for station in graph.nodes:
+		breaker = 0
+		counter = 0
+		# iterate over every edge
+		for tuple in graph.edges:
+			# to break out of this for loop if critical station has more than one edge
+			if breaker == 1:
+				break
+			# iterate over every node in edge
+			for item in tuple:
+				# to break out of this for loop if critical station has more than one edge
+				if breaker == 1:
+					break
+				# if node is equal to station that is checked now
+				if item == station:
+					# counter for every edge the station has
+					counter += 1
+					# to break out if critical station has more than one edge
+					if counter > 1:				
+						breaker = 1
+		if counter == 1:
+			one_edge_list.append(station)
+	## end: checking which stations have one connections and adding to one_edge_list
+
+	# get random starting station that has only one edge
+	current_node = random.choice(one_edge_list)
+
+	# # check if current node has unused edges
+	# boolean_node = False
+	# breaker2 = 0
+	# while boolean_node == False:
+	# 	for tuple in all_edges_list:
+	# 		if breaker2 = 1
+	# 			break
+	# 		for item in tuple:
+	# 			if item == current_node:
+	# 				breaker2 = 1
+	# 				# in dit geval kan je uit de loop
+	# 				boolean_node = True
+	# 				# if current_node is in one_edge_list, delete it from that list
+	# 	# if current_node has no unused edges, choose new one
+	# 	if breaker2 == 0:
+	# 		if one_edge_list:
+	# 			current_node = random.choice(one_edge_list)
+	# 			# delete from one_edge_list
+	# 		else:
+	# 			current_node = random.choice(graph.nodes)
+	# 			# maar, nu wordt niet per se de optimale keuze wordt hier gemaakt,
+			
+
+	# eerst dit hierbeneden testen met dit hierboven op comment!!!
+	#####
+	
+	# choose random neighbor of station
+	random_neighbor_node = random.choice(list(G[current_node]))
+
+	# ensure that random neighbor station has several edges (otherwise, this will be the end of the track)
+	while random_neighbor_node in one_edge_list:
+		random_neighbor_node = random.choice(list(G[current_node]))
+	
+	# ensure that edge hasn't been traversed yet
+	while ((random_neighbor_node, current_node) not in all_edge_list) or ((current_node, random_neighbor_node) not in all_edge_list):
+		random_neighbor_node = random.choice(list(G[current_node]))
+
+	# dit werkt dus niet....
+	# if (random_neighbor_node, current_node) in all_edges_list:
+	# 	all_edges_list.remove(random_neighbor_node, current_node)
+	# if (current_node, random_neighbor_node) in all_edges_list:
+	# 	all_edges_list.remove(current_node, random_neighbor_node)
+
+	# maar, 
+
+	# # check:
+	print("current_node, random_neighbor_node")
+	print(current_node, random_neighbor_node)
+	print("all_edges_list")
+	print(all_edges_list)
+			
+
+	
+
+
 			
 	while True:
 
 		boolean_edges_unused = False
-		node_in_edges = 0;
-		node_in_used_edges = 0;
 
 		# to check if current_node has any unused edges
 		while boolean_edges_unused == False:
 
-			current_node_check = current_node
+			node_in_edges = 0;
+			node_in_used_edges = 0;
 
-			for current_node_check in graph.edges:
-				print("error")
-				print(current_node_check)
-				print("for current_node in graph.edges")
-				print(current_node)
-				node_in_edges += 1
+			for edge_tuple in graph.edges:
+				if current_node in edge_tuple:
+					node_in_edges += 1
+					print("node_in_edges")
+					print(node_in_edges)
 
-			for current_node_check in connections_traversed:
-				print("for current_node in connections_traversed")
-				print(current_node)
-				# zorgen dat het beneden bij append aan deze lijst wel zo opgeslagen wordt als de G.edges, anders werkt dat met de counter niet.
-				node_in_used_edges += 1
+			for edge_tuple in connections_traversed:
+				if current_node in edge_tuple:
+					node_in_used_edges += 1
+					print("node_in_used_edges")
+					print(node_in_used_edges)
 
 			# if current_node has no unused edges pick new current_node
 			if node_in_edges == node_in_used_edges:
+				#print(node_in_edges)
+				#print(node_in_used_edges)
 				current_node = random.choice(graph.nodes)
 				print(current_node)
-				print("de node hierboven is random veranderd in while loop 2")
+				connections_traversed.append("NEW TRACK")
+				# BUT: ALS ER NOG NODES ZIJN MET MAAR ÉÉN EDGE, DAN DIE KIEZEN
 			# if current_node has some unused edges, continue
 			else:
 				boolean_edges_unused = True
 
-		print("ZZZZZ")
+		#print("ZZZZZ")
 
-		# test_iterator = graph.G.all_neighbors(graph, current_node)
-		# random_neighbor_node = random.choice(graph.G.all_neighbors(graph, current_node))
-
-		print(current_node)
+		#print(current_node)
 		
 		random_neighbor_node = random.choice(list(G[current_node]))
 
 		# lukt, en is ook neighbor
-		print(random_neighbor_node)
+		#print(random_neighbor_node)
 
 		print("next while loop")
 
@@ -325,9 +417,9 @@ def hierholzer(graph):
 		# # add now used edge to critical_connections_traversed: error hier: ik wil een tupple toevoegen.
 		connections_traversed.append((current_node, random_neighbor_node))
 
-		print("connect")
+		print("connections_traversed", end="")
 		print(connections_traversed)
-		print("conn")
+		# print("conn")
 
 			# BUT: hoe wordt het precies opgeslagen in G.edges? wordt de tuple daar ook andersom opgeslagen? voor de boolean_unused_edges
 
