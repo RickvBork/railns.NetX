@@ -14,7 +14,7 @@ class Graph:
 		self.G = nx.Graph()
 
 		# load csv files into this specific instance of nx
-		self.critical_station_list = self.add_csv_nodes(node_file)
+		self.critical_station_list, self.non_critical_station_list = self.add_csv_nodes(node_file)
 		self.add_csv_edges(edge_file, self.critical_station_list)
 
 		# force iterator object from nx to list
@@ -41,6 +41,7 @@ class Graph:
 			rows = csv.reader(csvfile)
 
 			critical_station_list = []
+			non_critical_station_list = []
 			for row in rows:
 
 				# immidiately single out stations for efficiency
@@ -52,12 +53,13 @@ class Graph:
 						size = 40)
 
 				else:
+					non_critical_station_list.append(row[0])
 					self.G.add_node(row[0], 
 						pos = (float(row[2]), float(row[1])),
 						color = 'k',
 						size = 10)
 
-			return critical_station_list
+			return critical_station_list, non_critical_station_list
 
 	'''
 	Adds edges from the csv files passed to a specific instance 
@@ -77,17 +79,17 @@ class Graph:
 				# these edges are 'super' critical
 				if station_0 in list and station_1 in list:
 					self.G.add_edge(station_0, station_1, 
-						weight = int(weight), color = 'r')
+						weight = int(weight), color = 'r', visited = 'n')
 
 				# these edges are critical
 				elif station_0 in list or station_1 in list:
 					self.G.add_edge(station_0, station_1, 
-						weight = int(weight), color = 'r')
+						weight = int(weight), color = 'r', visited = 'n')
 
 				# these edges are not critical
 				else:
 					self.G.add_edge(station_0, station_1, 
-						weight = int(weight), color = 'k')
+						weight = int(weight), color = 'k', visited = 'n')
 
 	'''
 	Get the edges from this specific instance of the graph class

@@ -1,6 +1,7 @@
 import helpers as hlp
 import random
 import line_analysis as ana
+import networkx as nx
 
 '''
 Pure, random walk. No heuristics.
@@ -339,3 +340,52 @@ def hierholzer(graph):
 
 		# returns list of tuples so you can, "by hand" follow the path
 	return connections_traversed
+
+def hill_climber(graph):
+
+	# get information from graph to perform algorithm
+	nodes = graph.nodes
+	critical_station_list = graph.critical_station_list
+	non_critical_station_list = graph.non_critical_station_list
+	critical_edge_list = graph.critical_edge_list
+	G = graph.G
+
+	track = []
+	walked_neighbors_list = []
+
+	i = 0
+
+	# all starting nodes
+	while True:
+
+		from_node = node
+		neigbor_list = list(G[from_node])
+		neighbors = len(neighbor_list)
+		to_node = neighbor_list[j]
+
+		if to_node in walked_neighbors_list:
+			j += 1
+			continue
+
+		# critical edge
+		if G[from_node][to_node]['color'] = 'r':
+
+			# append node to list, but the next edge is walked so -1 neighbors
+			track.append({station: from_node, neighbors: neighbours - 1})
+			walked_neighbors_list.append(to_node)
+
+			# iterator to track list
+			i += 1
+
+			# update from_node
+			from_node = to_node
+
+		# walk back
+		elif G[from_node][to_node]['color'] = 'k' or neighbors == 0:
+			
+			# go to previous from node
+			update = track[i - 1]['node']
+			update -= 1
+
+			# choose new to_node
+			from_node = track[i - 1].keys()[0]
