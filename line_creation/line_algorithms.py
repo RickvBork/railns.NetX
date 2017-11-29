@@ -32,6 +32,7 @@ def random_walk(Graph, iterator):
 
 		# rand number of tracks 1 up to including 7
 		random_tracks = random.randint(1, 7)
+		random_tracks = 7
 
 		# print("Track number: {}".format(random_tracks))
 
@@ -54,6 +55,7 @@ def random_walk(Graph, iterator):
 
 			# random time for a given track
 			random_time = random.randint(minimum_weight, 120)
+			random_time = 120
 
 			# print("Track maximum time: {}".format(random_time))
 
@@ -311,6 +313,7 @@ def hierholzer(graph):
 				random_neighbor_node = random.choice(list(G[current_node]))
 				# BUT: mogelijk gaat dit oneindig door als er geen andere optie is.
 			
+
 			# ensure that edge hasn't been traversed yet (vrij zeker dat dit werkt, niet 100%: is die 'and' oke?)
 			while (current_node, random_neighbor_node) not in all_edge_list and (random_neighbor_node, current_node) not in all_edge_list:
 				random_neighbor_node = random.choice(list(G[current_node]))
