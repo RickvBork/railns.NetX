@@ -32,6 +32,7 @@ def random_walk(Graph, iterator):
 
 		# rand number of tracks 1 up to including 7
 		random_tracks = random.randint(1, 7)
+		random_tracks = 7
 
 		# print("Track number: {}".format(random_tracks))
 
@@ -54,6 +55,7 @@ def random_walk(Graph, iterator):
 
 			# random time for a given track
 			random_time = random.randint(minimum_weight, 120)
+			random_time = 120
 
 			# print("Track maximum time: {}".format(random_time))
 
