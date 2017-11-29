@@ -329,7 +329,7 @@ def hierholzer(graph):
 
 
 	# HIERHOLZER DEEL II:
-	# je hebt dus een list met tuples met daarin stations. 
+	# je hebt dus een list met tuples met daarin stations. tracks aan elkaar plakken.
 
 
 	### niet  meer nodig, maar hier werkt append wel, dus niet deleten
