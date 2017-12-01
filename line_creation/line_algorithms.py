@@ -33,6 +33,7 @@ def random_walk(Graph, iterator):
 
 		# rand number of tracks 1 up to including 7
 		random_tracks = random.randint(1, 7)
+		random_tracks = 7
 
 		# print("Track number: {}".format(random_tracks))
 
@@ -55,6 +56,7 @@ def random_walk(Graph, iterator):
 
 			# random time for a given track
 			random_time = random.randint(minimum_weight, 120)
+			random_time = 120
 
 			# print("Track maximum time: {}".format(random_time))
 
@@ -250,137 +252,113 @@ def smart_random_walk(graph, iterator):
 
 	return s_list, p_list, best_tracks
 
-''''
-Hierholzer's algorithm
-'''
 
+''''
+Hierholzer's algorithm (v2)
+'''
 def hierholzer(graph):
 
-		# list of tuples: to add used edges, that is two nodes that share that edge
-	critical_list = graph.critical_station_list
+	print("======HIERHOLZER======")
+	#critical_list = graph.critical_station_list
 	connections_traversed = []
 	G = graph.G
 
-	current_node = random.choice(graph.nodes)
-	print("======HIERHOLZER======")
-	print(current_node)
+	# adding all edges as tuples to all_edges_list
+	all_edge_list = []
+	for tuples in graph.edges:
+		all_edge_list.append(tuple(tuples))
 
-	# ensure that starting node is critical station
-	while current_node not in critical_list:
-		current_node = random.choice(graph.nodes)
-		print("in 1e while loop om te zorgen dat het critical station is")
-		print(current_node)
-			
+	# adding all nodes to list to make list of all stations
+	all_stations_list = []
+	for station in graph.nodes:
+		print(station) # check, station is de waarde die je wil: maar weet niet hoe je het moet toevoegen...
+		string = str(station) # dit werkt ook niet... alleen met tuple(string), en extend(string) maar dat is beide bullshit
+		#all_stations_list.append(station)
+
+	# loop for track
 	while True:
 
-		boolean_edges_unused = False
-		node_in_edges = 0;
-		node_in_used_edges = 0;
-
-		# to check if current_node has any unused edges
-		while boolean_edges_unused == False:
-
-			current_node_check = current_node
-
-			for current_node_check in graph.edges:
-				print("error")
-				print(current_node_check)
-				print("for current_node in graph.edges")
-				print(current_node)
-				node_in_edges += 1
-
-			for current_node_check in connections_traversed:
-				print("for current_node in connections_traversed")
-				print(current_node)
-				# zorgen dat het beneden bij append aan deze lijst wel zo opgeslagen wordt als de G.edges, anders werkt dat met de counter niet.
-				node_in_used_edges += 1
-
-			# if current_node has no unused edges pick new current_node
-			if node_in_edges == node_in_used_edges:
-				current_node = random.choice(graph.nodes)
-				print(current_node)
-				print("de node hierboven is random veranderd in while loop 2")
-			# if current_node has some unused edges, continue
-			else:
-				boolean_edges_unused = True
-
-		print("ZZZZZ")
-
-		# test_iterator = graph.G.all_neighbors(graph, current_node)
-		# random_neighbor_node = random.choice(graph.G.all_neighbors(graph, current_node))
-
-		print(current_node)
-		
-		random_neighbor_node = random.choice(list(G[current_node]))
-
-		# lukt, en is ook neighbor
-		print(random_neighbor_node)
-
-		print("next while loop")
-
-		# choose random new neighbor node until you find one with unused edge.
-		while ((current_node, random_neighbor_node) in connections_traversed) or ((random_neighbor_node, current_node) in connections_traversed):
-			random_neighbor_node = random.choice(list(G[current_node]))
-			print(random_neighbor_node)
-
-		# # add now used edge to critical_connections_traversed: error hier: ik wil een tupple toevoegen.
-		connections_traversed.append((current_node, random_neighbor_node))
-
-		print("connect")
-		print(connections_traversed)
-		print("conn")
-
-			# BUT: hoe wordt het precies opgeslagen in G.edges? wordt de tuple daar ook andersom opgeslagen? voor de boolean_unused_edges
-
-			# change current_node to random_neighbor_node
-		current_node = random_neighbor_node
-			
-		if len(connections_traversed) == len(G.edges):
-			break;	
-
-		# returns list of tuples so you can, "by hand" follow the path
-	return connections_traversed
-
-def analytical(graph):
-
-	non_critical_station_list = graph.non_critical_station_list
-	G = graph.G
-
-	track = [{'Den Helder': ['Alkmaar']}]
-
-	node = 'Den Helder'
-	previous = 'Den Helder'
-
-	i = 0
-	track_time = 0
-	while track_time < 120:
-
-		# choose first of fresh neighbors
-		neighbor = track[i][node][0]
-
-		# if egde is critical
-		if G[node][neighbor]['color'] == 'r':
-
-			# pop new walked neighbor from previous node
-			track[i][node].pop(0)
-
-			neighbor_dict = {neighbor: list(G[neighbor])}
-
-			# pop from station
-			neighbor_dict[neighbor].remove(node)
-
-			# append node to track list
-			track.append(neighbor_dict)
-
-			# get edge time
-			edge_time = G[node][neighbor]['weight']
-			track_time += edge_time
-
-			# update station
-			node = neighbor
-			i += 1
-
-		elif G[node][neighbor]['color'] == 'k':
+		# breaks if all edges are traversed: weet niet of dit noodzakelijk gebeurd alleen
+		if all_edge_list == []:
 			break
 
-	print(track)
+		# checking which stations have only one edge, adding these to one_edge_list
+		one_edge_list = []
+		for station in all_stations_list:
+			occurence_count = all_edge_list.count(station) # maar, in all_edge_list staan tuples, dus dit werkt denk ik niet.
+			if occurence_count == 0:
+				#one_edge_list.append(station) # doet het ook niet, wtf
+				print("test")
+
+		# get random starting station that has only one edge, if possible
+		if one_edge_list != []:
+			current_node = random.choice(one_edge_list)
+		else:
+			current_node = random.choice(all_stations_list)
+
+		# loop for edges in track
+		while True:
+
+			# checking if station has unused edges.
+			remaining_edge_check = [item for item in all_edge_list if current_node in item]
+			
+			# if current_node has no unused edges: beginning of new track, so break out of while loop
+			if remaining_edge_check == []:
+				break
+
+			# choose random neighbor of station
+			random_neighbor_node = random.choice(list(G[current_node]))
+
+			# ensure that random neighbor station has several edges (otherwise, this will be the end of the track)
+			while random_neighbor_node in one_edge_list:
+				random_neighbor_node = random.choice(list(G[current_node]))
+				# BUT: mogelijk gaat dit oneindig door als er geen andere optie is.
+
+			# ensure that edge hasn't been traversed yet (vrij zeker dat dit werkt, niet 100%: is die 'and' oke?)
+			while (current_node, random_neighbor_node) not in all_edge_list and (random_neighbor_node, current_node) not in all_edge_list:
+				random_neighbor_node = random.choice(list(G[current_node]))
+
+			# remove traversed edge from all_edge_list, and add traversed edge to connections traversed to keep track of route
+			if (current_node, random_neighbor_node) in all_edge_list:
+				all_edge_list.remove((current_node, random_neighbor_node))
+				connections_traversed.append((current_node, random_neighbor_node))
+			if (random_neighbor_node, current_node) in all_edge_list:
+				all_edge_list.remove((random_neighbor_node, current_node))
+				connections_traversed.append((random_neighbor_node, current_node))
+		
+			current_node = random_neighbor_node
+		
+	return connections_traversed
+
+
+	# HIERHOLZER DEEL II:
+	# je hebt dus een list met tuples met daarin stations. 
+
+
+	### niet  meer nodig, maar hier werkt append wel, dus niet deleten
+	# while True:
+	# 	## checking which stations have only one connection, and adding those to one_edge_list
+	# 	# iterate over every station
+	# 	for station in graph.nodes:
+	# 		breaker = 0
+	# 		counter = 0
+	# 		# iterate over every edge
+	# 		for tuples in graph.edges:
+	# 			# to break out of this for loop if critical station has more than one edge
+	# 			if breaker == 1:
+	# 				break
+	# 			# iterate over every node in edge
+	# 			for item in tuples:
+	# 				# to break out of this for loop if critical station has more than one edge
+	# 				if breaker == 1:
+	# 					break
+	# 				# if node is equal to station that is checked now
+	# 				if item == station:
+	# 					# counter for every edge the station has
+	# 					counter += 1
+	# 					# to break out if critical station has more than one edge
+	# 					if counter > 1:				
+	# 						breaker = 1
+	# 		if counter == 1:
+	# 			one_edge_list.append(station)
+	# 	## end: checking which stations have one connection and adding to one_edge_list
