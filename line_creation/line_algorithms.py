@@ -404,3 +404,47 @@ def hierholzer(graph):
 		# 	if counter == 1:
 		# 		one_edge_list.append(station)
 	# 	## end: checking which stations have one connection and adding to one_edge_list
+
+def analytical_dfs(graph):
+
+	non_critical_station_list = graph.non_critical_station_list
+	G = graph.G
+
+	track = [{'Den Helder': ['Alkmaar']}]
+
+	node = 'Den Helder'
+	previous = 'Den Helder'
+
+	i = 0
+	track_time = 0
+	while track_time < 120:
+
+		# choose first of fresh neighbors
+		neighbor = track[i][node][0]
+
+		# if egde is critical
+		if G[node][neighbor]['color'] == 'r':
+
+			# pop new walked neighbor from previous node
+			track[i][node].pop(0)
+
+			neighbor_dict = {neighbor: list(G[neighbor])}
+
+			# pop from station
+			neighbor_dict[neighbor].remove(node)
+
+			# append node to track list
+			track.append(neighbor_dict)
+
+			# get edge time
+			edge_time = G[node][neighbor]['weight']
+			track_time += edge_time
+
+			# update station
+			node = neighbor
+			i += 1
+
+		elif G[node][neighbor]['color'] == 'k':
+			break
+
+	print(track)
