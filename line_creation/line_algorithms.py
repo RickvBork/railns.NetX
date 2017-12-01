@@ -341,51 +341,46 @@ def hierholzer(graph):
 		# returns list of tuples so you can, "by hand" follow the path
 	return connections_traversed
 
-def hill_climber(graph):
+def analytical(graph):
 
-	# get information from graph to perform algorithm
-	nodes = graph.nodes
-	critical_station_list = graph.critical_station_list
 	non_critical_station_list = graph.non_critical_station_list
-	critical_edge_list = graph.critical_edge_list
 	G = graph.G
 
-	track = []
-	walked_neighbors_list = []
+	track = [{'Den Helder': ['Alkmaar']}]
+
+	node = 'Den Helder'
+	previous = 'Den Helder'
 
 	i = 0
+	track_time = 0
+	while track_time < 120:
 
-	# all starting nodes
-	while True:
+		# choose first of fresh neighbors
+		neighbor = track[i][node][0]
 
-		from_node = node
-		neigbor_list = list(G[from_node])
-		neighbors = len(neighbor_list)
-		to_node = neighbor_list[j]
+		# if egde is critical
+		if G[node][neighbor]['color'] == 'r':
 
-		if to_node in walked_neighbors_list:
-			j += 1
-			continue
+			# pop new walked neighbor from previous node
+			track[i][node].pop(0)
 
-		# critical edge
-		if G[from_node][to_node]['color'] = 'r':
+			neighbor_dict = {neighbor: list(G[neighbor])}
 
-			# append node to list, but the next edge is walked so -1 neighbors
-			track.append({station: from_node, neighbors: neighbours - 1})
-			walked_neighbors_list.append(to_node)
+			# pop from station
+			neighbor_dict[neighbor].remove(node)
 
-			# iterator to track list
+			# append node to track list
+			track.append(neighbor_dict)
+
+			# get edge time
+			edge_time = G[node][neighbor]['weight']
+			track_time += edge_time
+
+			# update station
+			node = neighbor
 			i += 1
 
-			# update from_node
-			from_node = to_node
+		elif G[node][neighbor]['color'] == 'k':
+			break
 
-		# walk back
-		elif G[from_node][to_node]['color'] = 'k' or neighbors == 0:
-			
-			# go to previous from node
-			update = track[i - 1]['node']
-			update -= 1
-
-			# choose new to_node
-			from_node = track[i - 1].keys()[0]
+	print(track)
