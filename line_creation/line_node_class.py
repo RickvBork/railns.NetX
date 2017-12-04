@@ -29,6 +29,6 @@ class Node(object):
 
 			if neighbor.visited == 'n':
 				if G[neighbor.name][self.name]['weight'] + total_time <= 120:
-					print('Edge: ' + neighbor.name + ' -> ' + self.name)
+					print('Edge: ' + self.name + ' -> ' + neighbor.name)
 					return neighbor
 		return False
