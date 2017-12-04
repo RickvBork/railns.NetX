@@ -3,6 +3,7 @@ import random
 import line_analysis as ana
 import networkx as nx
 import collections # for Hierholzer's
+import line_node_class
 
 '''
 Pure, random walk. No heuristics.
@@ -407,44 +408,65 @@ def hierholzer(graph):
 
 def analytical_dfs(graph):
 
-	non_critical_station_list = graph.non_critical_station_list
 	G = graph.G
 
-	track = [{'Den Helder': ['Alkmaar']}]
+	station = 'Den Helder'
 
-	node = 'Den Helder'
-	previous = 'Den Helder'
+	# set starting station
+	start = Node(station, None)
 
-	i = 0
+	# set start to visited
+	start.walked()
+
+	# string must not be equal to any name of a station
+	previous = station
+
 	track_time = 0
+	print('begin from: ' + start.name)
+	print('_______________________________________')
 	while track_time < 120:
 
-		# choose first of fresh neighbors
-		neighbor = track[i][node][0]
+		# get name of station
+		station = start.name
+		print('Start: ' + station)
+		print('Previous ' + previous)
 
-		# if egde is critical
-		if G[node][neighbor]['color'] == 'r':
+		# for every neighbor of station, add neighbors as new Nodes with start as the previous Node
+		for station in G[station]:
+			if station != previous:
+				start.add_neighbor(Node(station, start))
 
-			# pop new walked neighbor from previous node
-			track[i][node].pop(0)
+		print('Neighbors of ' + start.name)
+		for neighbor in start.neighbors:
+			print('\t' + neighbor.name)
 
-			neighbor_dict = {neighbor: list(G[neighbor])}
+		# loop over neighbors
+		for neighbor in start.neighbors:
+			print('+++Possible edges: ' + start.name + ', ' + neighbor.name)
 
-			# pop from station
-			neighbor_dict[neighbor].remove(node)
+			edge = G[neighbor.name][start.name]['color']
 
-			# append node to track list
-			track.append(neighbor_dict)
+			# if one hasn't been visited and is a critical edge
+			if neighbor.visited == 'n' and edge == 'r':
 
-			# get edge time
-			edge_time = G[node][neighbor]['weight']
-			track_time += edge_time
+				# append time of edge to track time
+				track_time += G[start.name][neighbor.name]['weight']
 
-			# update station
-			node = neighbor
-			i += 1
+				# set neighbor to visited
+				neighbor.walked()
 
-		elif G[node][neighbor]['color'] == 'k':
-			break
+				print('\tEdge: ' + start.name + ', ' + neighbor.name)
 
-	print(track)
+				# previous is the current node as a string and must not be added as a possible neighbor to the next node
+				previous = start.name
+
+				# set start to selected neighbor and begin new walk
+				start = neighbor
+
+				# found next edge break out of for loop
+				break
+
+			elif edge == 'k':
+				break
+
+	# print(G['Castricum']['Hoorn']['color'])
