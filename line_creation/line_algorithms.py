@@ -455,4 +455,6 @@ def analytical_dfs(graph):
 				else:
 					print('Check returned: ' + check.name)
 					break
+
+			print('done')
 			break
