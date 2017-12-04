@@ -1,6 +1,9 @@
 import helpers as hlp
 import random
 import line_analysis as ana
+import networkx as nx
+import collections # for Hierholzer's
+import line_node_class as N
 
 '''
 Pure, random walk. No heuristics.
@@ -273,27 +276,66 @@ def hierholzer(graph):
 	for tuples in graph.edges:
 		all_edge_list.append(tuple(tuples))
 
-	# adding all nodes to list to make list of all stations
-	all_stations_list = []
-	for station in graph.nodes:
-		print(station) # check, station is de waarde die je wil: maar weet niet hoe je het moet toevoegen...
-		string = str(station) # dit werkt ook niet... alleen met tuple(string), en extend(string) maar dat is beide bullshit
-		#all_stations_list.append(station)
+	# making list of all stations
+	all_stations_list = list(graph.nodes)
 
+	#track_counter = 0
 	# loop for track
 	while True:
 
-		# breaks if all edges are traversed: weet niet of dit noodzakelijk gebeurd alleen
+		# breaks if all edges are traversed
 		if all_edge_list == []:
 			break
 
+		# determines which track this is, and adds this to connections_traversed
+		# track_counter += 1
+		# track_amount = str(track_counter)
+		# connections_traversed.append(track_amount)
+
+		# should also break if track number is 7 (or 20) or if max time is 120 times total amount of tracks
+		# if track_counter >= 7: # hardcoded 7 vervangen door user input
+		# 	break
+			# weet niet of dit op de goede plaats staat alleen. geldt ook voor de track_counter en het toevoegen aan connections_traversed
+
 		# checking which stations have only one edge, adding these to one_edge_list
-		one_edge_list = []
-		for station in all_stations_list:
-			occurence_count = all_edge_list.count(station) # maar, in all_edge_list staan tuples, dus dit werkt denk ik niet.
-			if occurence_count == 0:
+		# one_edge_list = []
+		# for station in all_stations_list:
+		# 	occurence_count = all_edge_list.count(station) # maar, in all_edge_list staan tuples, dus dit werkt denk ik niet.
+			#if occurence_count == 0:
 				#one_edge_list.append(station) # doet het ook niet, wtf
-				print("test")
+				#print("test")
+
+		one_edge_list = []
+		# if item in tuple of all_edge_list count is 1, add to one_edge_list.
+		test = [elem[0] for elem in all_edge_list]
+		test2 = [elem[1] for elem in all_edge_list]
+		test3 = test + test2
+		bla3 = collections.Counter(test3)
+		for station, amount in bla3.items():
+			if amount == 1:
+				#one_edge_list.append(station)
+				print(station, amount)
+		
+		#print(one_edge_list)
+
+
+		# for elem[0] in bla3:
+		# 	print(elem[0])
+		# 	if elem[1] == 1:
+		# 		print("yes")
+
+		# print("bla3")
+		# print(bla3)
+			
+
+		# bla = Counter(elem[0] for elem in all_edge_list)
+		# print("bla")
+		# print(bla)
+		# bla2 = Counter(elem[1] for elem in all_edge_list)
+		# print("bla2")
+		# print(bla2)
+		# print("all_edge_list")
+		# print(all_edge_list)
 
 		# get random starting station that has only one edge, if possible
 		if one_edge_list != []:
@@ -317,8 +359,8 @@ def hierholzer(graph):
 			# ensure that random neighbor station has several edges (otherwise, this will be the end of the track)
 			while random_neighbor_node in one_edge_list:
 				random_neighbor_node = random.choice(list(G[current_node]))
-				# BUT: mogelijk gaat dit oneindig door als er geen andere optie is.
-			
+
+				# BUT: mogelijk gaat dit oneindig door als er geen andere optie is. Stoppen na aantal keer of zo?		
 
 			# ensure that edge hasn't been traversed yet (vrij zeker dat dit werkt, niet 100%: is die 'and' oke?)
 			while (current_node, random_neighbor_node) not in all_edge_list and (random_neighbor_node, current_node) not in all_edge_list:
@@ -338,33 +380,129 @@ def hierholzer(graph):
 
 
 	# HIERHOLZER DEEL II:
-	# je hebt dus een list met tuples met daarin stations. 
+	# je hebt dus een list met tuples met daarin stations. tracks aan elkaar plakken: hiervoor nieuwe tracks beginnen bij een node
+	# die al in 
 
 
 	### niet  meer nodig, maar hier werkt append wel, dus niet deleten
 	# while True:
 	# 	## checking which stations have only one connection, and adding those to one_edge_list
 	# 	# iterate over every station
-	# 	for station in graph.nodes:
-	# 		breaker = 0
-	# 		counter = 0
-	# 		# iterate over every edge
-	# 		for tuples in graph.edges:
-	# 			# to break out of this for loop if critical station has more than one edge
-	# 			if breaker == 1:
-	# 				break
-	# 			# iterate over every node in edge
-	# 			for item in tuples:
-	# 				# to break out of this for loop if critical station has more than one edge
-	# 				if breaker == 1:
-	# 					break
-	# 				# if node is equal to station that is checked now
-	# 				if item == station:
-	# 					# counter for every edge the station has
-	# 					counter += 1
-	# 					# to break out if critical station has more than one edge
-	# 					if counter > 1:				
-	# 						breaker = 1
-	# 		if counter == 1:
-	# 			one_edge_list.append(station)
+		# for station in graph.nodes:
+		# 	breaker = 0
+		# 	counter = 0
+		# 	# iterate over every edge
+		# 	for tuples in graph.edges:
+		# 		# to break out of this for loop if critical station has more than one edge
+		# 		if breaker == 1:
+		# 			break
+		# 		# iterate over every node in edge
+		# 		for item in tuples:
+		# 			# to break out of this for loop if critical station has more than one edge
+		# 			if breaker == 1:
+		# 				break
+		# 			# if node is equal to station that is checked now
+		# 			if item == station:
+		# 				# counter for every edge the station has
+		# 				counter += 1
+		# 				# to break out if critical station has more than one edge
+		# 				if counter > 1:				
+		# 					breaker = 1
+		# 	if counter == 1:
+		# 		one_edge_list.append(station)
 	# 	## end: checking which stations have one connection and adding to one_edge_list
+
+def analytical_dfs(graph):
+
+	G = graph.G
+
+	station = 'Den Helder'
+
+	# set starting station
+	start = N.Node(station, None)
+	previous = 'None'
+
+
+	# set start to visited
+	start.walked()
+
+	track_time = 0
+	print('begin from: ' + start.name)
+	print('_______________________________________')
+	while True:
+
+		print('\nStart: ' + start.name)
+		print('Previous ' + previous)
+
+		# for every neighbor of station, add neighbors as new Nodes with start as the previous Node
+		for station in G[start.name]:
+
+			if station == previous:
+				print('\tStation neglected:  ' + station)
+			if station != previous:
+				print('\tStation added:\t    ' + station)
+
+				# add all neighbors except previous node
+				start.add_neighbor(N.Node(station, start))
+
+		# DEBUG
+		print('Neighbors of ' + start.name)
+		for neighbor in start.neighbors:
+			print('\t' + neighbor.name)
+
+		# loop over neighbors
+		for neighbor in start.neighbors:
+			print('\tPossible edges: ' + start.name + ', ' + neighbor.name)
+
+			# if one hasn't been visited
+			if neighbor.visited == 'n':
+
+				# append time of edge to track time
+				track_time += G[start.name][neighbor.name]['weight']
+
+				# set neighbor to visited
+				neighbor.walked()
+
+				print('\tEdge:       ' + start.name + ', ' + neighbor.name)
+				print('\tEdge time:  ' + str(G[start.name][neighbor.name]['weight']))
+				print('\tTrack time: ' + str(track_time))
+				# set start to selected neighbor and begin new walk
+				start = neighbor
+				previous = start.previous.name
+
+				# found next edge break out of for loop
+				break
+
+			elif neighbor.visited == 'y':
+				print('Found Loop')
+				# check if the neighbor has neighbors that have not been visited
+				break
+
+		# begin walk back change for track_time == 120
+		if track_time > 120:
+
+			# as the time is already > 120, no valid new edges can be added, so walk back one edge and adjust the total time
+			print('Walk back')
+			print(start.name + ' -> ' + start.previous.name)
+
+			# adjust track time
+			track_time -= G[start.name][start.previous.name]['weight']
+
+			# go back one node
+			start = start.previous
+
+			while True:
+
+				# check neighbors of previous node
+				check = start.check_neighbors(track_time, G)
+
+				# check has not returned any neighbors
+				if check == False:
+					track_time -= G[start.name][start.previous.name]['weight']
+					start = start.previous
+
+				# found untravelled previous node within total time
+				else:
+					print('Check returned: ' + check.name)
+					break
+			break

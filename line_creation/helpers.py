@@ -91,3 +91,14 @@ def get_prefered_neighbors(graph, starting_station, all_connections, track):
 	print(prefered_neighbors)
 	
 	return prefered_neighbors
+
+def test(edge, critical_edges, critical_edges_traversed):
+
+	edge_reversed = (edge[1], edge[0])
+	print(edge, edge_reversed)
+
+	if not (edge in critical_edges_traversed) and not (edge_reversed in critical_edges_traversed):
+		if (edge in critical_edges) or (edge_reversed in critical_edges):
+			critical_edges_traversed.append(edge)
+	return critical_edges_traversed
+

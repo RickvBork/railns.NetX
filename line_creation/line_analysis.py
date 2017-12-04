@@ -14,8 +14,6 @@ def draw_graph(Graph):
 	edges = Graph.edges
 	G = Graph.G
 
-	print(edges)
-
 	# get positions of nodes and edges
 	pos = nx.get_node_attributes(G, 'pos')
 

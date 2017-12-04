@@ -1,0 +1,31 @@
+self.track = a track
+
+def __hash__(self):
+	return hash(self.track)
+
+Classes gebruiken voor:
+	1. Nodes.
+		Aantal kritieke sporen in de buurt van node.
+	2. Tracks.
+		Aantal edges aan elkaar.
+		Score van de track.
+	3. lijndiensten.
+		Aantal tracks aan elkaar.
+		Score voor hele lijndienst.
+
+Visualisatie:
+	Open plaatje in code
+	Sluit plaatje in code
+	SLuit met timer
+
+Wees duidelijk over keywords in presentatie
+Wees kort en bondig in presentatie
+Layout
+	Inleiding
+	Resultaten
+	Conclusies
+	Discussie
+
+Dijkstra matrix met aantal kritieke sporen tussen trajecten.
+	Route maximaal 120m.
+	Tel aantal kritieke sporen tussen twee stations.
