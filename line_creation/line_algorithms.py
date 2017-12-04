@@ -3,7 +3,7 @@ import random
 import line_analysis as ana
 import networkx as nx
 import collections # for Hierholzer's
-import line_node_class
+import line_node_class as N
 
 '''
 Pure, random walk. No heuristics.
@@ -413,41 +413,43 @@ def analytical_dfs(graph):
 	station = 'Den Helder'
 
 	# set starting station
-	start = Node(station, None)
+	start = N.Node(station, None)
+	previous = 'None'
+
 
 	# set start to visited
 	start.walked()
 
-	# string must not be equal to any name of a station
-	previous = station
-
 	track_time = 0
 	print('begin from: ' + start.name)
 	print('_______________________________________')
-	while track_time < 120:
+	while True:
 
-		# get name of station
-		station = start.name
-		print('Start: ' + station)
+		print('\nStart: ' + start.name)
 		print('Previous ' + previous)
 
 		# for every neighbor of station, add neighbors as new Nodes with start as the previous Node
-		for station in G[station]:
-			if station != previous:
-				start.add_neighbor(Node(station, start))
+		for station in G[start.name]:
 
+			if station == previous:
+				print('\tStation neglected:  ' + station)
+			if station != previous:
+				print('\tStation added:\t    ' + station)
+
+				# add all neighbors except previous node
+				start.add_neighbor(N.Node(station, start))
+
+		# DEBUG
 		print('Neighbors of ' + start.name)
 		for neighbor in start.neighbors:
 			print('\t' + neighbor.name)
 
 		# loop over neighbors
 		for neighbor in start.neighbors:
-			print('+++Possible edges: ' + start.name + ', ' + neighbor.name)
+			print('\tPossible edges: ' + start.name + ', ' + neighbor.name)
 
-			edge = G[neighbor.name][start.name]['color']
-
-			# if one hasn't been visited and is a critical edge
-			if neighbor.visited == 'n' and edge == 'r':
+			# if one hasn't been visited
+			if neighbor.visited == 'n':
 
 				# append time of edge to track time
 				track_time += G[start.name][neighbor.name]['weight']
@@ -455,18 +457,46 @@ def analytical_dfs(graph):
 				# set neighbor to visited
 				neighbor.walked()
 
-				print('\tEdge: ' + start.name + ', ' + neighbor.name)
-
-				# previous is the current node as a string and must not be added as a possible neighbor to the next node
-				previous = start.name
-
+				print('\tEdge:       ' + start.name + ', ' + neighbor.name)
+				print('\tEdge time:  ' + str(G[start.name][neighbor.name]['weight']))
+				print('\tTrack time: ' + str(track_time))
 				# set start to selected neighbor and begin new walk
 				start = neighbor
+				previous = start.previous.name
 
 				# found next edge break out of for loop
 				break
 
-			elif edge == 'k':
+			elif neighbor.visited == 'y':
+				print('Found Loop')
+				# check if the neighbor has neighbors that have not been visited
 				break
 
-	# print(G['Castricum']['Hoorn']['color'])
+		# begin walk back change for track_time == 120
+		if track_time > 120:
+
+			# as the time is already > 120, no valid new edges can be added, so walk back one edge and adjust the total time
+			print('Walk back')
+			print(start.name + ' -> ' + start.previous.name)
+
+			# adjust track time
+			track_time -= G[start.name][start.previous.name]['weight']
+
+			# go back one node
+			start = start.previous
+
+			while True:
+
+				# check neighbors of previous node
+				check = start.check_neighbors(track_time, G)
+
+				# check has not returned any neighbors
+				if check == False:
+					track_time -= G[start.name][start.previous.name]['weight']
+					start = start.previous
+
+				# found untravelled previous node within total time
+				else:
+					print('Check returned: ' + check.name)
+					break
+			break
