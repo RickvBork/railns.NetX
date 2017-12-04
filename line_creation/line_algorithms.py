@@ -20,6 +20,7 @@ def random_walk(Graph, iterator):
 	s_list = []
 	best_tracks = []
 	best_score = - 141
+	number_of_best_tracks = 5
 
 	# do the walk iterator amount of times
 	for i in range(iterator):
@@ -104,10 +105,15 @@ def random_walk(Graph, iterator):
 		s = hlp.get_score(p, random_tracks, total_time)
 		s_list.append(s)
 
+		#append score to all_connections
+		all_connections["score"] = s
+
 		# update best track if its score is better than previous best
 		if s > best_score:
 			best_tracks.append(all_connections)
 			best_score = s
+		if (len(best_tracks) > number_of_best_tracks):
+			best_tracks.pop(0)
 
 		# all_connections["score"] = s
 
