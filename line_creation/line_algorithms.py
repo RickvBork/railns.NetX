@@ -274,7 +274,10 @@ def hierholzer(graph):
 	# adding all edges as tuples to all_edges_list
 	all_edge_list = []
 	for tuples in graph.edges:
-		all_edge_list.append(tuple(tuples))
+		print(tuples)
+		all_edge_list.append(tuples)
+
+
 
 	# making list of all stations
 	all_stations_list = list(graph.nodes)
@@ -283,6 +286,8 @@ def hierholzer(graph):
 	# loop for track
 	while True:
 
+		total_time = 0
+
 		# breaks if all edges are traversed
 		if all_edge_list == []:
 			break
@@ -290,52 +295,17 @@ def hierholzer(graph):
 		# determines which track this is, and adds this to connections_traversed
 		# track_counter += 1
 		# track_amount = str(track_counter)
-		# connections_traversed.append(track_amount)
-
-		# should also break if track number is 7 (or 20) or if max time is 120 times total amount of tracks
-		# if track_counter >= 7: # hardcoded 7 vervangen door user input
-		# 	break
-			# weet niet of dit op de goede plaats staat alleen. geldt ook voor de track_counter en het toevoegen aan connections_traversed
-
-		# checking which stations have only one edge, adding these to one_edge_list
-		# one_edge_list = []
-		# for station in all_stations_list:
-		# 	occurence_count = all_edge_list.count(station) # maar, in all_edge_list staan tuples, dus dit werkt denk ik niet.
-			#if occurence_count == 0:
-				#one_edge_list.append(station) # doet het ook niet, wtf
-				#print("test")
+		# connections_traversed.append(track_amount)	
 
 		one_edge_list = []
 		# if item in tuple of all_edge_list count is 1, add to one_edge_list.
 		test = [elem[0] for elem in all_edge_list]
 		test2 = [elem[1] for elem in all_edge_list]
 		test3 = test + test2
-		bla3 = collections.Counter(test3)
-		for station, amount in bla3.items():
-			if amount == 1:
-				#one_edge_list.append(station)
-				print(station, amount)
-		
-		#print(one_edge_list)
-
-
-		# for elem[0] in bla3:
-		# 	print(elem[0])
-		# 	if elem[1] == 1:
-		# 		print("yes")
-
-		# print("bla3")
-		# print(bla3)
-			
-
-		# bla = Counter(elem[0] for elem in all_edge_list)
-		# print("bla")
-		# print(bla)
-		# bla2 = Counter(elem[1] for elem in all_edge_list)
-		# print("bla2")
-		# print(bla2)
-		# print("all_edge_list")
-		# print(all_edge_list)
+		counter = collections.Counter(test3)
+		for station, count in counter.items():
+			if count == 1:
+				one_edge_list.append(station)
 
 		# get random starting station that has only one edge, if possible
 		if one_edge_list != []:
@@ -343,9 +313,13 @@ def hierholzer(graph):
 		else:
 			current_node = random.choice(all_stations_list)
 
+
+		#print("!!!!!!!!!!!!!!")
+
 		# loop for edges in track
 		while True:
 
+			#print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 			# checking if station has unused edges.
 			remaining_edge_check = [item for item in all_edge_list if current_node in item]
 			
@@ -370,48 +344,24 @@ def hierholzer(graph):
 			if (current_node, random_neighbor_node) in all_edge_list:
 				all_edge_list.remove((current_node, random_neighbor_node))
 				connections_traversed.append((current_node, random_neighbor_node))
+
 			if (random_neighbor_node, current_node) in all_edge_list:
 				all_edge_list.remove((random_neighbor_node, current_node))
 				connections_traversed.append((random_neighbor_node, current_node))
-		
+			
+
+			track_time = G[current_node][random_neighbor_node]['weight']
+			print(track_time)
+
 			current_node = random_neighbor_node
 		
+	# tuple	
 	return connections_traversed
-
 
 	# HIERHOLZER DEEL II:
 	# je hebt dus een list met tuples met daarin stations. tracks aan elkaar plakken: hiervoor nieuwe tracks beginnen bij een node
 	# die al in 
-
-
-	### niet  meer nodig, maar hier werkt append wel, dus niet deleten
-	# while True:
-	# 	## checking which stations have only one connection, and adding those to one_edge_list
-	# 	# iterate over every station
-		# for station in graph.nodes:
-		# 	breaker = 0
-		# 	counter = 0
-		# 	# iterate over every edge
-		# 	for tuples in graph.edges:
-		# 		# to break out of this for loop if critical station has more than one edge
-		# 		if breaker == 1:
-		# 			break
-		# 		# iterate over every node in edge
-		# 		for item in tuples:
-		# 			# to break out of this for loop if critical station has more than one edge
-		# 			if breaker == 1:
-		# 				break
-		# 			# if node is equal to station that is checked now
-		# 			if item == station:
-		# 				# counter for every edge the station has
-		# 				counter += 1
-		# 				# to break out if critical station has more than one edge
-		# 				if counter > 1:				
-		# 					breaker = 1
-		# 	if counter == 1:
-		# 		one_edge_list.append(station)
-	# 	## end: checking which stations have one connection and adding to one_edge_list
-
+	
 def analytical_dfs(graph):
 
 	G = graph.G
