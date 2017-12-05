@@ -1,5 +1,3 @@
-import networkx as nx
-
 # Test class for nodes
 class Node(object):
 	def __init__(self, name, Node):
@@ -29,6 +27,9 @@ class Node(object):
 
 			if neighbor.visited == 'n':
 				if G[neighbor.name][self.name]['weight'] + total_time <= 120:
-					print('Edge: ' + neighbor.name + ' -> ' + self.name)
+					print('Edge: ' + self.name + ' -> ' + neighbor.name)
+					print('Old Total Time: ' + str(total_time))
+					print('Edge Time:\t' + str(G[neighbor.name][self.name]['weight']))
+					print(str(G[neighbor.name][self.name]['weight'] + total_time))
 					return neighbor
 		return False
