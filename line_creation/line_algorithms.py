@@ -417,6 +417,8 @@ def analytical_dfs(graph):
 				print('\tEdge time:  ' + str(G[start.name][neighbor.name]['weight']))
 				print('\tTrack time: ' + str(track_time))
 				# set start to selected neighbor and begin new walk
+				start.next = neighbor
+				print('\tWalked from: ' + start.name + ' -> ' + start.next.name)
 				start = neighbor
 				previous = start.previous.name
 

@@ -5,6 +5,7 @@ class Node(object):
 		self.neighbors = []
 		self.visited = 'n'
 		self.previous = Node
+		self.next = None
 
 	def add_neighbor(self, Node):
 		self.neighbors.append(Node)
@@ -25,11 +26,24 @@ class Node(object):
 
 		for neighbor in self.neighbors:
 
-			if neighbor.visited == 'n':
+			# check surroundings, but not the node walked from and node already walked to
+			if neighbor != self.next and neighbor != self.previous:
+
+				# only take nodes that have valid travel time
 				if G[neighbor.name][self.name]['weight'] + total_time <= 120:
 					print('Edge: ' + self.name + ' -> ' + neighbor.name)
 					print('Old Total Time: ' + str(total_time))
 					print('Edge Time:\t' + str(G[neighbor.name][self.name]['weight']))
 					print(str(G[neighbor.name][self.name]['weight'] + total_time))
+
 					return neighbor
+
+
+			# if neighbor.visited == 'n':
+			# 	if G[neighbor.name][self.name]['weight'] + total_time <= 120:
+			# 		print('Edge: ' + self.name + ' -> ' + neighbor.name)
+			# 		print('Old Total Time: ' + str(total_time))
+			# 		print('Edge Time:\t' + str(G[neighbor.name][self.name]['weight']))
+			# 		print(str(G[neighbor.name][self.name]['weight'] + total_time))
+			# 		return neighbor
 		return False
