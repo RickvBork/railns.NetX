@@ -274,22 +274,23 @@ def hierholzer(graph):
 	# adding all edges as tuples to all_edges_list
 	all_edge_list = []
 	for tuples in graph.edges:
-		print(tuples)
 		all_edge_list.append(tuples)
-
-
 
 	# making list of all stations
 	all_stations_list = list(graph.nodes)
 
-	#track_counter = 0
+	track_counter = 0
+	total_time = 0
 	# loop for track
 	while True:
 
-		total_time = 0
-
+		track_counter += 1
+		print("track_counter: ", end="")
+		print(track_counter)
+	
 		# breaks if all edges are traversed
 		if all_edge_list == []:
+			print("break")
 			break
 
 		# determines which track this is, and adds this to connections_traversed
@@ -313,7 +314,6 @@ def hierholzer(graph):
 		else:
 			current_node = random.choice(all_stations_list)
 
-
 		#print("!!!!!!!!!!!!!!")
 
 		# loop for edges in track
@@ -331,10 +331,9 @@ def hierholzer(graph):
 			random_neighbor_node = random.choice(list(G[current_node]))
 
 			# ensure that random neighbor station has several edges (otherwise, this will be the end of the track)
-			while random_neighbor_node in one_edge_list:
-				random_neighbor_node = random.choice(list(G[current_node]))
-
-				# BUT: mogelijk gaat dit oneindig door als er geen andere optie is. Stoppen na aantal keer of zo?		
+			if len(all_edge_list) != 1:
+				while random_neighbor_node in one_edge_list:
+					random_neighbor_node = random.choice(list(G[current_node]))
 
 			# ensure that edge hasn't been traversed yet (vrij zeker dat dit werkt, niet 100%: is die 'and' oke?)
 			while (current_node, random_neighbor_node) not in all_edge_list and (random_neighbor_node, current_node) not in all_edge_list:
@@ -344,18 +343,27 @@ def hierholzer(graph):
 			if (current_node, random_neighbor_node) in all_edge_list:
 				all_edge_list.remove((current_node, random_neighbor_node))
 				connections_traversed.append((current_node, random_neighbor_node))
-
 			if (random_neighbor_node, current_node) in all_edge_list:
 				all_edge_list.remove((random_neighbor_node, current_node))
 				connections_traversed.append((random_neighbor_node, current_node))
 			
+			print(current_node, random_neighbor_node)
 
 			track_time = G[current_node][random_neighbor_node]['weight']
+			print("track_time", end="")
 			print(track_time)
+
+			total_time += track_time
+			print("total_time", end="")
+			print(total_time)
 
 			current_node = random_neighbor_node
 		
-	# tuple	
+	# list of tuples
+	score = hlp.get_score(1, track_counter, total_time)
+	print("score", end="")
+	print(score)
+
 	return connections_traversed
 
 	# HIERHOLZER DEEL II:
