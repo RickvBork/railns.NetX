@@ -5,6 +5,7 @@ import networkx as nx
 import collections # for Hierholzer's
 import line_node_class as N
 import line_edges_class as E
+from copy import deepcopy
 
 '''
 Pure, random walk. No heuristics.
@@ -407,9 +408,9 @@ def analytical_dfs(graph):
 	start.walked()
 
 	# set track object
-	track = E.Edges(G)
+	track = E.Track(G)
+	track_list = []
 
-	track_time = 0
 	print('begin from: ' + start.name)
 	print('_______________________________________')
 	while True:
@@ -437,22 +438,21 @@ def analytical_dfs(graph):
 		for neighbor in start.neighbors:
 			print('\tPossible edges: ' + start.name + ', ' + neighbor.name)
 
+			if (start.name, neighbor.name) not in track.edges:
+				print('++ Test: {}, {}'.format(start.name, neighbor.name))
+
 			# if one hasn't been visited
 			if neighbor.visited == 'n':
-
-				# append time of edge to track time
-				track_time += G[start.name][neighbor.name]['weight']
-
-				track.time += G[start.name][neighbor.name]['weight']
 
 				# set neighbor to visited
 				neighbor.walked()
 
-				track.add_edge(tuple((start.name, neighbor.name)))
+				# add the track to the track object
+				track.add_edge(start.name, neighbor.name)
 
 				print('\tEdge:       ' + start.name + ', ' + neighbor.name)
 				print('\tEdge time:  ' + str(G[start.name][neighbor.name]['weight']))
-				print('\tTrack time: ' + str(track_time))
+				print('\tTrack time: ' + str(track.time))
 				# set start to selected neighbor and begin new walk
 				start.next = neighbor
 				print('\tWalked from: ' + start.name + ' -> ' + start.next.name)
@@ -468,6 +468,23 @@ def analytical_dfs(graph):
 				break
 
 		# begin walk back change for track_time == 120
-		if track_time > 120:
-			print(track.get_score())
+		if track.time > 120:
+			
+			# store track in list
+			track_list.append(track) 			# store old track
+			track = deepcopy(track_list[0])		# copy old track
+			track.remove_edge()					# remove last edge
+			start = start.previous              # go back one node
+
+			while True:
+				check = start.check_neighbors(track, G)
+				if check == False:
+					print('\n\t  continue walkback')
+					track.remove_edge()			# remove last edge
+					start = start.previous      # go back one node
+
+				else:
+					print(check.name)
+					print(track.edges)
+					break
 			break
