@@ -13,30 +13,37 @@ class Node(object):
 	def walked(self):
 		self.visited = 'y'
 
-	def check_neighbors(self, total_time, G):
+	def check_neighbors(self, track, G):
 
 		print('\n_______________Enter Check_______________\n')
 
 		print('Check neighbors for: ' + self.name)
-		print('Total time is: ' + str(total_time) + '\n')
+		print('Total time is: ' + str(track.time) + '\n')
 
 		print('Possible Neighbors:')
-		for neighbor in self.neighbors:
-			print(neighbor.name)
-
 		for neighbor in self.neighbors:
 
 			# check surroundings, but not the node walked from and node already walked to
 			if neighbor != self.next and neighbor != self.previous:
 
-				# only take nodes that have valid travel time
-				if G[neighbor.name][self.name]['weight'] + total_time <= 120:
-					print('Edge: ' + self.name + ' -> ' + neighbor.name)
-					print('Old Total Time: ' + str(total_time))
-					print('Edge Time:\t' + str(G[neighbor.name][self.name]['weight']))
-					print(str(G[neighbor.name][self.name]['weight'] + total_time))
+				print(neighbor.name)
 
-					return neighbor
+				# only take nodes that have valid travel time
+				if G[neighbor.name][self.name]['weight'] + track.time <= 120:
+					print('Edge: ' + self.name + ' -> ' + neighbor.name)
+					print('Old Total Time: ' + str(track.time))
+					print('Edge Time:\t' + str(G[neighbor.name][self.name]['weight']))
+					print(str(G[neighbor.name][self.name]['weight'] + track.time))
+
+					# edge from -> to, also stored this way in edges
+					edge = (self.name, neighbor.name)
+
+					# check track if the edge has not been travelled
+					if edge not in track.edges:
+						return neighbor
+
+		# no possible neighbor, continue walkback
+		return False
 
 
 			# if neighbor.visited == 'n':
