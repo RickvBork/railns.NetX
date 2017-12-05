@@ -6,25 +6,33 @@ import line_graph_class as grc
 class track:
 	def __init__(self, stations, graph):
 		
+		self.G = graph.G
 		self.critical_edge_list = graph.critical_edge_list
 		self.starting_station = stations[0][0]
 		self.last_station = stations[-1][1]
-		self.route = self.get_route_list(stations)	
+		self.edges = self.get_edges_list(stations)	
 		self.critical_lines_traversed = self.get_critical_lines_traversed()	
-
-	def get_route_list(self, stations):
-		route = []
+		self.time = self.get_time()
+	
+	def get_time(self):
+		time = 0
+		for i in range(len(self.edges)-1):
+			time += self.G[self.edges[i]][self.edges[i+1]]['weight']
+		return time
+ 
+	def get_edges_list(self, stations):
+		edges = []
 		for stationpair in stations:
-			route.append(stationpair[0])
-		route.append(stations[-1][1])
-		return route
+			edges.append(stationpair[0])
+		edges.append(stations[-1][1])
+		return edges
 
 
 	def get_critical_lines_traversed(self):
 		critical_lines_traversed = []
-		route = self.route
-		for i in range(len(route)-1):
-			if ((route[i], route[i+1]) in self.critical_edge_list):
-				critical_lines_traversed.append((route[i], route[i+1]))
+		edges = self.edges
+		for i in range(len(edges)-1):
+			if ((edges[i], edges[i+1]) in self.critical_edge_list):
+				critical_lines_traversed.append((edges[i], edges[i+1]))
 				print("add critical line traversed")
 		return critical_lines_traversed
