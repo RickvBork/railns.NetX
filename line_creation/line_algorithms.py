@@ -4,6 +4,7 @@ import line_analysis as ana
 import networkx as nx
 import collections # for Hierholzer's
 import line_node_class as N
+import line_edges_class as E
 
 '''
 Pure, random walk. No heuristics.
@@ -378,11 +379,13 @@ def analytical_dfs(graph):
 
 	# set starting station
 	start = N.Node(station, None)
-	previous = 'None'
-
+	previous = 'Start'
 
 	# set start to visited
 	start.walked()
+
+	# set track object
+	track = E.Edges(G)
 
 	track_time = 0
 	print('begin from: ' + start.name)
@@ -418,8 +421,12 @@ def analytical_dfs(graph):
 				# append time of edge to track time
 				track_time += G[start.name][neighbor.name]['weight']
 
+				track.time += G[start.name][neighbor.name]['weight']
+
 				# set neighbor to visited
 				neighbor.walked()
+
+				track.add_edge(tuple((start.name, neighbor.name)))
 
 				print('\tEdge:       ' + start.name + ', ' + neighbor.name)
 				print('\tEdge time:  ' + str(G[start.name][neighbor.name]['weight']))
@@ -440,31 +447,5 @@ def analytical_dfs(graph):
 
 		# begin walk back change for track_time == 120
 		if track_time > 120:
-
-			# as the time is already > 120, no valid new edges can be added, so walk back one edge and adjust the total time
-			print('Walk back')
-			print(start.name + ' -> ' + start.previous.name)
-
-			# adjust track time
-			track_time -= G[start.name][start.previous.name]['weight']
-
-			# go back one node
-			start = start.previous
-
-			while True:
-
-				# check neighbors of previous node
-				check = start.check_neighbors(track_time, G)
-
-				# check has not returned any neighbors
-				if check == False:
-					track_time -= G[start.name][start.previous.name]['weight']
-					start = start.previous
-
-				# found untravelled previous node within total time
-				else:
-					print('Check returned: ' + check.name)
-					break
-
-			print('done')
+			print(track.get_score())
 			break
