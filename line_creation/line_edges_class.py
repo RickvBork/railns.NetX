@@ -1,4 +1,4 @@
-class Edges(object):
+class Track(object):
 
 	def __init__(self, G):
 		self.G = G

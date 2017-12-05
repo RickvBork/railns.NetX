@@ -263,13 +263,12 @@ def smart_random_walk(graph, iterator):
 
 
 ''''
-Hierholzer's algorithm (v2)
+Hierholzer's algorithm
 '''
 def hierholzer(graph):
 
 	print("======HIERHOLZER======")
 
-	#critical_list = graph.critical_station_list
 	connections_traversed = []
 	G = graph.G
 
@@ -285,21 +284,26 @@ def hierholzer(graph):
 	# the time in total and the time of each track
 	track_counter = 0
 	total_time = 0
-	track_time = 0
 
 	# loop for each track
 	while True:
 
-		print("total track_time:", end="")
-		print(track_time)
+		# make new track object (one for each track)
+		track = E.Track(G)
 
 		# if the track turns out to be longer than 120 minutes, it has to be split in two
-		if track_time > 120:
+		if track.time > 120:
+			# track toevoegen aan connections traversed en nieuw track beginnen, zolang de current node maar hetzelfde is
+			connections_traversed.append(track)
+			print("connections_traversed", end="")
+			print(connections_traversed)
+			track = E.Track(G)
+			print("track, E.Track", end="")
+			print(track)
 			track_counter += 1
 
-		# keeping track of track time and amount
+		# keeping track of track amount
 		track_counter += 1
-		track_time = 0
 
 		print("track_counter: ", end="")
 		print(track_counter)
@@ -308,14 +312,14 @@ def hierholzer(graph):
 		if all_edge_list == []:
 			break
 
-		# initalize list for stations with only one edge
-		one_edge_list = []
-
 		# making list, by adding two lists together, that contains each station 
 		# as many times as it has edges
 		half_edge_list = [elem[0] for elem in all_edge_list]
 		other_half_edge_list = [elem[1] for elem in all_edge_list]
 		stations_in_edges_amount_list = half_edge_list + other_half_edge_list
+
+		# initalize list for stations with only one edge
+		one_edge_list = []
 
 		# determine which stations have only one edge, adding these to one_edge_list
 		counter = collections.Counter(stations_in_edges_amount_list)
@@ -337,6 +341,8 @@ def hierholzer(graph):
 			
 			# if current_node has no unused edges: beginning of new track, so break out of this while loop
 			if remaining_edge_check == []:
+				# add complete track to connections traversed
+				connections_traversed.append(track)
 				break
 
 			# choose random neighbor of station
@@ -354,10 +360,10 @@ def hierholzer(graph):
 			# remove traversed edge from all_edge_list, and add traversed edge to connections traversed to keep track of route
 			if (current_node, random_neighbor_node) in all_edge_list:
 				all_edge_list.remove((current_node, random_neighbor_node))
-				connections_traversed.append((current_node, random_neighbor_node))
+				#connections_traversed.append((current_node, random_neighbor_node))
 			if (random_neighbor_node, current_node) in all_edge_list:
 				all_edge_list.remove((random_neighbor_node, current_node))
-				connections_traversed.append((random_neighbor_node, current_node))
+				#connections_traversed.append((random_neighbor_node, current_node))
 			
 			print(current_node, random_neighbor_node)
 
@@ -365,12 +371,18 @@ def hierholzer(graph):
 			edge_time = G[current_node][random_neighbor_node]['weight']
 
 			# keeping track of track time, and of the time in total
-			track_time += edge_time
 			total_time += edge_time
-		
+			
+			track.time += edge_time
+
+			print("track.time: ", end="")
+			print(track.time)
+
 			# make neighbor node current node, so that this node can go through the while loop to create a track
 			current_node = random_neighbor_node
-		
+	
+	print("connections_traversed: ", end="")
+	print(connections_traversed)	
 	
 	score = hlp.get_score(1, track_counter, total_time)
 	print("score: ", end="")
