@@ -270,56 +270,46 @@ def hierholzer(graph):
 
 	print("======HIERHOLZER======")
 
-	connections_traversed = []
+	# for access to the graph
 	G = graph.G
 
+	# initializing list for all tracks
+	connections_traversed = []
+
 	# adding all edges as tuples to all_edges_list
-	all_edge_list = []
-	for tuples in graph.edges:
-		all_edge_list.append(tuples)
+	all_edge_list = [edge for edge in graph.edges]
 
-	# making list of all stations
-	all_stations_list = list(graph.nodes)
-
-	# initializing variables to keep track of the amount of tracks, 
-	# the time in total and the time of each track
+	# to keep track of amount of tracks
 	track_counter = 0
+
+	# to keep track of time of all tracks combined
 	total_time = 0
 
-	# loop for each track
+	# for each track
 	while True:
 
 		# make new track object (one for each track)
 		track = E.Track(G)
 
-		# if the track turns out to be longer than 120 minutes, it has to be split in two
-		if track.time > 120:
-			# track toevoegen aan connections traversed en nieuw track beginnen, zolang de current node maar hetzelfde is
-			connections_traversed.append(track)
-			print("connections_traversed", end="")
-			print(connections_traversed)
-			track = E.Track(G)
-			print("track, E.Track", end="")
-			print(track)
-			track_counter += 1
-
-		# keeping track of track amount
+		# keeping track of amount of tracks
 		track_counter += 1
 
-		print("track_counter: ", end="")
-		print(track_counter)
+		# check
+		# print("track_counter: ", end="")
+		# print(track_counter)
 	
 		# breaks if all edges are traversed, ending the algorithm
 		if all_edge_list == []:
 			break
 
-		# making list, by adding two lists together, that contains each station 
-		# as many times as it has edges
-		half_edge_list = [elem[0] for elem in all_edge_list]
-		other_half_edge_list = [elem[1] for elem in all_edge_list]
-		stations_in_edges_amount_list = half_edge_list + other_half_edge_list
 
-		# initalize list for stations with only one edge
+		#### dit misschien in functie: dit is allemaal om, voor zover mogelijk, een starting node te krijgen
+		# die maar één edge heeft
+
+		# make list with every station as much as they have untraversed edges
+		stations_in_edges_amount_list = [elem for t in all_edge_list for elem in t]
+
+		# initalize list for stations with only one untraversed edge
 		one_edge_list = []
 
 		# determine which stations have only one edge, adding these to one_edge_list
@@ -332,7 +322,10 @@ def hierholzer(graph):
 		if one_edge_list != []:
 			current_node = random.choice(one_edge_list)
 		else:
-			current_node = random.choice(all_stations_list)
+			current_node = random.choice(list(graph.nodes))
+
+		#### eind mogelijke functie
+
 
 		# loop for each edge in each track
 		while True:
@@ -340,10 +333,11 @@ def hierholzer(graph):
 			# checking if current station has unused edges
 			remaining_edge_check = [item for item in all_edge_list if current_node in item]
 			
-			# if current_node has no unused edges: beginning of new track, so break out of this while loop
+			# if current_node has no unused edges
 			if remaining_edge_check == []:
-				# add complete track to connections traversed
+				# add this track to connections traversed
 				connections_traversed.append(track)
+				# break out of while loop to begin new track
 				break
 
 			# choose random neighbor of station
@@ -358,33 +352,56 @@ def hierholzer(graph):
 			while (current_node, random_neighbor_node) not in all_edge_list and (random_neighbor_node, current_node) not in all_edge_list:
 				random_neighbor_node = random.choice(list(G[current_node]))
 
-			# remove traversed edge from all_edge_list, and add traversed edge to connections traversed to keep track of route
-			if (current_node, random_neighbor_node) in all_edge_list:
-				all_edge_list.remove((current_node, random_neighbor_node))
-				#connections_traversed.append((current_node, random_neighbor_node))
-			if (random_neighbor_node, current_node) in all_edge_list:
-				all_edge_list.remove((random_neighbor_node, current_node))
-				#connections_traversed.append((random_neighbor_node, current_node))
-			
-			print(current_node, random_neighbor_node)
-
 			# get edge time
 			edge_time = G[current_node][random_neighbor_node]['weight']
-
-			# keeping track of track time, and of the time in total
-			total_time += edge_time
 			
-			track.time += edge_time
+			# keeping track of total time of all tracks
+			total_time += edge_time
 
-			print("track.time: ", end="")
-			print(track.time)
+			# if track is longer than 120 minutes
+			if track.time > 120:
 
-			# make neighbor node current node, so that this node can go through the while loop to create a track
-			current_node = random_neighbor_node
-	
-	print("connections_traversed: ", end="")
-	print(connections_traversed)	
-	
+				# remove last edge from track to keep time at a max of 120
+				track.remove_edge()
+
+				# add track, without last edge, to list of all tracks
+				connections_traversed.append(track)
+
+				# initialize new track object
+				track = E.Track(G)
+
+				# keep track of amount of tracks
+				track_counter += 1
+
+			# if track with new edge is not longer than 120 minutes
+			else:
+				# check in what order edge is stored in all_edge_list
+				if (current_node, random_neighbor_node) in all_edge_list:
+
+					# remove edge from all_edge_list
+					all_edge_list.remove((current_node, random_neighbor_node))
+
+				elif (random_neighbor_node, current_node) in all_edge_list:
+
+					# remove edge from all_edge_list
+					all_edge_list.remove((random_neighbor_node, current_node))
+
+				# add edge to track
+				track.add_edge(current_node, random_neighbor_node)	
+
+				# make neighbor node current node, so that this node can go through the while loop to create a track
+				current_node = random_neighbor_node
+
+	print("track_counter: ", end="")
+	print(track_counter)
+	# die -1 is nodig zodat het niet out of bounds gaat: de track counter telt een te hoog
+	for i in range(track_counter - 1):
+		print("time: ", end="")
+		print(connections_traversed[i].time)
+		# print("edges of track: ", end="")
+		# print(connections_traversed[i].edges)
+
+
 	score = hlp.get_score(1, track_counter, total_time)
 	print("score: ", end="")
 	print(score)
@@ -392,6 +409,14 @@ def hierholzer(graph):
 	# list of tuples
 	return connections_traversed
 
+	# to do
+	# - score op andere manier berekenen: via de connections_traversed[i].get_score oid.
+	# - deze score ook returnen
+	# - track_counter telt één te veel
+	# - misschien: all_edges_list veranderen voor connections_traversed[i].edges: dit geeft precies
+	#   het omgekeerde terug, daar kan misschien op de een of andere manier gebruikt worden?
+	# - misschien: functie om voorzover mogelijk een random neighbor te krijgen met maar één edge die nog
+	#   traversed moet worden. Had Thom niet al zoiets
 	
 	
 def analytical_dfs(graph):
