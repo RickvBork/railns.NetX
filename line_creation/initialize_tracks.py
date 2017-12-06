@@ -1,4 +1,4 @@
-# run in terminal: exec(open("./initialize_tracks.test.py").read())
+# run in terminal: exec(open("./initialize_tracks.py").read())
 # to run this script
 
 import line_algorithms as alg
