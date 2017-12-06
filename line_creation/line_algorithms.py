@@ -290,16 +290,9 @@ def hierholzer(graph):
 
 		# make new track object (one for each track)
 		track = E.Track(G)
-		print("new track")
 
 		# keeping track of amount of tracks
 		track_counter += 1
-		print("track_counter: ")
-		print(track_counter)
-
-		# check
-		# print("track_counter: ", end="")
-		# print(track_counter)
 	
 		# if all edges are traversed
 		if all_edge_list == []:
@@ -342,9 +335,16 @@ def hierholzer(graph):
 			
 			# if current_node has no unused edges
 			if remaining_edge_check == []:
+
+				# if last track made track longer than max length
+				if track.time > 120:
+
+					# remove last edge
+					track.remove_edge()
+
 				# add this track to connections traversed
 				connections_traversed.append(track)
-				print("track appended")
+
 				# break out of while loop to begin new track
 				break
 
@@ -369,21 +369,17 @@ def hierholzer(graph):
 			# if track is longer than 120 minutes
 			if track.time > 120:
 
-				# remove last edge from track to keep time at a max of 120
+				# remove last edge to make length less than 120 minutes
 				track.remove_edge()
 
-				# add track, without last edge, to list of all tracks
+				# add track to list of all tracks
 				connections_traversed.append(track)
-				print("track appended")
 
 				# initialize new track object
 				track = E.Track(G)
-				print("new track")
 
 				# keep track of amount of tracks
 				track_counter += 1
-				print("track_counter: ")
-				print(track_counter)
 
 			# if track with new edge is not longer than 120 minutes
 			else:
@@ -406,16 +402,11 @@ def hierholzer(graph):
 
 	print("track_counter: ", end="")
 	print(track_counter)
-	# die -1 is nodig zodat het niet out of bounds gaat: de track counter telt een te hoog
+
 	for i in range(track_counter):
 		print("time: ", end="")
-		print(connections_traversed[i].time)
-		print("edges of track: ", end="")
-		print(connections_traversed[i].edges)
-
-	print("connections_traversed: ", end="")
-	print(connections_traversed)
-
+		print(connections_traversed[i].time)	
+	
 	score = hlp.get_score(1, track_counter, total_time)
 	print("score: ", end="")
 	print(score)
@@ -426,7 +417,6 @@ def hierholzer(graph):
 	# to do
 	# - score op andere manier berekenen: via de connections_traversed[i].get_score oid.
 	# - deze score ook returnen
-	# - track_counter telt één te veel
 	# - misschien: all_edges_list veranderen voor connections_traversed[i].edges: dit geeft precies
 	#   het omgekeerde terug, daar kan misschien op de een of andere manier gebruikt worden?
 	# - misschien: functie om voorzover mogelijk een random neighbor te krijgen met maar één edge die nog
