@@ -13,44 +13,45 @@ class Node(object):
 	def walked(self):
 		self.visited = 'y'
 
-	def check_neighbors(self, track, G):
+	def check_neighbors(self, track, track_list, G):
 
-		print('\n_______________Enter Check_______________\n')
+		print('\n__________________Enter Check__________________\n')
 
-		print('Check neighbors for: ' + self.name)
-		print('Total time is: ' + str(track.time) + '\n')
+		print('Checking for Node:\t' + self.name)
 
-		print('Possible Neighbors:')
-		for neighbor in self.neighbors:
+		print('\nExisting tracks: ')
+		for obj in track_list:
+			print(obj.edges)
+			print()
 
-			# check surroundings, but not the node walked from and node already walked to
-			if neighbor != self.next and neighbor != self.previous:
+		print('Current track')
+		print('{}'.format(track.edges))
 
-				print(neighbor.name)
+		slice0 = len(track.edges)
 
-				# only take nodes that have valid travel time
-				if G[neighbor.name][self.name]['weight'] + track.time <= 120:
-					print('Edge: ' + self.name + ' -> ' + neighbor.name)
-					print('Old Total Time: ' + str(track.time))
-					print('Edge Time:\t' + str(G[neighbor.name][self.name]['weight']))
-					print(str(G[neighbor.name][self.name]['weight'] + track.time))
+		# from all tracks, seek the pathfinder edge
+		for unique_track in track_list:
 
-					# edge from -> to, also stored this way in edges
-					edge = (self.name, neighbor.name)
+			slice1 = len(unique_track.edges)
 
-					# check track if the edge has not been travelled
-					if edge not in track.edges:
+			# slice off the track from unique strack, get first edge
+			edge = unique_track.edges[slice0:slice1][0]
+
+			print('Neglect edge:\t\t{}'.format(edge))
+
+			# loop over all neighbors of the from node
+			for neighbor in self.neighbors:
+
+				print('Edge:\t\t\t(\'{}\', \'{}\')'.format(self.name, neighbor.name))
+				print('Old Total Time:\t\t' + str(track.time))
+				print('Edge Time:\t\t{}'.format(G[neighbor.name][self.name]['weight']))
+				print('Total Time:\t\t{}\n'.format(G[neighbor.name][self.name]['weight'] + track.time))
+
+				# if the edge does not force total time over limit, and not equal to the node previous to the from node
+				if neighbor != self.previous and G[self.name][neighbor.name]['weight'] + track.time <= 120:
+
+					# if the edge is not equal to the pathfinder edge
+					if (self.name, neighbor.name) != edge:
+						print('test')
 						return neighbor
-
-		# no possible neighbor, continue walkback
-		return False
-
-
-			# if neighbor.visited == 'n':
-			# 	if G[neighbor.name][self.name]['weight'] + total_time <= 120:
-			# 		print('Edge: ' + self.name + ' -> ' + neighbor.name)
-			# 		print('Old Total Time: ' + str(total_time))
-			# 		print('Edge Time:\t' + str(G[neighbor.name][self.name]['weight']))
-			# 		print(str(G[neighbor.name][self.name]['weight'] + total_time))
-			# 		return neighbor
 		return False
