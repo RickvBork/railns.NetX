@@ -290,18 +290,25 @@ def hierholzer(graph):
 
 		# make new track object (one for each track)
 		track = E.Track(G)
+		print("new track")
 
 		# keeping track of amount of tracks
 		track_counter += 1
+		print("track_counter: ")
+		print(track_counter)
 
 		# check
 		# print("track_counter: ", end="")
 		# print(track_counter)
 	
-		# breaks if all edges are traversed, ending the algorithm
+		# if all edges are traversed
 		if all_edge_list == []:
-			break
 
+			# counter counted one track too much
+			track_counter -= 1
+
+			# break to end the algorithm
+			break
 
 		#### dit misschien in functie: dit is allemaal om, voor zover mogelijk, een starting node te krijgen
 		# die maar één edge heeft
@@ -337,6 +344,7 @@ def hierholzer(graph):
 			if remaining_edge_check == []:
 				# add this track to connections traversed
 				connections_traversed.append(track)
+				print("track appended")
 				# break out of while loop to begin new track
 				break
 
@@ -366,12 +374,16 @@ def hierholzer(graph):
 
 				# add track, without last edge, to list of all tracks
 				connections_traversed.append(track)
+				print("track appended")
 
 				# initialize new track object
 				track = E.Track(G)
+				print("new track")
 
 				# keep track of amount of tracks
 				track_counter += 1
+				print("track_counter: ")
+				print(track_counter)
 
 			# if track with new edge is not longer than 120 minutes
 			else:
@@ -395,12 +407,14 @@ def hierholzer(graph):
 	print("track_counter: ", end="")
 	print(track_counter)
 	# die -1 is nodig zodat het niet out of bounds gaat: de track counter telt een te hoog
-	for i in range(track_counter - 1):
+	for i in range(track_counter):
 		print("time: ", end="")
 		print(connections_traversed[i].time)
-		# print("edges of track: ", end="")
-		# print(connections_traversed[i].edges)
+		print("edges of track: ", end="")
+		print(connections_traversed[i].edges)
 
+	print("connections_traversed: ", end="")
+	print(connections_traversed)
 
 	score = hlp.get_score(1, track_counter, total_time)
 	print("score: ", end="")
