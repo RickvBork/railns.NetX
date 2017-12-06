@@ -403,7 +403,7 @@ def analytical_dfs(graph):
 	print('_______________________________________')
 	while True:
 
-		print('\nStart: ' + start.name)
+		print('\nStart: {}\n'.format(start.name))
 		print('Previous ' + previous)
 
 		# for every neighbor of station, add neighbors as new Nodes with start as the previous Node
@@ -418,7 +418,7 @@ def analytical_dfs(graph):
 				start.add_neighbor(N.Node(station, start))
 
 		# DEBUG
-		print('Neighbors of ' + start.name)
+		print('\nNeighbors of ' + start.name)
 		for neighbor in start.neighbors:
 			print('\t' + neighbor.name)
 
@@ -426,53 +426,37 @@ def analytical_dfs(graph):
 		for neighbor in start.neighbors:
 			print('\tPossible edges: ' + start.name + ', ' + neighbor.name)
 
-			if (start.name, neighbor.name) not in track.edges:
-				print('++ Test: {}, {}'.format(start.name, neighbor.name))
+			# add the track to the track object
+			track.add_edge(start.name, neighbor.name)
 
-			# if one hasn't been visited
-			if neighbor.visited == 'n':
+			print('\tEdge:       ' + start.name + ', ' + neighbor.name)
+			print('\tEdge time:  ' + str(G[start.name][neighbor.name]['weight']))
+			print('\tTrack time: ' + str(track.time))
+			# set start to selected neighbor and begin new walk
+			start.next = neighbor
+			print('\tWalked from: ' + start.name + ' -> ' + start.next.name)
+			start = neighbor
+			previous = start.previous.name
 
-				# set neighbor to visited
-				neighbor.walked()
-
-				# add the track to the track object
-				track.add_edge(start.name, neighbor.name)
-
-				print('\tEdge:       ' + start.name + ', ' + neighbor.name)
-				print('\tEdge time:  ' + str(G[start.name][neighbor.name]['weight']))
-				print('\tTrack time: ' + str(track.time))
-				# set start to selected neighbor and begin new walk
-				start.next = neighbor
-				print('\tWalked from: ' + start.name + ' -> ' + start.next.name)
-				start = neighbor
-				previous = start.previous.name
-
-				# found next edge break out of for loop
-				break
-
-			elif neighbor.visited == 'y':
-				print('Found Loop')
-				# check if the neighbor has neighbors that have not been visited
-				break
+			# found next edge break out of for loop
+			break
 
 		# begin walk back change for track_time == 120
 		if track.time > 120:
 			
 			# store track in list
-			track_list.append(track) 			# store old track
-			track = deepcopy(track_list[0])		# copy old track
-			track.remove_edge()					# remove last edge
-			start = start.previous              # go back one node
+			track_list.append(track) 						# store old track
+			track = deepcopy(track)							# copy old track
+			track.remove_edge()								# remove last edge
+			start = start.previous              			# go back one node
 
 			while True:
-				check = start.check_neighbors(track, G)
+				check = start.check_neighbors(track, track_list, G)
 				if check == False:
-					print('\n\t  continue walkback')
-					track.remove_edge()			# remove last edge
-					start = start.previous      # go back one node
-
+					track.remove_edge()						# remove last edge
+					start = start.previous      			# go back one node
 				else:
-					print(check.name)
-					print(track.edges)
+					start.next = check 			  # link found station
+					start = check 				  # set start to check
+					previous = start.previous.name
 					break
-			break
