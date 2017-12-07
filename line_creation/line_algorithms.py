@@ -395,7 +395,10 @@ def hierholzer(graph):
 					all_edge_list.remove((random_neighbor_node, current_node))
 
 				# add edge to track
-				track.add_edge(current_node, random_neighbor_node)	
+				track.add_edge(current_node, random_neighbor_node)
+
+				# for possibly adding tracks together later on
+				track.add_station(current_node, random_neighbor_node)
 
 				# make neighbor node current node, so that this node can go through the while loop to create a track
 				current_node = random_neighbor_node
@@ -407,6 +410,135 @@ def hierholzer(graph):
 		print("time: ", end="")
 		print(connections_traversed[i].time)	
 	
+	print("connections_traversed time times two")
+	for i in range(track_counter):
+		if (connections_traversed[i].time * 2) < 120:
+			for station in connections_traversed[i].stations:
+				for j in range(track_counter):
+					if station in connections_traversed[j].stations:
+						if connections_traversed[j] != connections_traversed[i]:
+							if connections_traversed[j].time < 120:
+								if (connections_traversed[j].time + (connections_traversed[i].time * 2)) < 120:
+									print(station)
+
+									# voor A en D: een van de twee tracks omdraaien
+									reversed_list = []
+									partially_reversed_list = list(reversed(connections_traversed[j].edges))
+									for item in partially_reversed_list:
+										reversed_list.append(tuple(reversed(item)))
+
+									# dan deze omgekeerde lijst achter elkaar plakken
+									combined_list = connections_traversed[i].edges + reversed_list
+									print("combined_list, maar het is nog niet op goede volgorde hier")
+									print(combined_list)
+
+
+									# if station is first station in first edge (beginning station)
+									if station in connections_traversed[i].edges[0][0]:
+										
+										# if station from other track is first (beginning station)
+										if station in connections_traversed[j].edges[0][0]:
+
+											# A: een route achter elkaar: j omdraaien, zowel tuples als inhoud, dan achter elkaar plakken.
+											reversed_list = []
+											partially_reversed_list = list(reversed(connections_traversed[j].edges))
+											for item in partially_reversed_list:
+												reversed_list.append(tuple(reversed(item)))
+
+											# dan deze omgekeerde lijst achter elkaar plakken
+											combined_list = reversed_list + connections_traversed[i].edges
+											print("combined_list A")
+											print(combined_list)
+												# check: dit is de route!
+
+
+										# if station in other track is last station
+										elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
+
+											# B:  een route achter elkaar.
+											
+											# direct achter elkaar plakken zonder om te draaien:
+											combined_list = connections_traversed[j].edges + connections_traversed[i].edges
+											print("combined_list B")
+											print(combined_list)
+
+										# if station in other track is in middle
+										else:
+
+											# Nieuwe track: over edges  van i, dan vanaf edge met 
+											# station erin de kortste kant op van J, dan weer terug, 
+											# en dan de andere helft.
+											print("3")
+
+									# if station is last statin in last edge (final station)
+									elif station in connections_traversed[i].edges[len(connections_traversed[i].edges) - 1][1]:
+
+										# if station from other track is first (beginning station)
+										if station in connections_traversed[j].edges[0][0]:
+
+											# C: een route achter elkaar.
+											combined_list = connections_traversed[i].edges + connections_traversed[j].edges
+											print("combined_list C")
+											print(combined_list)
+
+
+										# if station in other track is last station
+										elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
+
+											# D: een route achter elkaar
+											
+											# een van de twee omdraaien
+											reversed_list = []
+											partially_reversed_list = list(reversed(connections_traversed[j].edges))
+											for item in partially_reversed_list:
+												reversed_list.append(tuple(reversed(item)))
+
+											# achter elkaar plakken
+											combined_list = connections_traversed[i].edges + reversed_list
+											print("combined_list D")
+											print(combined_list)
+
+											# toevoegen aan nieuw track
+
+											# de andere twee tracks verwijderen
+
+
+										# if station in other track is in middle
+										else:
+
+											# Nieuwe track: over edges  van i, in onmgekeerde volgorde, 
+											# dan vanaf edge met station erin de kortste kant op van J, 
+											# dan weer terug, en dan de andere helft.
+											print("6")
+
+									# if station is in middle: (misschien dit checken voor andere twee?)
+									else:
+
+										# if station from other track is first (beginning station)
+										if station in connections_traversed[j].edges[0][0]:
+
+											# Nieuwe track: over edges  van J, dan vanaf edge met 
+											# station erin de kortste kant op van I, dan weer terug, 
+											# en dan de andere helft.
+											print("7")
+
+										# if station in other track is last station
+										elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
+
+											# Nieuwe track: over edges  van J, dan vanaf edge met 
+											# station erin de kortste kant op van I, dan weer terug, 
+											# en dan de andere helft.
+											print("8")
+
+										# if station in other track is in middle
+										else:
+
+											# Neem langste track, neem daar een willekeurige helft 
+											# van, dan over de twee helften elk heen en weer van de 
+											# kortste track, en dan de rest van de langste track
+											print("9")
+			
+
 	score = hlp.get_score(1, track_counter, total_time)
 	print("score: ", end="")
 	print(score)

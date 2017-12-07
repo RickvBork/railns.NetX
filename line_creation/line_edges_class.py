@@ -5,6 +5,7 @@ class Track(object):
 		self.edges = []
 		self.time = 0
 		self.critical = 0
+		self.stations = []
 
 	# add edges as tuples
 	def add_edge(self, from_node, to_node):
@@ -14,6 +15,14 @@ class Track(object):
 
 		if self.G[from_node][to_node]['color'] == 'r':
 			self.critical += 1
+
+	def add_station(self, from_node, to_node):
+
+		if from_node not in self.stations:
+			self.stations.append(from_node)
+			
+		if to_node not in self.stations:
+			self.stations.append(to_node)
 
 	# remove last item in list to make new track for walkback
 	def remove_edge(self):
