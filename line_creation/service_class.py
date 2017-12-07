@@ -2,6 +2,7 @@
 service class models service (nl: 'lijnvoering') consisting of several tracks
 argument to construct service is a graph as defined in line_graph_class.py
 tracks are added seperately using add_track(self, track)
+track is object as defined in track_class.py
 '''
 
 class service:
@@ -57,10 +58,10 @@ class service:
 	def update_critical_edges_traversed_remove(self, track):
 		self.critical_edges_traversed = []
 		for track in self.tracks:
-			update_critical_edges_traversed(track)
+			self.update_critical_edges_traversed(track)
 
 	def update_all_edges_traversed_remove(self, track):
 		self.all_edges_traversed = []
 		for track in self.tracks:
-			update_all_edges_traversed(track
+			self.update_all_edges_traversed(track
 )

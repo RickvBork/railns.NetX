@@ -114,6 +114,9 @@ def generate_track(total_track_time, Graph, starting_station, all_connections, t
 	
 	# track is track number
 	G = Graph.G
+	counter = 0
+	all_connections["tracks"][str(track)] = []
+	
 
 	track_time = 0
 	while track_time < total_track_time:
@@ -129,17 +132,12 @@ def generate_track(total_track_time, Graph, starting_station, all_connections, t
 		all_connections["tracks"][str(track)].append((starting_station, random_neighbor))
 	
 		# always pick one track
-		if ((edge_time > total_time) and counter != 0) or (edge_time > total_time - track_time):
+		if ((edge_time > total_track_time) and counter != 0) or (edge_time > total_track_time - track_time):
 			# print("		Exception!")
 			break
 		counter += 1
 
-		# update traversed critical connections as long as not all have been covered
-		if len(critical_connections_traversed) != total_critical_connections:
-			critical_connections_traversed = hlp.update_critical_connections_travesed((starting_station, random_neighbor), critical_connections, critical_connections_traversed)
-		else:
-			print("`GOT EM!") # yeah right...
-
+		
 		# updates the starting station
 		starting_station = random_neighbor
 		# print("		Next station: {}".format(random_neighbor))
@@ -147,7 +145,7 @@ def generate_track(total_track_time, Graph, starting_station, all_connections, t
 		# print("			Total time is: {}".format(track_time))
 		# print("-------------------------------------------------")
 
-	return track_time, all_conections
+	return total_track_time, all_connections
 
 
 
