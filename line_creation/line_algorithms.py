@@ -410,28 +410,20 @@ def hierholzer(graph):
 		print("time: ", end="")
 		print(connections_traversed[i].time)	
 	
+	#################################################
+
 	print("connections_traversed time times two")
 	for i in range(track_counter):
 		if (connections_traversed[i].time * 2) < 120:
 			for station in connections_traversed[i].stations:
 				for j in range(track_counter):
 					if station in connections_traversed[j].stations:
+					# hierboven out of range, nadat er een track verwijderd is. dan is connections tm trackcounter niet meer up to date natuurlijk.
+					# misschien hierna nog een if statement, voor als track_counter != len(connections_traversed).
 						if connections_traversed[j] != connections_traversed[i]:
 							if connections_traversed[j].time < 120:
 								if (connections_traversed[j].time + (connections_traversed[i].time * 2)) < 120:
 									print(station)
-
-									# voor A en D: een van de twee tracks omdraaien
-									reversed_list = []
-									partially_reversed_list = list(reversed(connections_traversed[j].edges))
-									for item in partially_reversed_list:
-										reversed_list.append(tuple(reversed(item)))
-
-									# dan deze omgekeerde lijst achter elkaar plakken
-									combined_list = connections_traversed[i].edges + reversed_list
-									print("combined_list, maar het is nog niet op goede volgorde hier")
-									print(combined_list)
-
 
 									# if station is first station in first edge (beginning station)
 									if station in connections_traversed[i].edges[0][0]:
@@ -440,17 +432,28 @@ def hierholzer(graph):
 										if station in connections_traversed[j].edges[0][0]:
 
 											# A: een route achter elkaar: j omdraaien, zowel tuples als inhoud, dan achter elkaar plakken.
+											print("A")
+
 											reversed_list = []
 											partially_reversed_list = list(reversed(connections_traversed[j].edges))
 											for item in partially_reversed_list:
 												reversed_list.append(tuple(reversed(item)))
 
-											# dan deze omgekeerde lijst achter elkaar plakken
+											# 
 											combined_list = reversed_list + connections_traversed[i].edges
-											print("combined_list A")
-											print(combined_list)
-												# check: dit is de route!
+											
+											# initialize new track object
+											track = E.Track(G)
 
+											# add all edges to make complete track to new track
+											track.add_edge_list(combined_list)
+
+											# remove redundant tracks
+											connections_traversed.remove(connections_traversed[i])
+											connections_traversed.remove(connections_traversed[j])
+
+											# add new combined track
+											connections_traversed.append(track)
 
 										# if station in other track is last station
 										elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
@@ -537,7 +540,7 @@ def hierholzer(graph):
 											# van, dan over de twee helften elk heen en weer van de 
 											# kortste track, en dan de rest van de langste track
 											print("9")
-			
+	#######################################################################################		
 
 	score = hlp.get_score(1, track_counter, total_time)
 	print("score: ", end="")
