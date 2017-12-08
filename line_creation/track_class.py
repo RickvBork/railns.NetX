@@ -12,6 +12,7 @@ class track:
 		self.critical_lines_traversed = []	
 		self.time = 0
 		self.stations = []
+		self.necessary = True
 
 	def add_whole_track(self, stations):
 		self.edges = []
@@ -44,7 +45,9 @@ class track:
 		self.update_time()
 		self.update_critical_lines_traversed()
 			
-		
+	def remove_all_edges(self):
+		self.edges = []
+
 	def update_time(self):
 		self.time = 0
 		for edge in self.edges:
@@ -70,3 +73,4 @@ class track:
 			
 		if to_node not in self.stations:
 			self.stations.append(to_node)
+
