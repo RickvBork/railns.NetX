@@ -26,6 +26,10 @@ g = Graph("NH", path_stations_file, path_tracks_file)
 # get scores
 scores, p_scores, best_tracks = alg.random_walk(g, 1000)
 
+for service in best_tracks:
+	print(service)
+	print()
+
 # create service from best_tracks
 service1 = sc.service(g)
 number_of_tracks = 7

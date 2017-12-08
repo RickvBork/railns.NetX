@@ -1,4 +1,5 @@
 import collections as col
+import line_node_class as N
 
 '''
 Helpers file.
@@ -103,4 +104,22 @@ def test(edge, critical_edges, critical_edges_traversed):
 		if (edge in critical_edges) or (edge_reversed in critical_edges):
 			critical_edges_traversed.append(edge)
 	return critical_edges_traversed
+
+'''
+makes node objects complete with their neighbors as nodes
+'''
+def get_node_list(G, nodes):
+
+	node_dict = {}
+	for node in nodes:
+		node_dict[node] = N.Node(node)
+
+	node_list = []
+	for node in nodes:
+		for neighbor in G[node]:
+			node_dict[node].add_neighbor(node_dict[neighbor])
+		node_list.append(node_dict[node])
+
+	return node_list
+
 

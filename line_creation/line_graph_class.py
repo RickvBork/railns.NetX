@@ -13,6 +13,10 @@ class Graph:
 		self.name = name
 		self.G = nx.Graph()
 
+		# for more efficient lookup of edge attributes use this dict
+		self.critical_edge_dict = {}
+		self.edge_weight_dict = {}
+
 		# load csv files into this specific instance of nx
 		self.critical_station_list, self.non_critical_station_list = self.add_csv_nodes(node_file)
 		self.add_csv_edges(edge_file, self.critical_station_list)
@@ -24,7 +28,6 @@ class Graph:
 		self.critical_edge_list = self.get_critical_edges()
 		self.minimal_edge_weight = min(self.get_edge_weights())
 		self.total_critical_edges = len(self.critical_edge_list)
-		# self.critical_edge_dict = self.get_build_edge_dict()
 
 	'''
 	print(Object) now returns this string, usefull for profiding short descriptions
@@ -77,15 +80,12 @@ class Graph:
 				station_1 = row[1]
 				weight = row[2]
 
-				# these edges are 'super' critical
-				if station_0 in list and station_1 in list:
+				# these edges are critical
+				if station_0 in list or station_1 in list:
 					self.G.add_edge(station_0, station_1, 
 						weight = int(weight), color = 'r', visited = 'n')
 
-				# these edges are critical
-				elif station_0 in list or station_1 in list:
-					self.G.add_edge(station_0, station_1, 
-						weight = int(weight), color = 'r', visited = 'n')
+					self.critical_edge_dict[(station_0, station_1)] = True
 
 				# these edges are not critical
 				else:
