@@ -15,13 +15,13 @@ class track:
 		self.edges = self.get_edges_list(stations)	
 		self.critical_lines_traversed = self.get_critical_lines_traversed()	
 		self.time = self.get_time()
-	
+
 	def get_time(self):
 		time = 0
 		for i in range(len(self.edges)-1):
 			time += self.G[self.edges[i]][self.edges[i+1]]['weight']
 		return time
- 
+
 	def get_edges_list(self, stations):
 		edges = []
 		for stationpair in stations:
