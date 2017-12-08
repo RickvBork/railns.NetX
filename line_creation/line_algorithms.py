@@ -4,8 +4,8 @@ import line_analysis as ana
 import networkx as nx
 import collections # for Hierholzer's
 import line_node_class as N
-# import line_edges_class as E
 import track_class as T
+import service_class as S
 from copy import deepcopy
 import service_class as sc
 
@@ -199,11 +199,14 @@ def hierholzer(graph):
 
 	print("======HIERHOLZER======")
 
+	# initializing list for all tracks
+	connections_traversed = []
+
 	# for access to the graph
 	G = graph.G
 
-	# initializing list for all tracks
-	connections_traversed = []
+	# initialize service
+	service = S.service(graph)
 
 	# adding all edges as tuples to all_edges_list
 	all_edge_list = [edge for edge in graph.edges]
@@ -274,6 +277,8 @@ def hierholzer(graph):
 				# add this track to connections traversed
 				connections_traversed.append(track)
 
+				service.add_track(track)
+
 				# break out of while loop to begin new track
 				break
 
@@ -303,6 +308,8 @@ def hierholzer(graph):
 
 				# add track to list of all tracks
 				connections_traversed.append(track)
+
+				service.add_track(track)
 
 				# initialize new track object
 				track = T.track(graph)
@@ -337,193 +344,337 @@ def hierholzer(graph):
 
 	for i in range(track_counter):
 		print("time: ", end="")
-		print(connections_traversed[i].time)	
+		print(connections_traversed[i].time)
+
+
+	tmp_new_track_list = []
+
+	# iterate over all tracks
+	for i in range(len(service.tracks)):
+		# for each track, iterate over all other tracks
+		for j in range(len(service.tracks)):
+			# ensure that track is not compared to same track
+			if i != j:
+				# if track time combined is less than the maximum time
+				if (service.tracks[i].time + service.tracks[j].time) < 120:
+					# if starting station for both stations is the same
+					if service.tracks[i].edges[0][0] == service.tracks[j].edges[0][0]:
+
+
+						# kleine bug: in dit geval (starting + starting) wordt er twee keer hierdoor heen gegaan, aangezien i en j allebei i en j zijn
+						# het resultaat: twee keer wordt aan tmp_new.. een track toegevoegd. deze is identiek, behalve dat deze helemaal
+						# reversed is
+
+						# nog een kleine bug: bij starting + ending, en ending + starting, kan het ook dubbel. Het resultaat is dat aan tmp_new.. twee keer
+						# een deze keer compleet identieke lijst wordt toegevoeg.
+
+						print("starting + starting")
+
+						reversed_list = []
+						partially_reversed_list = list(reversed(service.tracks[j].edges))
+						for item in partially_reversed_list:
+							reversed_list.append(tuple(reversed(item)))
+
+						# make new list with edges of new track
+						combined_list = reversed_list + connections_traversed[i].edges
+						
+						# add new route to tmp list
+						tmp_new_track_list.append(combined_list)
+
+						# indicate that track can later be removed from service
+						service.tracks[i].necessary = False
+						service.tracks[j].necessary = False
+
+						# update track counter
+						track_counter -=1
+					
+					# if starting station and ending station is the same
+					elif service.tracks[i].edges[0][0] == service.tracks[j].edges[-1][1]:
+
+						print("starting + ending")
+						combined_list = service.tracks[j].edges + service.tracks[i].edges
+						print("combined_list B: check")
+						print(combined_list)
+						
+						# add new route to tmp list
+						tmp_new_track_list.append(combined_list)
+
+						# indicate that track can later be removed from service
+						service.tracks[i].necessary = False
+						service.tracks[j].necessary = False
+
+						# update track counter
+						track_counter -=1
+
+					# if ending station and starting station is the same
+					elif service.tracks[i].edges[-1][1] == service.tracks[j].edges[0][0]:
+
+						print("ending + starting")
+						combined_list = service.tracks[i].edges + service.tracks[j].edges
+						print("combined_list C: check")
+						print(combined_list)
+
+						# add new route to tmp list
+						tmp_new_track_list.append(combined_list)
+
+						# indicate that track can later be removed from service
+						service.tracks[i].necessary = False
+						service.tracks[j].necessary = False
+
+						# update track counter
+						track_counter -=1
+
+					# if ending station for both tracks is the same
+					elif service.tracks[i].edges[-1][1] == service.tracks[j].edges[-1][1]:
+						print("ending + ending")
+
+						print("service tracks not yet reversed:")
+						print(service.tracks[j].edges)
+
+						reversed_list = []
+						partially_reversed_list = list(reversed(service.tracks[j].edges))
+						for item in partially_reversed_list:
+							reversed_list.append(tuple(reversed(item)))
+
+						print("reversed list:")
+						print(reversed_list)
+
+						# achter elkaar plakken
+						combined_list = service.tracks[i].edges + reversed_list
+						print("combined_list D: ?")
+						print(combined_list)
+
+						# add new route to tmp list
+						tmp_new_track_list.append(combined_list)
+
+						# indicate that track can later be removed from service
+						service.tracks[i].necessary = False
+						service.tracks[j].necessary = False
+
+						# update track counter
+						track_counter -=1	
+
+	# remove all redundant tracks from service class
+	for track in service.tracks:
+		if track.necessary == False:
+			service.remove_track
+		elif track.necessary == True:
+			print("sdgah")
+
+	for item in tmp_new_track_list:
+		track = T.track(graph)
+		track.add_edge_list(item)
+		service.add_track(track)		
+
 	
 	#################################################
 
-	print("connections_traversed time times two")
-	# iterate over all tracks
-	for i in range(len(connections_traversed)):
-		# if track is, when traversed twice, shorter than maximum time
-		if (connections_traversed[i].time * 2) < 120:
-			# iterate over every station in track
-			for station in connections_traversed[i].stations:
-				# iterate over all tracks
-				for j in range(len(connections_traversed)):
-					# if station from track is also a station in another track
-					if station in connections_traversed[j].stations:
-						# if this track is, hopefully, not the same track as itself
-						if connections_traversed[j] != connections_traversed[i]:
-							# if the other track has a track time less than the maximum track time
-							if connections_traversed[j].time < 120:
-								# if the first track, with the time twice, plus the time from the second track, is less than maxiumum time
-								if (connections_traversed[j].time + (connections_traversed[i].time * 2)) < 120:
-									print(station)
+	# print("connections_traversed time times two")
 
-									# if station is first station in first edge (beginning station)
-									if station in connections_traversed[i].edges[0][0]:
-										
-										# if station from other track is first (beginning station)
-										if station in connections_traversed[j].edges[0][0]:
+	# new_connections_traversed = connections_traversed
 
-											print("A")
+	# # iterate over all tracks
+	# for i in range(len(connections_traversed)):
+	# 	print("i: ", end="")
+	# 	print(i)
+	# 	# if track exists
+	# 	try:
+	# 	#if connections_traversed[i]:
+	# 		# if track is, when traversed twice, shorter than maximum time
+	# 		if (connections_traversed[i].time * 2) < 120:
+	# 			# iterate over every station in track
+	# 			for station in connections_traversed[i].stations:
+	# 				# iterate over all tracks
+	# 				for j in range(len(connections_traversed)):
+	# 					print("J : ", end="")
+	# 					print(j)
+	# 					# if this track exists
+	# 					try:
+	# 						connections_traversed[j]
+	# 						# if this track is, hopefully, not the same track as itself
+	# 						if connections_traversed[j] != connections_traversed[i]:
+	# 							# if station from track is also a station in another track
+	# 							if station in connections_traversed[j].stations:
+	# 								# if the other track has a track time less than the maximum track time
+	# 								if connections_traversed[j].time < 120:
+	# 									# if the first track, with the time twice, plus the time from the second track, is less than maxiumum time
+	# 									if (connections_traversed[j].time + (connections_traversed[i].time * 2)) < 120:
+	# 										print(station)
 
-											# reverse the entire second track, so that the two tracks can be combined
-											reversed_list = []
-											partially_reversed_list = list(reversed(connections_traversed[j].edges))
-											for item in partially_reversed_list:
-												reversed_list.append(tuple(reversed(item)))
+	# 										# if station is first station in first edge (beginning station)
+	# 										if station in connections_traversed[i].edges[0][0]:
+												
+	# 											# if station from other track is first (beginning station)
+	# 											if station in connections_traversed[j].edges[0][0]:
 
-											# make new list with edges of new track
-											combined_list = reversed_list + connections_traversed[i].edges
-											
-											# initialize new track object
-											track = T.track(graph)
+	# 												print("A")
 
-											# add all edges to make complete track to new track
-											track.add_edge_list(combined_list)
+	# 												# reverse the entire second track, so that the two tracks can be combined
+	# 												reversed_list = []
+	# 												partially_reversed_list = list(reversed(connections_traversed[j].edges))
+	# 												for item in partially_reversed_list:
+	# 													reversed_list.append(tuple(reversed(item)))
 
-											# remove redundant tracks
-											connections_traversed.remove(connections_traversed[i])
-											connections_traversed.remove(connections_traversed[j])
+	# 												# make new list with edges of new track
+	# 												combined_list = reversed_list + connections_traversed[i].edges
+													
+	# 												# initialize new track object
+	# 												track = T.track(graph)
 
-											# add new combined track
-											connections_traversed.append(track)
+	# 												# add all edges to make complete track to new track
+	# 												track.add_edge_list(combined_list)
 
-											track_counter -=1
+	# 												# remove redundant tracks: maar dit moet dus niet. Gewoon nieuwe lijst aanmaken waarin dit niet voorkomt.
+	# 												new_connections_traversed.remove(connections_traversed[i])
+	# 												new_connections_traversed.remove(connections_traversed[j])
 
-										# if station in other track is last station
-										elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
-											
-											# direct achter elkaar plakken zonder om te draaien:
-											combined_list = connections_traversed[j].edges + connections_traversed[i].edges
-											print("combined_list B")
-											print(combined_list)
+	# 												# add new combined track
+	# 												new_connections_traversed.append(track)
 
-											# initialize new track object
-											track = T.track(graph)
+	# 												track_counter -=1
 
-											# add all edges to make complete track to new track
-											track.add_edge_list(combined_list)
+	# 											# if station in other track is last station
+	# 											elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
+													
+	# 												# direct achter elkaar plakken zonder om te draaien:
+	# 												combined_list = connections_traversed[j].edges + connections_traversed[i].edges
+	# 												print("combined_list B: check, klopt!")
+	# 												print(combined_list)
 
-											# remove redundant tracks
-											connections_traversed.remove(connections_traversed[i])
-											connections_traversed.remove(connections_traversed[j])
+	# 												# initialize new track object
+	# 												track = T.track(graph)
 
-											# add new combined track
-											connections_traversed.append(track)
+	# 												# add all edges to make complete track to new track
+	# 												track.add_edge_list(combined_list)
 
-											track_counter -= 1
+	# 												# remove redundant tracks
+	# 												new_connections_traversed.remove(connections_traversed[i])
+	# 												new_connections_traversed.remove(connections_traversed[j])
 
-										# if station in other track is in middle
-										else:
+	# 												# add new combined track
+	# 												new_connections_traversed.append(track)
 
-											# Nieuwe track: over edges  van i, dan vanaf edge met 
-											# station erin de kortste kant op van J, dan weer terug, 
-											# en dan de andere helft.
-											print("3")
+	# 												# update track counter
+	# 												track_counter -= 1
 
-									# if station is last statin in last edge (final station)
-									elif station in connections_traversed[i].edges[len(connections_traversed[i].edges) - 1][1]:
+	# 										# if station is last statin in last edge (final station)
+	# 										elif station in connections_traversed[i].edges[len(connections_traversed[i].edges) - 1][1]:
 
-										# if station from other track is first (beginning station)
-										if station in connections_traversed[j].edges[0][0]:
+	# 											# if station from other track is first (beginning station)
+	# 											if station in connections_traversed[j].edges[0][0]:
 
-											# C: een route achter elkaar.
-											combined_list = connections_traversed[i].edges + connections_traversed[j].edges
-											print("combined_list C: check")
-											print(combined_list)
-											# check: de combined list klopt
+	# 												# C: een route achter elkaar.
+	# 												combined_list = connections_traversed[i].edges + connections_traversed[j].edges
+	# 												print("combined_list C: check")
+	# 												print(combined_list)
+	# 												# check: de combined list klopt
 
-											# initialize new track object
-											track = T.track(graph)
+	# 												# initialize new track object
+	# 												track = T.track(graph)
 
-											# add all edges to make complete track to new track
-											track.add_edge_list(combined_list)
+	# 												# add all edges to make complete track to new track
+	# 												track.add_edge_list(combined_list)
 
-											# remove redundant tracks
-											connections_traversed.remove(connections_traversed[i])
-											connections_traversed.remove(connections_traversed[j])
+	# 												# remove redundant tracks
+	# 												new_connections_traversed.remove(connections_traversed[i])
+	# 												new_connections_traversed.remove(connections_traversed[j])
 
-											# add new combined track
-											connections_traversed.append(track)
+	# 												# add new combined track
+	# 												new_connections_traversed.append(track)
 
-											track_counter -= 1
+	# 												# update track counter
+	# 												track_counter -= 1
 
+	# 											# if station in other track is last station
+	# 											elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
+													
+	# 												# een van de twee omdraaien
+	# 												reversed_list = []
+	# 												partially_reversed_list = list(reversed(connections_traversed[j].edges))
+	# 												for item in partially_reversed_list:
+	# 													reversed_list.append(tuple(reversed(item)))
 
-										# if station in other track is last station
-										elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
-											
-											# een van de twee omdraaien
-											reversed_list = []
-											partially_reversed_list = list(reversed(connections_traversed[j].edges))
-											for item in partially_reversed_list:
-												reversed_list.append(tuple(reversed(item)))
+	# 												# achter elkaar plakken
+	# 												combined_list = connections_traversed[i].edges + reversed_list
+	# 												print("combined_list D")
+	# 												print(combined_list)
 
-											# achter elkaar plakken
-											combined_list = connections_traversed[i].edges + reversed_list
-											print("combined_list D")
-											print(combined_list)
+	# 												# initialize new track object
+	# 												track = T.track(graph)
 
-											# initialize new track object
-											track = T.track(graph)
+	# 												# add all edges to make complete track to new track
+	# 												track.add_edge_list(combined_list)
 
-											# add all edges to make complete track to new track
-											track.add_edge_list(combined_list)
+	# 												# remove redundant tracks
+	# 												new_connections_traversed.remove(connections_traversed[i])
+	# 												new_connections_traversed.remove(connections_traversed[j])
 
-											# remove redundant tracks
-											connections_traversed.remove(connections_traversed[i])
-											connections_traversed.remove(connections_traversed[j])
+	# 												# add new combined track
+	# 												new_connections_traversed.append(track)
 
-											# add new combined track
-											connections_traversed.append(track)
+	# 												# update track counter
+	# 												track_counter -= 1
 
-											track_counter -= 1
+	# 										# if station is in middle: (misschien dit checken voor andere twee?)
+	# 										else:
 
+	# 											# if station from other track is first (beginning station)
+	# 											if station in connections_traversed[j].edges[0][0]:
 
-										# if station in other track is in middle
-										else:
+	# 												print("testestetes")
 
-											# Nieuwe track: over edges  van i, in onmgekeerde volgorde,
-											reversed_list = []
-											partially_reversed_list = list(reversed(connections_traversed[i].edges))
-											for item in partially_reversed_list:
-												reversed_list.append(tuple(reversed(item)))
+	# 												# Nieuwe track: over edges  van J, reversed
+	# 												reversed_list = []
+	# 												partially_reversed_list = list(reversed(connections_traversed[j].edges))
+	# 												for item in partially_reversed_list:
+	# 													reversed_list.append(tuple(reversed(item)))
 
-											# list maken met edges vanaf station van j, een willekeurige kant op.
-											# reversed
-											# dan de rest op.
+	# 												# zoek station in edges van i
+	# 												for item in connections_traversed[i].edges:
+	# 													if item == station:
+	# 														print("item: ", end="")
+	# 														print(item)
 
-											# maar, kan je dit niet gewoon overlaten voor als j i is?
-											
-											print("6")
+	# 												# ga dan vanaf daar edges af.
+	# 												# reverse deze edges
+	# 												# rest van de edges (in reverse.)	
 
-									# if station is in middle: (misschien dit checken voor andere twee?)
-									else:
+	# 												### dit kan wel.
 
-										# if station from other track is first (beginning station)
-										if station in connections_traversed[j].edges[0][0]:
+	# 												print("5")
 
-											# Nieuwe track: over edges  van J, dan vanaf edge met 
-											# station erin de kortste kant op van I, dan weer terug, 
-											# en dan de andere helft.
-											print("7")
+	# 											# if station in other track is last station
+	# 											elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
 
-										# if station in other track is last station
-										elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
+	# 												print("ttesssstt")
+	# 												# Nieuwe track: over edges  van J tot je aankomt bij station, niet in reverse.
+	# 												# station vinden in edges I
+	# 												for item in connections_traversed[i].edges:
+	# 													if item == station:
+	# 														print("item: ", end="")
+	# 														print(item)
+	# 												# ga dan vanaf daar edges af.
+	# 												# diezelfde edges in reverse.
+	# 												# rest van de edges (evt. in reverse.)
 
-											# Nieuwe track: over edges  van J, dan vanaf edge met 
-											# station erin de kortste kant op van I, dan weer terug, 
-											# en dan de andere helft.
-											print("8")
+	# 												### dit kan ook.
 
-										# if station in other track is in middle
-										else:
+	# 												print("6")
 
-											# Neem langste track, neem daar een willekeurige helft 
-											# van, dan over de twee helften elk heen en weer van de 
-											# kortste track, en dan de rest van de langste track
-											print("9")
+	# 											# if station in other track is in middle
+	# 											else:
+
+	# 												# Neem langste track, neem daar een willekeurige helft 
+	# 												# van, dan over de twee helften elk heen en weer van de i
+	# 												# en dan de rest van de langste track
+	# 												print("7")
+	# 						except ValueError:
+	# 							pass
+	# 						continue							
+	# 	except:
+	# 		pass
+	# 	continue
+
 
 	#######################################################################################		
 

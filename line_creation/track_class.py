@@ -12,6 +12,7 @@ class track:
 		self.critical_lines_traversed = []	
 		self.time = 0
 		self.stations = []
+		self.necessary = True
 
 		# AANPASSEN TOT LIJST MET EDGES!
 		self.time = self.get_time()
@@ -55,6 +56,12 @@ class track:
 		self.edges = self.edges[:-1]
 		self.update_time()
 		self.update_critical_lines_traversed()
+<<<<<<< HEAD
+=======
+			
+	def remove_all_edges(self):
+		self.edges = []
+>>>>>>> 8cfc6fb1460217b445c785f0f467a71793e84c55
 
 	def update_time(self):
 		self.time = 0
@@ -81,3 +88,4 @@ class track:
 			
 		if to_node not in self.stations:
 			self.stations.append(to_node)
+
