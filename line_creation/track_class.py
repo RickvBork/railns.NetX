@@ -34,5 +34,5 @@ class track:
 		for i in range(len(edges)-1):
 			if ((edges[i], edges[i+1]) in self.critical_edge_list):
 				critical_lines_traversed.append((edges[i], edges[i+1]))
-				print("add critical line traversed")
+				#print("add critical line traversed")
 		return critical_lines_traversed

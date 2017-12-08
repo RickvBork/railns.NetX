@@ -24,6 +24,7 @@ class Graph:
 		self.critical_edge_list = self.get_critical_edges()
 		self.minimal_edge_weight = min(self.get_edge_weights())
 		self.total_critical_edges = len(self.critical_edge_list)
+		self.critical_edge_dict = self.get_build_edge_dict()
 
 	'''
 	print(Object) now returns this string, usefull for profiding short descriptions
@@ -105,3 +106,7 @@ class Graph:
 		edges = self.G.edges()
 		weight_dict = nx.get_edge_attributes(self.G,'weight')
 		return [weight_dict[edge] for edge in edges]
+
+	'''
+	Build critical edge dict for better search functionality
+	'''

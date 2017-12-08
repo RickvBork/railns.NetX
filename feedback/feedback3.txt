@@ -1,0 +1,4 @@
+feedback3 (7-12-17)
+
+meer in functies zetten
+gebruik attributen van graaf networkx ipv hele graaf. Dan kritiek of niet checken aan de hand van dictoionary van graaf.
