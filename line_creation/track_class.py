@@ -25,6 +25,7 @@ class track:
 		for stationpair in stations:
 			edges.append(stationpair[0])
 		edges.append(stations[-1][1])
+		print(edges)
 		return edges
 
 

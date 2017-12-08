@@ -16,6 +16,9 @@ class Track(object):
 		if self.G[from_node][to_node]['color'] == 'r':
 			self.critical += 1
 
+	def add_edge_list(self, edge_list):
+		self.edges = edge_list
+
 	def add_station(self, from_node, to_node):
 
 		if from_node not in self.stations:
