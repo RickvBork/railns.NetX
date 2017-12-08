@@ -14,7 +14,7 @@ from copy import deepcopy
 import track_class as tc
 
 def hillclimber(service, track_number):
-	old_service_score_s = service.get_s_score()
+	old_service_score_s = service.s_score
 	track0 = service.tracks[track_number]	
 	# replace track by a new track
 	track_time = 120
@@ -28,7 +28,7 @@ def hillclimber(service, track_number):
 	service.add_track(track_new_c)
 	service.remove_track(track0)
 	# check if score is higher
-	new_service_score_s = service.get_s_score()
+	new_service_score_s = service.s_score
 	# undo adding new track is score is lower
 	if old_service_score_s > new_service_score_s:
 		service.add_track(track0)

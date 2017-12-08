@@ -20,8 +20,8 @@ score occurrence easier.
 '''
 
 # ROUND IN VISUALISATION, OTHERWHILE HILLCLIMBER WON'T RECOGNISE SMALL SCORE INCREASES!
-def get_score(p, t, m):
-	return round(p * 10000 - (t * 20 + m / 100000), -1)
+def get_score(p, track_amount, total_track_time):
+	return p * 10000 - (track_amount * 20 + total_track_time / 100000)
 
 '''
 Checks wether a certain connection is critical in any direction.

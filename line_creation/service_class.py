@@ -24,8 +24,8 @@ class service:
 		self.update_all_edges_traversed(track)	
 		self.time = self.time + track.time
 		# update scores
-		self.p_score = self.get_p_score()
-		self.s_score = self.get_s_score()
+		self.p_score = hlp.get_p(self.critical_edges_traversed, self.all_critical_edges)
+		self.s_score = hlp.get_score(self.p_score, len(self.tracks),self.time)
 
 	def update_critical_edges_traversed(self, track):
 		for i in range(len(track.edges)-1):
@@ -37,18 +37,6 @@ class service:
 		for i in range(len(track.edges)-1):
 			if (((track.edges[i],track.edges[i+1]) not in self.all_edges_traversed) and ((track.edges[i+1],track.edges[i]) not in self.all_edges_traversed)):
 					self.all_edges_traversed.append((track.edges[i],track.edges[i+1]))
-		
-	
-	# METHODE AL IN HELPERS! IMPORT HELPERS EN ROEP DE FUNCTIE, get_p() AAN!
-	def get_p_score(self):
-		p_score = (float(len(self.critical_edges_traversed))/float(len(self.all_critical_edges)))
-		return p_score
-
-	# METHODE AL IN HELPERS! IMPORT HELPERS EN ROEP DE FUNCTIE, get_s() AAN!
-	def get_s_score(self):
-		p_score = self.p_score
-		s_score = (10000 * p_score - (float(len(self.tracks))*20 + float(self.time) / 100000)) 
-		return s_score
 
 	def remove_track(self, track):
 		self.tracks.remove(track)
@@ -56,8 +44,8 @@ class service:
 		self.update_all_edges_traversed_remove(track)	
 		self.time -= track.time
 		# update scores
-		self.p_score = self.get_p_score()
-		self.s_score = self.get_s_score()
+		self.p_score = hlp.get_p(self.critical_edges_traversed, self.all_critical_edges)
+		self.s_score = hlp.get_score(self.p_score, len(self.tracks),self.time)
 	
 	def update_critical_edges_traversed_remove(self, track):
 		self.critical_edges_traversed = []

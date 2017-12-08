@@ -39,29 +39,4 @@ number_of_tries = 10
 for i in range(number_of_tracks):
 	for j in range(number_of_tries):
 		hh.hillclimber(service1,i)
-		print(service1.get_s_score())
-
-	
-	
-
-## print besttracks
-#for track in range(len(best_tracks)):
-#	print(best_tracks[track])
-#	print("+++++++++++++++++++++++++++++++++")
-#
-#print("mean")
-#print(numpy.mean(scores))
-#print(numpy.std(scores))
-#
-## analyse and visualise scores
-#ana.draw_barchart(scores)
-
-
-# write scores to csv
-# ref: https://stackoverflow.com/questions/39282516/python-list-to-csv-throws-error-iterable-expected-not-numpy-int64
-# ref: https://docs.python.org/3/library/csv.html
-#with open('../data/results.csv', 'w', newline='') as myfile:
-#	wr = csv.writer(myfile,delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-#	wr.writerows(map(lambda x: [x], scores))
-#
-
+		# print(service1.s_score)

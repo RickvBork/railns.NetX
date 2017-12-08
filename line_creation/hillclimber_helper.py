@@ -105,11 +105,9 @@ def random_walk(Graph, iterator):
 
 	return s_list, p_list, best_tracks
 
-
 '''
 seperate function for generate_track
 '''
-
 def generate_track(total_track_time, Graph, starting_station, all_connections, track):
 	
 	# track is track number
@@ -137,7 +135,6 @@ def generate_track(total_track_time, Graph, starting_station, all_connections, t
 			break
 		counter += 1
 
-		
 		# updates the starting station
 		starting_station = random_neighbor
 		# print("		Next station: {}".format(random_neighbor))
@@ -146,6 +143,3 @@ def generate_track(total_track_time, Graph, starting_station, all_connections, t
 		# print("-------------------------------------------------")
 
 	return total_track_time, all_connections
-
-
-

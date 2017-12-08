@@ -5,7 +5,7 @@ import line_graph_class as grc
 
 class track:
 	def __init__(self, stations, graph):
-		
+
 		self.G = graph.G
 		self.critical_edge_list = graph.critical_edge_list
 		self.starting_station = stations[0][0]
@@ -27,7 +27,6 @@ class track:
 		for stationpair in stations:
 			edges.append(stationpair[0])
 		edges.append(stations[-1][1])
-		print(edges)
 		return edges
 
 
@@ -38,5 +37,4 @@ class track:
 			if ((edges[i], edges[i+1]) in self.critical_edge_list):
 				critical_lines_traversed.append((edges[i], edges[i+1]))
 				#print("add critical line traversed")
-		print(critical_lines_traversed)
 		return critical_lines_traversed
