@@ -20,6 +20,7 @@ class track:
 		self.update_critical_lines_traversed()
 
 	def add_edge(self, edge):
+		# edge = ('station a', 'station b')
 		# check if current last station is starting point of new edge since trains cannot teleport
 		if self.edges != []:
 			current_last_station = self.edges[-1][1]

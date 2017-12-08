@@ -5,6 +5,7 @@ import networkx as nx
 import collections # for Hierholzer's
 import line_node_class as N
 import line_edges_class as E
+import track_class as T
 from copy import deepcopy
 
 '''
@@ -262,60 +263,55 @@ def smart_random_walk(graph, iterator):
 
 	return s_list, p_list, best_tracks
 
+
 ''''
-Hierholzer's algorithm (v2)
+Hierholzer's algorithm
 '''
 def hierholzer(graph):
 
 	print("======HIERHOLZER======")
 
-	#critical_list = graph.critical_station_list
-	connections_traversed = []
+	# for access to the graph
 	G = graph.G
 
+	# initializing list for all tracks
+	connections_traversed = []
+
 	# adding all edges as tuples to all_edges_list
-	all_edge_list = []
-	for tuples in graph.edges:
-		all_edge_list.append(tuples)
+	all_edge_list = [edge for edge in graph.edges]
 
-	# making list of all stations
-	all_stations_list = list(graph.nodes)
-
-	# initializing variables to keep track of the amount of tracks, 
-	# the time in total and the time of each track
+	# to keep track of amount of tracks
 	track_counter = 0
-	total_time = 0
-	track_time = 0
 
-	# loop for each track
+	# to keep track of time of all tracks combined
+	total_time = 0
+
+	# for each track
 	while True:
 
-		print("total track_time:", end="")
-		print(track_time)
+		# make new track object (one for each track)
+		track = E.Track(G)
 
-		# if the track turns out to be longer than 120 minutes, it has to be split in two
-		if track_time > 120:
-			track_counter += 1
-
-		# keeping track of track time and amount
+		# keeping track of amount of tracks
 		track_counter += 1
-		track_time = 0
-
-		print("track_counter: ", end="")
-		print(track_counter)
 	
-		# breaks if all edges are traversed, ending the algorithm
+		# if all edges are traversed
 		if all_edge_list == []:
+
+			# counter counted one track too much
+			track_counter -= 1
+
+			# break to end the algorithm
 			break
 
-		# initalize list for stations with only one edge
-		one_edge_list = []
+		#### dit misschien in functie: dit is allemaal om, voor zover mogelijk, een starting node te krijgen
+		# die maar één edge heeft
 
-		# making list, by adding two lists together, that contains each station 
-		# as many times as it has edges
-		half_edge_list = [elem[0] for elem in all_edge_list]
-		other_half_edge_list = [elem[1] for elem in all_edge_list]
-		stations_in_edges_amount_list = half_edge_list + other_half_edge_list
+		# make list with every station as much as they have untraversed edges
+		stations_in_edges_amount_list = [elem for t in all_edge_list for elem in t]
+
+		# initalize list for stations with only one untraversed edge
+		one_edge_list = []
 
 		# determine which stations have only one edge, adding these to one_edge_list
 		counter = collections.Counter(stations_in_edges_amount_list)
@@ -327,7 +323,10 @@ def hierholzer(graph):
 		if one_edge_list != []:
 			current_node = random.choice(one_edge_list)
 		else:
-			current_node = random.choice(all_stations_list)
+			current_node = random.choice(list(graph.nodes))
+
+		#### eind mogelijke functie
+
 
 		# loop for each edge in each track
 		while True:
@@ -335,8 +334,19 @@ def hierholzer(graph):
 			# checking if current station has unused edges
 			remaining_edge_check = [item for item in all_edge_list if current_node in item]
 			
-			# if current_node has no unused edges: beginning of new track, so break out of this while loop
+			# if current_node has no unused edges
 			if remaining_edge_check == []:
+
+				# if last track made track longer than max length
+				if track.time > 120:
+
+					# remove last edge
+					track.remove_edge()
+
+				# add this track to connections traversed
+				connections_traversed.append(track)
+
+				# break out of while loop to begin new track
 				break
 
 			# choose random neighbor of station
@@ -351,30 +361,199 @@ def hierholzer(graph):
 			while (current_node, random_neighbor_node) not in all_edge_list and (random_neighbor_node, current_node) not in all_edge_list:
 				random_neighbor_node = random.choice(list(G[current_node]))
 
-			# remove traversed edge from all_edge_list, and add traversed edge to connections traversed to keep track of route
-			if (current_node, random_neighbor_node) in all_edge_list:
-				all_edge_list.remove((current_node, random_neighbor_node))
-				connections_traversed.append((current_node, random_neighbor_node))
-			if (random_neighbor_node, current_node) in all_edge_list:
-				all_edge_list.remove((random_neighbor_node, current_node))
-				connections_traversed.append((random_neighbor_node, current_node))
-			
-			print(current_node, random_neighbor_node)
-
 			# get edge time
 			edge_time = G[current_node][random_neighbor_node]['weight']
-
-			# keeping track of track time, and of the time in total
-			track_time += edge_time
+			
+			# keeping track of total time of all tracks
 			total_time += edge_time
-		
-			# make neighbor node current node, so that this node can go through the while loop to create a track
-			current_node = random_neighbor_node
-		
+
+			# if track is longer than 120 minutes
+			if track.time > 120:
+
+				# remove last edge to make length less than 120 minutes
+				track.remove_edge()
+
+				# add track to list of all tracks
+				connections_traversed.append(track)
+
+				# initialize new track object
+				track = E.Track(G)
+
+				# keep track of amount of tracks
+				track_counter += 1
+
+			# if track with new edge is not longer than 120 minutes
+			else:
+				# check in what order edge is stored in all_edge_list
+				if (current_node, random_neighbor_node) in all_edge_list:
+
+					# remove edge from all_edge_list
+					all_edge_list.remove((current_node, random_neighbor_node))
+
+				elif (random_neighbor_node, current_node) in all_edge_list:
+
+					# remove edge from all_edge_list
+					all_edge_list.remove((random_neighbor_node, current_node))
+
+				# add edge to track
+				track.add_edge(current_node, random_neighbor_node)
+
+				# for possibly adding tracks together later on
+				track.add_station(current_node, random_neighbor_node)
+
+				# make neighbor node current node, so that this node can go through the while loop to create a track
+				current_node = random_neighbor_node
+
+	print("track_counter: ", end="")
+	print(track_counter)
+
+	for i in range(track_counter):
+		print("time: ", end="")
+		print(connections_traversed[i].time)	
 	
+	#################################################
+
+	print("connections_traversed time times two")
+	for i in range(track_counter):
+		if (connections_traversed[i].time * 2) < 120:
+			for station in connections_traversed[i].stations:
+				for j in range(track_counter):
+					if station in connections_traversed[j].stations:
+					# hierboven out of range, nadat er een track verwijderd is. dan is connections tm trackcounter niet meer up to date natuurlijk.
+					# misschien hierna nog een if statement, voor als track_counter != len(connections_traversed).
+						if connections_traversed[j] != connections_traversed[i]:
+							if connections_traversed[j].time < 120:
+								if (connections_traversed[j].time + (connections_traversed[i].time * 2)) < 120:
+									print(station)
+
+									# if station is first station in first edge (beginning station)
+									if station in connections_traversed[i].edges[0][0]:
+										
+										# if station from other track is first (beginning station)
+										if station in connections_traversed[j].edges[0][0]:
+
+											# A: een route achter elkaar: j omdraaien, zowel tuples als inhoud, dan achter elkaar plakken.
+											print("A")
+
+											reversed_list = []
+											partially_reversed_list = list(reversed(connections_traversed[j].edges))
+											for item in partially_reversed_list:
+												reversed_list.append(tuple(reversed(item)))
+
+											# 
+											combined_list = reversed_list + connections_traversed[i].edges
+											
+											# initialize new track object
+											track = E.Track(G)
+
+											# add all edges to make complete track to new track
+											track.add_edge_list(combined_list)
+
+											# remove redundant tracks
+											connections_traversed.remove(connections_traversed[i])
+											connections_traversed.remove(connections_traversed[j])
+
+											# add new combined track
+											connections_traversed.append(track)
+
+										# if station in other track is last station
+										elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
+
+											# B:  een route achter elkaar.
+											
+											# direct achter elkaar plakken zonder om te draaien:
+											combined_list = connections_traversed[j].edges + connections_traversed[i].edges
+											print("combined_list B")
+											print(combined_list)
+
+										# if station in other track is in middle
+										else:
+
+											# Nieuwe track: over edges  van i, dan vanaf edge met 
+											# station erin de kortste kant op van J, dan weer terug, 
+											# en dan de andere helft.
+											print("3")
+
+									# if station is last statin in last edge (final station)
+									elif station in connections_traversed[i].edges[len(connections_traversed[i].edges) - 1][1]:
+
+										# if station from other track is first (beginning station)
+										if station in connections_traversed[j].edges[0][0]:
+
+											# C: een route achter elkaar.
+											combined_list = connections_traversed[i].edges + connections_traversed[j].edges
+											print("combined_list C")
+											print(combined_list)
+
+
+										# if station in other track is last station
+										elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
+
+											# D: een route achter elkaar
+											
+											# een van de twee omdraaien
+											reversed_list = []
+											partially_reversed_list = list(reversed(connections_traversed[j].edges))
+											for item in partially_reversed_list:
+												reversed_list.append(tuple(reversed(item)))
+
+											# achter elkaar plakken
+											combined_list = connections_traversed[i].edges + reversed_list
+											print("combined_list D")
+											print(combined_list)
+
+											# toevoegen aan nieuw track
+
+											# de andere twee tracks verwijderen
+
+
+										# if station in other track is in middle
+										else:
+
+											# Nieuwe track: over edges  van i, in onmgekeerde volgorde, 
+											# dan vanaf edge met station erin de kortste kant op van J, 
+											# dan weer terug, en dan de andere helft.
+											print("6")
+
+									# if station is in middle: (misschien dit checken voor andere twee?)
+									else:
+
+										# if station from other track is first (beginning station)
+										if station in connections_traversed[j].edges[0][0]:
+
+											# Nieuwe track: over edges  van J, dan vanaf edge met 
+											# station erin de kortste kant op van I, dan weer terug, 
+											# en dan de andere helft.
+											print("7")
+
+										# if station in other track is last station
+										elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
+
+											# Nieuwe track: over edges  van J, dan vanaf edge met 
+											# station erin de kortste kant op van I, dan weer terug, 
+											# en dan de andere helft.
+											print("8")
+
+										# if station in other track is in middle
+										else:
+
+											# Neem langste track, neem daar een willekeurige helft 
+											# van, dan over de twee helften elk heen en weer van de 
+											# kortste track, en dan de rest van de langste track
+											print("9")
+	#######################################################################################		
+
 	score = hlp.get_score(1, track_counter, total_time)
 	print("score: ", end="")
 	print(score)
 
 	# list of tuples
 	return connections_traversed
+
+	# to do
+	# - score op andere manier berekenen: via de connections_traversed[i].get_score oid.
+	# - deze score ook returnen
+	# - misschien: all_edges_list veranderen voor connections_traversed[i].edges: dit geeft precies
+	#   het omgekeerde terug, daar kan misschien op de een of andere manier gebruikt worden?
+	# - misschien: functie om voorzover mogelijk een random neighbor te krijgen met maar één edge die nog
+	#   traversed moet worden. Had Thom niet al zoiets
