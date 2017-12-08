@@ -10,6 +10,8 @@ class track:
 		self.critical_edge_list = graph.critical_edge_list
 		self.starting_station = stations[0][0]
 		self.last_station = stations[-1][1]
+
+		# AANPASSEN TOT LIJST MET EDGES!
 		self.edges = self.get_edges_list(stations)	
 		self.critical_lines_traversed = self.get_critical_lines_traversed()	
 		self.time = self.get_time()
@@ -36,4 +38,5 @@ class track:
 			if ((edges[i], edges[i+1]) in self.critical_edge_list):
 				critical_lines_traversed.append((edges[i], edges[i+1]))
 				#print("add critical line traversed")
+		print(critical_lines_traversed)
 		return critical_lines_traversed

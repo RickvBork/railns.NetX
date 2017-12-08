@@ -18,6 +18,8 @@ Calculates the score and rounds to nearest 10.
 m term small, hence the rounding. Plus makes searching for
 score occurrence easier.
 '''
+
+# ROUND IN VISUALISATION, OTHERWHILE HILLCLIMBER WON'T RECOGNISE SMALL SCORE INCREASES!
 def get_score(p, t, m):
 	return round(p * 10000 - (t * 20 + m / 100000), -1)
 
