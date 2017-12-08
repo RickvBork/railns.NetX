@@ -28,15 +28,21 @@ class service:
 		self.s_score = hlp.get_score(self.p_score, len(self.tracks),self.time)
 
 	def update_critical_edges_traversed(self, track):
-		for i in range(len(track.edges)-1):
-			if (((track.edges[i],track.edges[i+1]) in self.all_critical_edges) or ((track.edges[i+1],track.edges[i]) in self.all_critical_edges)):
-				if (((track.edges[i],track.edges[i+1]) not in self.critical_edges_traversed) and ((track.edges[i+1],track.edges[i]) not in self.critical_edges_traversed)):
-					self.critical_edges_traversed.append((track.edges[i],track.edges[i+1]))
-		
+		for edge in track.edges:
+			station0 = edge[0]
+			station1 = edge[1]
+			edge_reversed = (station1, station0)
+			if (edge in self.all_critical_edges or edge_reversed in self.all_critical_edges):
+				if (edge not in self.critical_edges_traversed) and (edge_reversed not in self.critical_edges_traversed):
+					self.critical_edges_traversed.append(edge)
+
 	def update_all_edges_traversed(self, track):
-		for i in range(len(track.edges)-1):
-			if (((track.edges[i],track.edges[i+1]) not in self.all_edges_traversed) and ((track.edges[i+1],track.edges[i]) not in self.all_edges_traversed)):
-					self.all_edges_traversed.append((track.edges[i],track.edges[i+1]))
+		for edge in track.edges:
+			station0 = edge[0]
+			station1 = edge[1]
+			edge_reversed = (station1, station0)
+			if (edge not in self.all_edges_traversed and edge_reversed not in self.all_edges_traversed):
+					self.all_edges_traversed.append(edge)
 
 	def remove_track(self, track):
 		self.tracks.remove(track)
