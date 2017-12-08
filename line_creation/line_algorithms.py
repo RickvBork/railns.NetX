@@ -17,7 +17,7 @@ def random_walk(Graph, iterator):
 	G = Graph.G
 	minimum_weight = Graph.minimal_edge_weight
 	nodes = Graph.nodes
-	critical_edge_dict = Graph.critical_edge_dict
+	# critical_edge_dict = Graph.critical_edge_dict
 
 	node_list = hlp.get_node_list(G, nodes)
 
