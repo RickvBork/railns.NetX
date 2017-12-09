@@ -1,5 +1,6 @@
 import collections as col
 import line_node_class as N
+import os, errno
 
 '''
 Helpers file.
@@ -122,4 +123,25 @@ def get_node_list(G, nodes):
 
 	return node_list
 
+'''
+Removes files, checks if file exists and silently ignores error if the error is a 'no such file or directory exists'.
+'''
+def file_remove(path_file_name):
+
+	try:
+		os.remove(path_file_name)
+	except OSError as e:
+		if e.errno != errno.ENOENT:
+			raise
+
+# Print iterations progress
+def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█'):
+
+	percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+	filledLength = int(length * iteration // total)
+	bar = fill * filledLength + '-' * (length - filledLength)
+	print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = '\r')
+	# Print New Line on Complete
+	if iteration == total: 
+		print()
 

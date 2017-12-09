@@ -8,6 +8,7 @@ import track_class as T
 import service_class as S
 from copy import deepcopy
 import service_class as sc
+from time import sleep
 
 '''
 Pure, random walk. No heuristics. Takes a graph object and an iterator as arguments. Returns an unordered list of 5 best service classes.
@@ -17,8 +18,8 @@ def random_walk(Graph, iterator):
 	G = Graph.G
 	minimum_weight = Graph.minimal_edge_weight
 	nodes = Graph.nodes
-	# critical_edge_dict = Graph.critical_edge_dict
 
+	# build node structure
 	node_list = hlp.get_node_list(G, nodes)
 
 	# initialise list for best services
@@ -27,18 +28,23 @@ def random_walk(Graph, iterator):
 
 	best_score = - 140
 	i = 0
+
+	# update loading bar every 1% instead of every iteration
+	update_load_bar = iterator / 100
+	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50)
+
 	for j in range(iterator):
-		
+
+		# build service loop
 		service = sc.service(Graph)
 		for k in range(random.randint(1, 7)):
 
 			track = T.track(Graph)
 			max_track_length = random.randint(minimum_weight, 120)
+			start = random.choice(node_list)
 
+			# build track loop
 			while track.time < max_track_length:
-
-				# choose random start node
-				start = random.choice(node_list)
 
 				# choose random neighbor node
 				neighbor = random.choice(start.neighbors)
@@ -56,13 +62,22 @@ def random_walk(Graph, iterator):
 			# add new track to service
 			service.add_track(track)
 
+		score = service.s_score
+
 		# remember best scores (unordered)
-		if service.s_score > best_score:
+		if score > best_score:
 			best_services[i % max_service_amount] = service
+			best_score = score
 			i += 1
 
+		# update every 1% if iterator is bigger than 1000
+		if iterator > 100 and (j % update_load_bar) == 0: 
+			hlp.loading_bar(j + update_load_bar, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50)
+		else:
+			hlp.loading_bar(j + 1, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50)
+
 	# remove empty values as list is not always filled
-	best_services = [service for service in best_services if service != 0]
+	return [service for service in best_services if service != 0]
 
 '''
 Smart 'random' walk

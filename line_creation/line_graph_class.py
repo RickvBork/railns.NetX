@@ -23,8 +23,7 @@ class Graph:
 
 		# force iterator object from nx to list
 		self.nodes = list(self.G.nodes())
-
-		self.edges = self.G.edges()
+		self.edges = list(self.G.edges())
 		self.critical_edge_list = self.get_critical_edges()
 		self.minimal_edge_weight = min(self.get_edge_weights())
 		self.total_critical_edges = len(self.critical_edge_list)
