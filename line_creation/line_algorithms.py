@@ -29,9 +29,8 @@ def random_walk(Graph, iterator):
 	best_score = - 140
 	i = 0
 
-	# update loading bar every 1% instead of every iteration
-	update_load_bar = iterator / 100
-	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50)
+	# initiate loading bar
+	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	for j in range(iterator):
 
@@ -70,11 +69,8 @@ def random_walk(Graph, iterator):
 			best_score = score
 			i += 1
 
-		# update every 1% if iterator is bigger than 1000
-		if iterator > 100 and (j % update_load_bar) == 0: 
-			hlp.loading_bar(j + update_load_bar, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50)
-		else:
-			hlp.loading_bar(j + 1, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50)
+		# update loading bar
+		hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# remove empty values as list is not always filled
 	return [service for service in best_services if service != 0]
@@ -82,7 +78,6 @@ def random_walk(Graph, iterator):
 '''
 Smart 'random' walk
 '''
-
 def smart_random_walk(graph, iterator):
 
 	# get information from graph to perform algorithm

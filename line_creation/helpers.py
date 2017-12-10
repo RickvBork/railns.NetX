@@ -56,12 +56,12 @@ def print_score_information(score_list):
 
 		# only print relevant scores
 		if score_count != 0:
-			print("{:<10}".format(i), end='')
+			print('{:<10}'.format(i), end='')
 			print(count_dict[i])
 
-	print("++++++++++++++\n")
-	print("minimum: {}".format(minimum))
-	print("maximum: {}\n".format(maximum))
+	print('++++++++++++++\n')
+	print('minimum: {}'.format(minimum))
+	print('maximum: {}\n'.format(maximum))
 
 	print(count_dict)
 
@@ -82,12 +82,12 @@ def get_prefered_neighbors(graph, starting_station, all_connections, track):
 	critical_neighbors = [station for station in list(graph.G[starting_station]) if station in graph.critical_station_list]
 
 	for i in range(track + 1):
-		print(all_connections["tracks"][str(i)])
-	print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+		print(all_connections['tracks'][str(i)])
+	print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 	prefered_neighbors = list(neighbors)
 	for i in range(track + 1):	
 		for neighbor in neighbors:
-			if ((starting_station, neighbor) in all_connections["tracks"][str(i)] or (starting_station, neighbor) in all_connections["tracks"][str(i)]):
+			if ((starting_station, neighbor) in all_connections['tracks'][str(i)] or (starting_station, neighbor) in all_connections['tracks'][str(i)]):
 				#print(starting_station, neighbor)
 				if neighbor in prefered_neighbors:
 					prefered_neighbors.remove(neighbor)
@@ -134,14 +134,32 @@ def file_remove(path_file_name):
 		if e.errno != errno.ENOENT:
 			raise
 
-# Print iterations progress
-def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█'):
+'''
+Loading bar. Two modes for faster computation of large iteration numbers. Switch sets the total iteration number where behaviour switches between modes.
 
-	percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
-	filledLength = int(length * iteration // total)
-	bar = fill * filledLength + '-' * (length - filledLength)
-	print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = '\r')
-	# Print New Line on Complete
+1: User chooses for update every 1% or .1% (update = 100, 1000)
+
+2: Always update every iteration. Show .1% increases.
+'''
+def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', update = 100, switch = 100):
+
+	# behaviour mode 1: every update %
+	if total >= switch and (iteration % (total / update)) == 0:
+		iteration += total / update
+		percent = ('{0:.' + str(decimals) + 'f}').format(100 * (iteration / float(total)))
+		filledLength = int(length * iteration // total)
+		bar = fill * filledLength + '-' * (length - filledLength)
+		print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = '\r')
+
+	# behaviour mode 2: standard every .1%
+	elif total < switch:
+		iteration += 1
+		percent = ('{0:.' + str(decimals) + 'f}').format(100 * (iteration / float(total)))
+		filledLength = int(length * iteration // total)
+		bar = fill * filledLength + '-' * (length - filledLength)
+		print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = '\r')
+
+
 	if iteration == total: 
 		print()
 
