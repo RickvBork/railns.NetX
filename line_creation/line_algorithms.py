@@ -9,6 +9,7 @@ import service_class as S
 from copy import deepcopy
 import service_class as sc
 from time import sleep
+import itertools # for Hierholzer's
 
 '''
 Pure, random walk. No heuristics. Takes a graph object and an iterator as arguments. Returns an unordered list of 5 best service classes.
@@ -209,6 +210,9 @@ def hierholzer(graph):
 
 	print("======HIERHOLZER======")
 
+	max_track_length = 120
+	max_track_amount = 7
+
 	# initializing list for all tracks
 	connections_traversed = []
 
@@ -221,9 +225,6 @@ def hierholzer(graph):
 	# adding all edges as tuples to all_edges_list
 	all_edge_list = [edge for edge in graph.edges]
 
-	# to keep track of amount of tracks
-	track_counter = 0
-
 	# to keep track of time of all tracks combined
 	total_time = 0
 
@@ -232,15 +233,9 @@ def hierholzer(graph):
 
 		# make new track object (one for each track)
 		track = T.track(graph)
-
-		# keeping track of amount of tracks
-		track_counter += 1
 	
 		# if all edges are traversed
 		if all_edge_list == []:
-
-			# counter counted one track too much
-			track_counter -= 1
 
 			# break to end the algorithm
 			break
@@ -278,8 +273,8 @@ def hierholzer(graph):
 			# if current_node has no unused edges
 			if remaining_edge_check == []:
 
-				# if last track made track longer than max length
-				if track.time > 120:
+				# if last track made track longer than maximum track length
+				if track.time > max_track_length:
 
 					# remove last edge
 					track.remove_edge()
@@ -310,8 +305,8 @@ def hierholzer(graph):
 			# keeping track of total time of all tracks
 			total_time += edge_time
 
-			# if track is longer than 120 minutes
-			if track.time > 120:
+			# if track is longer than maximum track length
+			if track.time > max_track_length:
 
 				# remove last edge to make length less than 120 minutes
 				track.remove_edge()
@@ -324,10 +319,7 @@ def hierholzer(graph):
 				# initialize new track object
 				track = T.track(graph)
 
-				# keep track of amount of tracks
-				track_counter += 1
-
-			# if track with new edge is not longer than 120 minutes
+			# if track with new edge is not longer than maximum track length
 			else:
 				# check in what order edge is stored in all_edge_list
 				if (current_node, random_neighbor_node) in all_edge_list:
@@ -349,34 +341,24 @@ def hierholzer(graph):
 				# make neighbor node current node, so that this node can go through the while loop to create a track
 				current_node = random_neighbor_node
 
-	print("track_counter: ", end="")
-	print(track_counter)
 
-	for i in range(track_counter):
+	for i in range(len(service.tracks)):
 		print("time: ", end="")
 		print(connections_traversed[i].time)
 
-
+	# list to store new tracks (to add to track object after iteration)
 	tmp_new_track_list = []
 
 	# iterate over all tracks
 	for i in range(len(service.tracks)):
 		# for each track, iterate over all other tracks
 		for j in range(len(service.tracks)):
-			# ensure that track is not compared to same track
+			# ensure that track is not compared to itself
 			if i != j:
 				# if track time combined is less than the maximum time
-				if (service.tracks[i].time + service.tracks[j].time) < 120:
+				if (service.tracks[i].time + service.tracks[j].time) < max_track_length:
 					# if starting station for both stations is the same
 					if service.tracks[i].edges[0][0] == service.tracks[j].edges[0][0]:
-
-
-						# kleine bug: in dit geval (starting + starting) wordt er twee keer hierdoor heen gegaan, aangezien i en j allebei i en j zijn
-						# het resultaat: twee keer wordt aan tmp_new.. een track toegevoegd. deze is identiek, behalve dat deze helemaal
-						# reversed is
-
-						# nog een kleine bug: bij starting + ending, en ending + starting, kan het ook dubbel. Het resultaat is dat aan tmp_new.. twee keer
-						# een deze keer compleet identieke lijst wordt toegevoeg.
 
 						print("starting + starting")
 
@@ -388,23 +370,39 @@ def hierholzer(graph):
 						# make new list with edges of new track
 						combined_list = reversed_list + connections_traversed[i].edges
 						
-						# add new route to tmp list
-						tmp_new_track_list.append(combined_list)
+						check_list = []
 
-						# indicate that track can later be removed from service
-						service.tracks[i].necessary = False
-						service.tracks[j].necessary = False
+						# if new route is not in reversed already in tmp_new_track_list:
+						for item in list(reversed(combined_list)):
+							check_list.append(tuple(reversed(item))) 
 
-						# update track counter
-						track_counter -=1
-					
+						booleanTrack = False
+						# iterate over lists of routes in tmp list
+						for item in tmp_new_track_list:
+							# if check_list is in tmp, than there is no need to add new combined list to 
+							if item == check_list:
+								# set boolean to true, to prevent combined list from being add.
+								booleanTrack = True
+
+						if booleanTrack == False:
+
+							# add new route to tmp list
+							tmp_new_track_list.append(combined_list)
+
+							# indicate that track can later be removed from service
+							service.tracks[i].necessary = False
+							service.tracks[j].necessary = False
+						
 					# if starting station and ending station is the same
 					elif service.tracks[i].edges[0][0] == service.tracks[j].edges[-1][1]:
 
 						print("starting + ending")
+
+
+						tmp_new_track_list = combine_tracks(service.tracks[j].edges, service.tracks[i].edges, tmp_new_track_list, service)
+						################# for function: tmp_new... = (List service.tracks..., List service tracks 2, list tmp_new)
+
 						combined_list = service.tracks[j].edges + service.tracks[i].edges
-						print("combined_list B: check")
-						print(combined_list)
 						
 						# add new route to tmp list
 						tmp_new_track_list.append(combined_list)
@@ -413,16 +411,16 @@ def hierholzer(graph):
 						service.tracks[i].necessary = False
 						service.tracks[j].necessary = False
 
-						# update track counter
-						track_counter -=1
+						########################3
 
 					# if ending station and starting station is the same
 					elif service.tracks[i].edges[-1][1] == service.tracks[j].edges[0][0]:
 
 						print("ending + starting")
+
+						####################
+
 						combined_list = service.tracks[i].edges + service.tracks[j].edges
-						print("combined_list C: check")
-						print(combined_list)
 
 						# add new route to tmp list
 						tmp_new_track_list.append(combined_list)
@@ -431,25 +429,21 @@ def hierholzer(graph):
 						service.tracks[i].necessary = False
 						service.tracks[j].necessary = False
 
-						# update track counter
-						track_counter -=1
+						#####################
 
+					# maar, dit komt eigenlijk nooit voor toch? want het einde is als het vastloopt, en het kan niet 2 keer op dezelfde plek 
+					# vastlopen.
 					# if ending station for both tracks is the same
 					elif service.tracks[i].edges[-1][1] == service.tracks[j].edges[-1][1]:
 						print("ending + ending")
-
-						print("service tracks not yet reversed:")
-						print(service.tracks[j].edges)
 
 						reversed_list = []
 						partially_reversed_list = list(reversed(service.tracks[j].edges))
 						for item in partially_reversed_list:
 							reversed_list.append(tuple(reversed(item)))
 
-						print("reversed list:")
-						print(reversed_list)
+						#########################
 
-						# achter elkaar plakken
 						combined_list = service.tracks[i].edges + reversed_list
 						print("combined_list D: ?")
 						print(combined_list)
@@ -461,169 +455,48 @@ def hierholzer(graph):
 						service.tracks[i].necessary = False
 						service.tracks[j].necessary = False
 
-						# update track counter
-						track_counter -=1	
+						##################
 
-	# remove all redundant tracks from service class
-	for track in service.tracks:
-		if track.necessary == False:
-			service.remove_track
-		elif track.necessary == True:
-			print("sdgah")
+	# ensure that next part is skipped if no new tracks were made
+	if tmp_new_track_list != []:
 
-	for item in tmp_new_track_list:
-		track = T.track(graph)
-		track.add_edge_list(item)
-		service.add_track(track)		
 
+		# for all - old - tracks in the service
+		for track in service.tracks:
+
+			# if track is redundant
+			if track.necessary == False:
+
+				# remove track from service
+				service.remove_track
+		
+		# remove duplicates from new tracks list
+		tmp_set = set(tuple(x) for x in tmp_new_track_list)
+		duplicate_free_list = [ list(x) for x in tmp_set ]
+
+		# for all new track routes in tmp list
+		for item in duplicate_free_list:
+
+			# make new track object
+			track = T.track(graph)
+
+			# add new track route to new track object
+			track.add_edge_list(item)
+
+			# add new track to service to replace redundant tracks
+			service.add_track(track)
+
+	# determine amount of tracks service has
+	track_counter = len(service.tracks)
+
+	# ensure that there are no more tracks than allows
+	while track_counter > max_track_length:
+		# determine track with lowest score
+		# remove from service
+		print("to do")
 	
-	#################################################
 
-	# print("connections_traversed time times two")
 
-	# new_connections_traversed = connections_traversed
-
-	# # iterate over all tracks
-	# for i in range(len(connections_traversed)):
-	# 	print("i: ", end="")
-	# 	print(i)
-	# 	# if track exists
-	# 	try:
-	# 	#if connections_traversed[i]:
-	# 		# if track is, when traversed twice, shorter than maximum time
-	# 		if (connections_traversed[i].time * 2) < 120:
-	# 			# iterate over every station in track
-	# 			for station in connections_traversed[i].stations:
-	# 				# iterate over all tracks
-	# 				for j in range(len(connections_traversed)):
-	# 					print("J : ", end="")
-	# 					print(j)
-	# 					# if this track exists
-	# 					try:
-	# 						connections_traversed[j]
-	# 						# if this track is, hopefully, not the same track as itself
-	# 						if connections_traversed[j] != connections_traversed[i]:
-	# 							# if station from track is also a station in another track
-	# 							if station in connections_traversed[j].stations:
-	# 								# if the other track has a track time less than the maximum track time
-	# 								if connections_traversed[j].time < 120:
-	# 									# if the first track, with the time twice, plus the time from the second track, is less than maxiumum time
-	# 									if (connections_traversed[j].time + (connections_traversed[i].time * 2)) < 120:
-	# 										print(station)
-
-	# 										# if station is first station in first edge (beginning station)
-	# 										if station in connections_traversed[i].edges[0][0]:
-												
-	# 											# if station from other track is first (beginning station)
-	# 											if station in connections_traversed[j].edges[0][0]:
-
-	# 												print("A")
-
-	# 												# reverse the entire second track, so that the two tracks can be combined
-	# 												reversed_list = []
-	# 												partially_reversed_list = list(reversed(connections_traversed[j].edges))
-	# 												for item in partially_reversed_list:
-	# 													reversed_list.append(tuple(reversed(item)))
-
-	# 												# make new list with edges of new track
-	# 												combined_list = reversed_list + connections_traversed[i].edges
-													
-	# 												# initialize new track object
-	# 												track = T.track(graph)
-
-	# 												# add all edges to make complete track to new track
-	# 												track.add_edge_list(combined_list)
-
-	# 												# remove redundant tracks: maar dit moet dus niet. Gewoon nieuwe lijst aanmaken waarin dit niet voorkomt.
-	# 												new_connections_traversed.remove(connections_traversed[i])
-	# 												new_connections_traversed.remove(connections_traversed[j])
-
-	# 												# add new combined track
-	# 												new_connections_traversed.append(track)
-
-	# 												track_counter -=1
-
-	# 											# if station in other track is last station
-	# 											elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
-													
-	# 												# direct achter elkaar plakken zonder om te draaien:
-	# 												combined_list = connections_traversed[j].edges + connections_traversed[i].edges
-	# 												print("combined_list B: check, klopt!")
-	# 												print(combined_list)
-
-	# 												# initialize new track object
-	# 												track = T.track(graph)
-
-	# 												# add all edges to make complete track to new track
-	# 												track.add_edge_list(combined_list)
-
-	# 												# remove redundant tracks
-	# 												new_connections_traversed.remove(connections_traversed[i])
-	# 												new_connections_traversed.remove(connections_traversed[j])
-
-	# 												# add new combined track
-	# 												new_connections_traversed.append(track)
-
-	# 												# update track counter
-	# 												track_counter -= 1
-
-	# 										# if station is last statin in last edge (final station)
-	# 										elif station in connections_traversed[i].edges[len(connections_traversed[i].edges) - 1][1]:
-
-	# 											# if station from other track is first (beginning station)
-	# 											if station in connections_traversed[j].edges[0][0]:
-
-	# 												# C: een route achter elkaar.
-	# 												combined_list = connections_traversed[i].edges + connections_traversed[j].edges
-	# 												print("combined_list C: check")
-	# 												print(combined_list)
-	# 												# check: de combined list klopt
-
-	# 												# initialize new track object
-	# 												track = T.track(graph)
-
-	# 												# add all edges to make complete track to new track
-	# 												track.add_edge_list(combined_list)
-
-	# 												# remove redundant tracks
-	# 												new_connections_traversed.remove(connections_traversed[i])
-	# 												new_connections_traversed.remove(connections_traversed[j])
-
-	# 												# add new combined track
-	# 												new_connections_traversed.append(track)
-
-	# 												# update track counter
-	# 												track_counter -= 1
-
-	# 											# if station in other track is last station
-	# 											elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
-													
-	# 												# een van de twee omdraaien
-	# 												reversed_list = []
-	# 												partially_reversed_list = list(reversed(connections_traversed[j].edges))
-	# 												for item in partially_reversed_list:
-	# 													reversed_list.append(tuple(reversed(item)))
-
-	# 												# achter elkaar plakken
-	# 												combined_list = connections_traversed[i].edges + reversed_list
-	# 												print("combined_list D")
-	# 												print(combined_list)
-
-	# 												# initialize new track object
-	# 												track = T.track(graph)
-
-	# 												# add all edges to make complete track to new track
-	# 												track.add_edge_list(combined_list)
-
-	# 												# remove redundant tracks
-	# 												new_connections_traversed.remove(connections_traversed[i])
-	# 												new_connections_traversed.remove(connections_traversed[j])
-
-	# 												# add new combined track
-	# 												new_connections_traversed.append(track)
-
-	# 												# update track counter
-	# 												track_counter -= 1
 
 	# 										# if station is in middle: (misschien dit checken voor andere twee?)
 	# 										else:
@@ -678,13 +551,6 @@ def hierholzer(graph):
 	# 												# van, dan over de twee helften elk heen en weer van de i
 	# 												# en dan de rest van de langste track
 	# 												print("7")
-	# 						except ValueError:
-	# 							pass
-	# 						continue							
-	# 	except:
-	# 		pass
-	# 	continue
-
 
 	#######################################################################################		
 
@@ -699,6 +565,5 @@ def hierholzer(graph):
 	# - score op andere manier berekenen: via de connections_traversed[i].get_score oid.
 	# - deze score ook returnen
 	# - misschien: all_edges_list veranderen voor connections_traversed[i].edges: dit geeft precies
-	#   het omgekeerde terug, daar kan misschien op de een of andere manier gebruikt worden?
 	# - misschien: functie om voorzover mogelijk een random neighbor te krijgen met maar één edge die nog
 	#   traversed moet worden. Had Thom niet al zoiets
