@@ -1,6 +1,8 @@
 import collections as col
 import line_node_class as N
 import os, errno
+import track_class as tc
+import random
 
 '''
 Helpers file.
@@ -162,5 +164,29 @@ def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length
 
 	if iteration == total: 
 		print()
+
+'''
+seperate function for generate_random_track
+'''
+def generate_random_track(Graph, start, max_track_length):
+	
+	track = tc.track(Graph)
+	
+	while track.time < max_track_length:
+
+		# choose random neighbor node
+		neighbor = random.choice(start.neighbors)
+
+		# add built edge
+		track.add_edge((start.name, neighbor.name))
+
+		# update start
+		start = neighbor
+		
+	# make sure track is minimum of one edge
+	if len(track.edges) != 1:
+		track.remove_edge()
+
+	return track 
 
 
