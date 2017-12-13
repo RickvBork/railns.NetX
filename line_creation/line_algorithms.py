@@ -323,9 +323,9 @@ def hierholzer(graph):
 
 			## # OP COMMENT VOOR  TEST MET BEGIN ALS KRITIEK STATION
 			# ensure that random neighbor station has several edges (otherwise, this will be the end of the track), if there is more than edge
-			if len(all_edge_list) != 1:
-				while random_neighbor_node in one_edge_list:
-					random_neighbor_node = random.choice(list(G[current_node]))
+		#	if len(all_edge_list) != 1:
+		#		while random_neighbor_node in one_edge_list:
+		#			random_neighbor_node = random.choice(list(G[current_node]))
 
 			# ensure that edge hasn't been traversed yet
 			while (current_node, random_neighbor_node) not in all_edge_list and (random_neighbor_node, current_node) not in all_edge_list:
