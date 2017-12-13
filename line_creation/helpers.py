@@ -189,4 +189,34 @@ def generate_random_track(Graph, start, max_track_length):
 
 	return track 
 
+def generate_smart_track(Graph, start, max_track_length):
+
+	track = tc.track(Graph)	
+	start = start.name
+
+	while track.time < max_track_length:
+				
+		# get list of critical neighbours of starting_station
+		critical_neighbors = [station for station in list(Graph.G[starting_station]) if station in graph.critical_station_list]
+	
+		prefered_neighbors = hlp.get_prefered_neighbors(graph, starting_station, all_connections, track)
+
+		if prefered_neighbors == []:
+			random_neighbor = random.choice(list(G[starting_station]))
+		else: 
+			random_neighbor = random.choice(prefered_neighbors)
+
+		track.add_edge((start, random_neighbor))
+
+		# update start
+		start = neighbor
+
+        # make sure track is minimum of one edge
+        if len(track.edges) != 1:
+                track.remove_edge()
+
+        return track
+
+
+
 
