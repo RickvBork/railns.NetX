@@ -10,11 +10,16 @@ import csv
 import numpy
 import service_class as sc
 import track_class as tc
-import hillclimber as hh
+import hillclimber as hc
+import hillclimber_helper as hh
 
 # initialize path files for Noord Holland graph
-path_stations_file = '../data/StationsHolland.csv'
-path_tracks_file = '../data/ConnectiesHolland.csv'
+#path_stations_file = '../data/StationsHolland.csv'
+#path_tracks_file = '../data/ConnectiesHolland.csv'
+
+# initialize path files for national graph
+path_stations_file = '../data/StationsNationaal.csv'
+path_tracks_file = '../data/ConnectiesNationaal.csv'
 
 # initialise graph class
 Graph = line_graph_class.Graph
@@ -23,24 +28,37 @@ Graph = line_graph_class.Graph
 g = Graph("NH", path_stations_file, path_tracks_file)
 
 #all_paths_dijkstra_path_length(g.G[])
-# get scores
-scores, p_scores, best_tracks = alg.random_walk(g, 1000)
+# get services
+max_number_of_tracks = 20
+max_time = 180
+services = hh.random_walk(g, 10, max_number_of_tracks, max_time)
 
-for service in best_tracks:
-	print(service)
+for service in services:
+	print(service.critical_edges_traversed)
+	print(service.s_score)
 	print()
 
-# create service from best_tracks
-service1 = sc.service(g)
-number_of_tracks = 7
-for i in range(number_of_tracks):
-	track1 = best_tracks[0]['tracks']['1']
-	trackc = tc.track(track1, g)
-	service1.add_track(trackc)
-
+service1 = services[-1]
 # now use hillclimber to improve service
+number_of_tracks = len(service1.tracks) 
 number_of_tries = 10
-for i in range(number_of_tracks):
-	for j in range(number_of_tries):
-		hh.hillclimber(service1,i)
-		# print(service1.s_score)
+print(service1.s_score)
+
+#for i in range(number_of_tracks):
+#	for j in range(number_of_tries):
+#		hc.hillclimber(service1,i)
+#		print(service1.s_score)
+#		
+hillclimber_scores = []
+for j in range(number_of_tries):
+	for i in range(number_of_tracks):
+		for k in range(number_of_tries):
+			hc.hillclimber(service1,i)
+			print(service1.s_score)
+			hillclimber_scores.append(service1.s_score) 
+
+# write score to csv
+with open('../data/hillclimber.csv', 'w', newline='') as csvfile:
+	wr = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+	for score in hillclimber_scores:
+		wr.writerow([score])
