@@ -14,7 +14,7 @@ import itertools # for Hierholzer's
 '''
 Pure, random walk. No heuristics. Takes a graph object and an iterator as arguments. Returns an unordered list of 5 best service classes.
 '''
-def random_walk(Graph, iterator):
+def random_walk(Graph, iterator, max_number_of_tracks, max_time):
 
 	G = Graph.G
 	minimum_weight = Graph.minimal_edge_weight
@@ -26,7 +26,6 @@ def random_walk(Graph, iterator):
 	# initialise list for best services
 	max_service_amount = 5
 	best_services = [0] * max_service_amount
-
 	best_score = - 140
 	i = 0
 
@@ -37,28 +36,21 @@ def random_walk(Graph, iterator):
 
 		# build service loop
 		service = sc.service(Graph)
-		for k in range(random.randint(1, 7)):
 
-			track = T.track(Graph)
-			max_track_length = random.randint(minimum_weight, 120)
+		# rand number of tracks 1 up to including 7
+		number_of_tracks_in_service = random.randint(1, max_number_of_tracks)
+		number_of_tracks_in_service = max_number_of_tracks
+
+		for k in range(number_of_tracks_in_service):
+
+			# pick random starting station 
 			start = random.choice(node_list)
 
-			# build track loop
-			while track.time < max_track_length:
+			# random time for a given track
+			random_time = random.randint(minimum_weight, max_time)
+			random_time = max_time
 
-				# choose random neighbor node
-				neighbor = random.choice(start.neighbors)
-
-				# add built edge
-				track.add_edge((start.name, neighbor.name))
-
-				# update start
-				start = neighbor
-
-			# make sure track is minimum of one edge
-			if len(track.edges) != 1:
-				track.remove_edge()
-
+			track = hlp.generate_random_track(Graph, start, random_time)
 			# add new track to service
 			service.add_track(track)
 
