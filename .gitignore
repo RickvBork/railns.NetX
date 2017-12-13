@@ -16,4 +16,4 @@ visualization/
 *.test.py
 
 # ignore csv files
-*.csv
+#*.csv
