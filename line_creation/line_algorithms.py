@@ -219,6 +219,13 @@ def hierholzer(graph):
 	# for access to the graph
 	G = graph.G
 
+	# voor experimentatie 2
+	# critical_station_list = graph.critical_station_list # iets met graph
+	critical_station_list = ['Alkmaar', 'Amsterdam Centraal', 'Den Haag Centraal', 'Gouda', 'Haarlem', 'Rotterdam Centraal', 'Zaandam']
+
+	# print("critical_station_list: ")
+	# print(critical_station_list)
+
 	# initialize service
 	service = S.service(graph)
 
@@ -255,14 +262,38 @@ def hierholzer(graph):
 			if count == 1:
 				one_edge_list.append(station)
 
+		super_special = []
+		## voor experimentatie deel 3: bij one_edge_list checken welke een edge hebben met daaraan een critical station.
+		# checken wat de edges zijn waarin stations van one_edge_list zitten
+		# checken
+		for item in one_edge_list:
+			for edge in all_edge_list:
+				for bla in edge:
+					if bla == item:
+						for i in edge:
+							if i in critical_station_list:
+								if i != item:
+									super_special.append(item)
+
+		# print("SUPER SPECIAL: ", end="")
+		# print(super_special)
+		# print()
+
+
+		if super_special != []:
+			current_node = random.choice(super_special)
+		elif one_edge_list != []:
 		# get random starting station that has only one edge, if possible
-		if one_edge_list != []:
+		#if one_edge_list != []:
 			current_node = random.choice(one_edge_list)
 		else:
 			current_node = random.choice(list(graph.nodes))
 
 		#### eind mogelijke functie
 
+
+		# voor experimentatie 2: als start node een critical station kiezen
+		#current_node = random.choice(critical_station_list)
 
 		# loop for each edge in each track
 		while True:
@@ -290,6 +321,7 @@ def hierholzer(graph):
 			# choose random neighbor of station
 			random_neighbor_node = random.choice(list(G[current_node]))
 
+			## # OP COMMENT VOOR  TEST MET BEGIN ALS KRITIEK STATION
 			# ensure that random neighbor station has several edges (otherwise, this will be the end of the track), if there is more than edge
 			if len(all_edge_list) != 1:
 				while random_neighbor_node in one_edge_list:
@@ -341,11 +373,6 @@ def hierholzer(graph):
 				# make neighbor node current node, so that this node can go through the while loop to create a track
 				current_node = random_neighbor_node
 
-
-	for i in range(len(service.tracks)):
-		print("time: ", end="")
-		print(connections_traversed[i].time)
-
 	# list to store new tracks (to add to track object after iteration)
 	tmp_new_track_list = []
 
@@ -381,7 +408,7 @@ def hierholzer(graph):
 						for item in tmp_new_track_list:
 							# if check_list is in tmp, than there is no need to add new combined list to 
 							if item == check_list:
-								# set boolean to true, to prevent combined list from being add.
+								# set boolean to true, to prevent combined list from being add
 								booleanTrack = True
 
 						if booleanTrack == False:
@@ -398,84 +425,28 @@ def hierholzer(graph):
 
 						print("starting + ending")
 
-
-						tmp_new_track_list = combine_tracks(service.tracks[j].edges, service.tracks[i].edges, tmp_new_track_list, service)
-						################# for function: tmp_new... = (List service.tracks..., List service tracks 2, list tmp_new)
-
 						combined_list = service.tracks[j].edges + service.tracks[i].edges
 						
 						# add new route to tmp list
 						tmp_new_track_list.append(combined_list)
 
 						# indicate that track can later be removed from service
-						service.tracks[i].necessary = False
+						service.tracks[i].necessary = False					
 						service.tracks[j].necessary = False
-
-						########################3
-
-					# if ending station and starting station is the same
-					elif service.tracks[i].edges[-1][1] == service.tracks[j].edges[0][0]:
-
-						print("ending + starting")
-
-						####################
-
-						combined_list = service.tracks[i].edges + service.tracks[j].edges
-
-						# add new route to tmp list
-						tmp_new_track_list.append(combined_list)
-
-						# indicate that track can later be removed from service
-						service.tracks[i].necessary = False
-						service.tracks[j].necessary = False
-
-						#####################
-
-					# maar, dit komt eigenlijk nooit voor toch? want het einde is als het vastloopt, en het kan niet 2 keer op dezelfde plek 
-					# vastlopen.
-					# if ending station for both tracks is the same
-					elif service.tracks[i].edges[-1][1] == service.tracks[j].edges[-1][1]:
-						print("ending + ending")
-
-						reversed_list = []
-						partially_reversed_list = list(reversed(service.tracks[j].edges))
-						for item in partially_reversed_list:
-							reversed_list.append(tuple(reversed(item)))
-
-						#########################
-
-						combined_list = service.tracks[i].edges + reversed_list
-						print("combined_list D: ?")
-						print(combined_list)
-
-						# add new route to tmp list
-						tmp_new_track_list.append(combined_list)
-
-						# indicate that track can later be removed from service
-						service.tracks[i].necessary = False
-						service.tracks[j].necessary = False
-
-						##################
 
 	# ensure that next part is skipped if no new tracks were made
 	if tmp_new_track_list != []:
-
 
 		# for all - old - tracks in the service
 		for track in service.tracks:
 
 			# if track is redundant
-			if track.necessary == False:
+			if track.necessary != True:
 
-				# remove track from service
-				service.remove_track
-		
-		# remove duplicates from new tracks list
-		tmp_set = set(tuple(x) for x in tmp_new_track_list)
-		duplicate_free_list = [ list(x) for x in tmp_set ]
+				service.remove_track(track)
 
 		# for all new track routes in tmp list
-		for item in duplicate_free_list:
+		for item in tmp_new_track_list:
 
 			# make new track object
 			track = T.track(graph)
@@ -496,74 +467,16 @@ def hierholzer(graph):
 		print("to do")
 	
 
+	for i in range(track_counter):
+		print("track: ", end="")
+		print(service.tracks[i].edges)
+		print()
 
-
-	# 										# if station is in middle: (misschien dit checken voor andere twee?)
-	# 										else:
-
-	# 											# if station from other track is first (beginning station)
-	# 											if station in connections_traversed[j].edges[0][0]:
-
-	# 												print("testestetes")
-
-	# 												# Nieuwe track: over edges  van J, reversed
-	# 												reversed_list = []
-	# 												partially_reversed_list = list(reversed(connections_traversed[j].edges))
-	# 												for item in partially_reversed_list:
-	# 													reversed_list.append(tuple(reversed(item)))
-
-	# 												# zoek station in edges van i
-	# 												for item in connections_traversed[i].edges:
-	# 													if item == station:
-	# 														print("item: ", end="")
-	# 														print(item)
-
-	# 												# ga dan vanaf daar edges af.
-	# 												# reverse deze edges
-	# 												# rest van de edges (in reverse.)	
-
-	# 												### dit kan wel.
-
-	# 												print("5")
-
-	# 											# if station in other track is last station
-	# 											elif station in connections_traversed[j].edges[len(connections_traversed[j].edges) - 1][1]:
-
-	# 												print("ttesssstt")
-	# 												# Nieuwe track: over edges  van J tot je aankomt bij station, niet in reverse.
-	# 												# station vinden in edges I
-	# 												for item in connections_traversed[i].edges:
-	# 													if item == station:
-	# 														print("item: ", end="")
-	# 														print(item)
-	# 												# ga dan vanaf daar edges af.
-	# 												# diezelfde edges in reverse.
-	# 												# rest van de edges (evt. in reverse.)
-
-	# 												### dit kan ook.
-
-	# 												print("6")
-
-	# 											# if station in other track is in middle
-	# 											else:
-
-	# 												# Neem langste track, neem daar een willekeurige helft 
-	# 												# van, dan over de twee helften elk heen en weer van de i
-	# 												# en dan de rest van de langste track
-	# 												print("7")
-
-	#######################################################################################		
+	print("track_counter: ", end="")
+	print(track_counter)
 
 	score = hlp.get_score(1, track_counter, total_time)
 	print("score: ", end="")
 	print(score)
-
-	# list of tuples
-	return connections_traversed
-
-	# to do
-	# - score op andere manier berekenen: via de connections_traversed[i].get_score oid.
-	# - deze score ook returnen
-	# - misschien: all_edges_list veranderen voor connections_traversed[i].edges: dit geeft precies
-	# - misschien: functie om voorzover mogelijk een random neighbor te krijgen met maar één edge die nog
-	#   traversed moet worden. Had Thom niet al zoiets
+	
+	return service

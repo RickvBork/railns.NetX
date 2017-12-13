@@ -163,22 +163,4 @@ def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length
 	if iteration == total: 
 		print()
 
-'''
-Combines two tracks into one track
-'''
-
-def combine_tracks(track1, track2, tmp_new_track_list, service):
-	
-	# 
-	combined_list = track1 + track2
-						
-	# add new route to tmp list
-	tmp_new_track_list.append(combined_list)
-
-	# indicate that track can later be removed from service: maar hoe moet dit?
-	service.tracks[i].necessary = False
-	service.tracks[j].necessary = False
-
-	return tmp_new_track_list
-
 
