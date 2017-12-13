@@ -210,8 +210,8 @@ def hierholzer(graph):
 
 	print("======HIERHOLZER======")
 
-	max_track_length = 120
-	max_track_amount = 7
+	max_track_length = 180
+	max_track_amount = 20
 
 	# initializing list for all tracks
 	connections_traversed = []
@@ -323,9 +323,10 @@ def hierholzer(graph):
 
 			## # OP COMMENT VOOR  TEST MET BEGIN ALS KRITIEK STATION
 			# ensure that random neighbor station has several edges (otherwise, this will be the end of the track), if there is more than edge
-		#	if len(all_edge_list) != 1:
-		#		while random_neighbor_node in one_edge_list:
-		#			random_neighbor_node = random.choice(list(G[current_node]))
+
+			# if len(all_edge_list) != 1:
+			# 	while random_neighbor_node in one_edge_list:
+			# 		random_neighbor_node = random.choice(list(G[current_node]))
 
 			# ensure that edge hasn't been traversed yet
 			while (current_node, random_neighbor_node) not in all_edge_list and (random_neighbor_node, current_node) not in all_edge_list:
@@ -478,5 +479,8 @@ def hierholzer(graph):
 	score = hlp.get_score(1, track_counter, total_time)
 	print("score: ", end="")
 	print(score)
+
+	print("service.self score")
+	print(service.s_score)
 	
 	return service
