@@ -206,280 +206,252 @@ def smart_random_walk(graph, iterator):
 ''''
 Hierholzer's algorithm
 '''
-def hierholzer(graph):
+def hierholzer(graph, iterator):
 
 	print("======HIERHOLZER======")
-
+	
+	# determine maximum time of tracks, and maximum amount of tracks per service
 	max_track_length = 180
 	max_track_amount = 20
 
-	# initializing list for all tracks
-	connections_traversed = []
+	# inititialize variables to save and return best service(s)
+	best_score = 0
+	max_service_amount = 5
+	best_services = [0] * max_service_amount
 
-	# for access to the graph
-	G = graph.G
+	# do the walk iterator amount of times
+	for i in range(iterator):		
 
-	# voor experimentatie 2
-	# critical_station_list = graph.critical_station_list # iets met graph
-	critical_station_list = ['Alkmaar', 'Amsterdam Centraal', 'Den Haag Centraal', 'Gouda', 'Haarlem', 'Rotterdam Centraal', 'Zaandam']
+		# initializing list for all tracks
+		connections_traversed = []
 
-	# print("critical_station_list: ")
-	# print(critical_station_list)
+		# for access to the graph
+		G = graph.G
 
-	# initialize service
-	service = S.service(graph)
+		# initialize service
+		service = S.service(graph)
 
-	# adding all edges as tuples to all_edges_list
-	all_edge_list = [edge for edge in graph.edges]
+		# adding all edges as tuples to all_edges_list
+		all_edge_list = [edge for edge in graph.edges]
 
-	# to keep track of time of all tracks combined
-	total_time = 0
+		# to keep track of time of all tracks combined
+		total_time = 0
 
-	# for each track
-	while True:
-
-		# make new track object (one for each track)
-		track = T.track(graph)
-	
-		# if all edges are traversed
-		if all_edge_list == []:
-
-			# break to end the algorithm
-			break
-
-		#### dit misschien in functie: dit is allemaal om, voor zover mogelijk, een starting node te krijgen
-		# die maar één edge heeft
-
-		# make list with every station as much as they have untraversed edges
-		stations_in_edges_amount_list = [elem for t in all_edge_list for elem in t]
-
-		# initalize list for stations with only one untraversed edge
-		one_edge_list = []
-
-		# determine which stations have only one edge, adding these to one_edge_list
-		counter = collections.Counter(stations_in_edges_amount_list)
-		for station, count in counter.items():
-			if count == 1:
-				one_edge_list.append(station)
-
-		super_special = []
-		## voor experimentatie deel 3: bij one_edge_list checken welke een edge hebben met daaraan een critical station.
-		# checken wat de edges zijn waarin stations van one_edge_list zitten
-		# checken
-		for item in one_edge_list:
-			for edge in all_edge_list:
-				for bla in edge:
-					if bla == item:
-						for i in edge:
-							if i in critical_station_list:
-								if i != item:
-									super_special.append(item)
-
-		# print("SUPER SPECIAL: ", end="")
-		# print(super_special)
-		# print()
-
-
-		if super_special != []:
-			current_node = random.choice(super_special)
-		elif one_edge_list != []:
-		# get random starting station that has only one edge, if possible
-		#if one_edge_list != []:
-			current_node = random.choice(one_edge_list)
-		else:
-			current_node = random.choice(list(graph.nodes))
-
-		#### eind mogelijke functie
-
-
-		# voor experimentatie 2: als start node een critical station kiezen
-		#current_node = random.choice(critical_station_list)
-
-		# loop for each edge in each track
+		# for each track
 		while True:
 
-			# checking if current station has unused edges
-			remaining_edge_check = [item for item in all_edge_list if current_node in item]
-			
-			# if current_node has no unused edges
-			if remaining_edge_check == []:
+			# if all edges are traversed
+			if all_edge_list == []:
 
-				# if last track made track longer than maximum track length
-				if track.time > max_track_length:
-
-					# remove last edge
-					track.remove_edge()
-
-				# add this track to connections traversed
-				connections_traversed.append(track)
-
-				service.add_track(track)
-
-				# break out of while loop to begin new track
+				# break to end making of new tracks, and continue to the combining of tracks
 				break
 
-			# choose random neighbor of station
-			random_neighbor_node = random.choice(list(G[current_node]))
+			# if the number of tracks made is the maximum amount of tracks allowed
+			if (len(service.tracks)) == max_track_amount:
 
-			## # OP COMMENT VOOR  TEST MET BEGIN ALS KRITIEK STATION
-			# ensure that random neighbor station has several edges (otherwise, this will be the end of the track), if there is more than edge
-			# if len(all_edge_list) != 1:
-			# 	while random_neighbor_node in one_edge_list:
-			# 		random_neighbor_node = random.choice(list(G[current_node]))
+				# break to end making of new tracks, and continue to the combining of tracks
+				break
 
-			# ensure that edge hasn't been traversed yet
-			while (current_node, random_neighbor_node) not in all_edge_list and (random_neighbor_node, current_node) not in all_edge_list:
+			# make new track object (one for each track)
+			track = T.track(graph)	
+
+			#### dit misschien in functie: dit is allemaal om, voor zover mogelijk, een starting node te krijgen
+			# die maar één edge heeft
+
+			# make list with every station as much as they have untraversed edges
+			stations_in_edges_amount_list = [elem for t in all_edge_list for elem in t]
+
+			# initalize list for stations with only one untraversed edge
+			one_edge_list = []
+
+			# determine which stations have only one edge, adding these to one_edge_list
+			counter = collections.Counter(stations_in_edges_amount_list)
+			for station, count in counter.items():
+				if count == 1:
+					one_edge_list.append(station)
+
+			# get random starting station that has only one edge, if possible
+			if one_edge_list != []:
+				current_node = random.choice(one_edge_list)
+			else:
+				current_node = random.choice(list(graph.nodes))
+
+			#### eind mogelijke functie
+
+			# loop for each edge in each track
+			while True:
+
+				# checking if current station has unused edges
+				remaining_edge_check = [item for item in all_edge_list if current_node in item]
+				
+				# if current_node has no unused edges
+				if remaining_edge_check == []:
+
+					# if last track made track longer than maximum track length
+					if track.time > max_track_length:
+
+						# remove last edge
+						track.remove_edge()
+
+					# add this track to connections traversed
+					connections_traversed.append(track)
+
+					service.add_track(track)
+
+					# break out of while loop to begin new track
+					break
+
+				# choose random neighbor of station
 				random_neighbor_node = random.choice(list(G[current_node]))
 
-			# get edge time
-			edge_time = G[current_node][random_neighbor_node]['weight']
-			
-			# keeping track of total time of all tracks
-			total_time += edge_time
+				# ensure that edge hasn't been traversed yet
+				while (current_node, random_neighbor_node) not in all_edge_list and (random_neighbor_node, current_node) not in all_edge_list:
+					random_neighbor_node = random.choice(list(G[current_node]))
 
-			# if track is longer than maximum track length
-			if track.time > max_track_length:
+				# get edge time
+				edge_time = G[current_node][random_neighbor_node]['weight']
+				
+				# keeping track of total time of all tracks
+				total_time += edge_time
 
-				# remove last edge to make length less than 120 minutes
-				track.remove_edge()
+				# if track is longer than maximum track length
+				if track.time > max_track_length:
 
-				# add track to list of all tracks
-				connections_traversed.append(track)
+					# remove last edge to make length less than 120 minutes
+					track.remove_edge()
 
-				service.add_track(track)
+					# add track to list of all tracks
+					connections_traversed.append(track)
 
-				# initialize new track object
-				track = T.track(graph)
+					service.add_track(track)
 
-			# if track with new edge is not longer than maximum track length
-			else:
-				# check in what order edge is stored in all_edge_list
-				if (current_node, random_neighbor_node) in all_edge_list:
+					# initialize new track object
+					track = T.track(graph)
 
-					# remove edge from all_edge_list
-					all_edge_list.remove((current_node, random_neighbor_node))
+				# if track with new edge is not longer than maximum track length
+				else:
+					# check in what order edge is stored in all_edge_list
+					if (current_node, random_neighbor_node) in all_edge_list:
 
-				elif (random_neighbor_node, current_node) in all_edge_list:
+						# remove edge from all_edge_list
+						all_edge_list.remove((current_node, random_neighbor_node))
 
-					# remove edge from all_edge_list
-					all_edge_list.remove((random_neighbor_node, current_node))
+					elif (random_neighbor_node, current_node) in all_edge_list:
 
-				# add edge to track
-				track.add_edge((current_node, random_neighbor_node))
+						# remove edge from all_edge_list
+						all_edge_list.remove((random_neighbor_node, current_node))
 
-				# for possibly adding tracks together later on
-				track.add_station(current_node, random_neighbor_node)
+					# add edge to track
+					track.add_edge((current_node, random_neighbor_node))
 
-				# make neighbor node current node, so that this node can go through the while loop to create a track
-				current_node = random_neighbor_node
+					# for possibly adding tracks together later on
+					track.add_station(current_node, random_neighbor_node)
 
-	# list to store new tracks (to add to track object after iteration)
-	tmp_new_track_list = []
+					# make neighbor node current node, so that this node can go through the while loop to create a track
+					current_node = random_neighbor_node
 
-	# iterate over all tracks
-	for i in range(len(service.tracks)):
-		# for each track, iterate over all other tracks
-		for j in range(len(service.tracks)):
-			# ensure that track is not compared to itself
-			if i != j:
-				# if track time combined is less than the maximum time
-				if (service.tracks[i].time + service.tracks[j].time) < max_track_length:
-					# if starting station for both stations is the same
-					if service.tracks[i].edges[0][0] == service.tracks[j].edges[0][0]:
+		# list to store new tracks (to add to track object after iteration)
+		tmp_new_track_list = []
 
-						print("starting + starting")
+		# iterate over all tracks
+		for i in range(len(service.tracks)):
+			# for each track, iterate over all other tracks
+			for j in range(len(service.tracks)):
+				# ensure that track is not compared to itself
+				if i != j:
+					# if track time combined is less than the maximum time
+					if (service.tracks[i].time + service.tracks[j].time) < max_track_length:
+						# if starting station for both stations is the same
+						if service.tracks[i].edges[0][0] == service.tracks[j].edges[0][0]:
 
-						reversed_list = []
-						partially_reversed_list = list(reversed(service.tracks[j].edges))
-						for item in partially_reversed_list:
-							reversed_list.append(tuple(reversed(item)))
+							reversed_list = []
+							partially_reversed_list = list(reversed(service.tracks[j].edges))
+							for item in partially_reversed_list:
+								reversed_list.append(tuple(reversed(item)))
 
-						# make new list with edges of new track
-						combined_list = reversed_list + connections_traversed[i].edges
-						
-						check_list = []
+							# make new list with edges of new track
+							combined_list = reversed_list + connections_traversed[i].edges
+							
+							check_list = []
 
-						# if new route is not in reversed already in tmp_new_track_list:
-						for item in list(reversed(combined_list)):
-							check_list.append(tuple(reversed(item))) 
+							# if new route is not in reversed already in tmp_new_track_list:
+							for item in list(reversed(combined_list)):
+								check_list.append(tuple(reversed(item))) 
 
-						booleanTrack = False
-						# iterate over lists of routes in tmp list
-						for item in tmp_new_track_list:
-							# if check_list is in tmp, than there is no need to add new combined list to 
-							if item == check_list:
-								# set boolean to true, to prevent combined list from being add
-								booleanTrack = True
+							booleanTrack = False
+							# iterate over lists of routes in tmp list
+							for item in tmp_new_track_list:
+								# if check_list is in tmp, than there is no need to add new combined list to 
+								if item == check_list:
+									# set boolean to true, to prevent combined list from being add
+									booleanTrack = True
 
-						if booleanTrack == False:
+							if booleanTrack == False:
 
+								# add new route to tmp list
+								tmp_new_track_list.append(combined_list)
+
+								# indicate that track can later be removed from service
+								service.tracks[i].necessary = False
+								service.tracks[j].necessary = False
+							
+						# if starting station and ending station is the same
+						elif service.tracks[i].edges[0][0] == service.tracks[j].edges[-1][1]:
+
+							combined_list = service.tracks[j].edges + service.tracks[i].edges
+							
 							# add new route to tmp list
 							tmp_new_track_list.append(combined_list)
 
 							# indicate that track can later be removed from service
-							service.tracks[i].necessary = False
+							service.tracks[i].necessary = False					
 							service.tracks[j].necessary = False
-						
-					# if starting station and ending station is the same
-					elif service.tracks[i].edges[0][0] == service.tracks[j].edges[-1][1]:
 
-						print("starting + ending")
+		# ensure that next part is skipped if no new tracks were made
+		if tmp_new_track_list != []:
 
-						combined_list = service.tracks[j].edges + service.tracks[i].edges
-						
-						# add new route to tmp list
-						tmp_new_track_list.append(combined_list)
+			# for all - old - tracks in the service
+			for track in service.tracks:
 
-						# indicate that track can later be removed from service
-						service.tracks[i].necessary = False					
-						service.tracks[j].necessary = False
+				# if track is redundant
+				if track.necessary != True:
 
-	# ensure that next part is skipped if no new tracks were made
-	if tmp_new_track_list != []:
+					service.remove_track(track)
 
-		# for all - old - tracks in the service
-		for track in service.tracks:
+			# for all new track routes in tmp list
+			for item in tmp_new_track_list:
 
-			# if track is redundant
-			if track.necessary != True:
+				# make new track object
+				track = T.track(graph)
 
-				service.remove_track(track)
+				# add new track route to new track object
+				track.add_edge_list(item)
 
-		# for all new track routes in tmp list
-		for item in tmp_new_track_list:
+				# add new track to service to replace redundant tracks
+				service.add_track(track)
 
-			# make new track object
-			track = T.track(graph)
+		# determine amount of tracks service has
+		track_counter = len(service.tracks)	
 
-			# add new track route to new track object
-			track.add_edge_list(item)
+		for i in range(track_counter):
+			print("track: ", end="")
+			print(service.tracks[i].edges)
+			print()
 
-			# add new track to service to replace redundant tracks
-			service.add_track(track)
+		print("track_counter: ", end="")
+		print(track_counter)
 
-	# determine amount of tracks service has
-	track_counter = len(service.tracks)
+		print("service.self score")
+		print(service.s_score)
 
-	# ensure that there are no more tracks than allows
-	while track_counter > max_track_length:
-		# determine track with lowest score
-		# remove from service
-		print("to do")
-	
+		# get score of service
+		score = service.s_score
 
-	for i in range(track_counter):
-		print("track: ", end="")
-		print(service.tracks[i].edges)
-		print()
-
-	print("track_counter: ", end="")
-	print(track_counter)
-
-	score = hlp.get_score(1, track_counter, total_time)
-	print("score: ", end="")
-	print(score)
-
-	print("service.self score")
-	print(service.s_score)
-	
-	return service
+		# remember best scores (unordered)
+		if score > best_score:
+			best_services[i % max_service_amount] = deepcopy(service)
+			best_score = score
+			i += 1
+		
+	# remove empty values as list is not always filled
+	return [service for service in best_services if service != 0]
