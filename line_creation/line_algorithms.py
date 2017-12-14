@@ -75,7 +75,7 @@ def smart_random_walk(Graph, iterator, max_number_of_tracks, max_time):
 
 	# get information from graph to perform algorithm
 	G = Graph.G	
-	minimum_weight = graph.minimal_edge_weight
+	minimum_weight = Graph.minimal_edge_weight
 	nodes = Graph.nodes
 	
 	#build node structure
@@ -102,30 +102,30 @@ def smart_random_walk(Graph, iterator, max_number_of_tracks, max_time):
 		service = sc.service(Graph)
 
 		# builds the service of multiple tracks
-		for k in range(number_of_tracks_in_service):
+		for k in range(max_number_of_tracks):
 
 			# pick random start station 
 			# TODO: make sure node is critical
 			start = random.choice(node_list)
 
-			track = hlp.generate_smart_track(Graph, start, random_time)
+			track = hlp.generate_smart_track(Graph, start, max_time)
 			
 			# add new track to service
 			serivce.add_track(track)
 
-			score = service.s_score
+		score = service.s_score
 
-                # remember best scores (unordered)
-                if score > best_score:
-                        best_services[i % max_service_amount] = service
-                        best_score = score
-                        i += 1
+		# remember best scores (unordered)
+		if score > best_score:
+			best_services[i % max_service_amount] = service
+			best_score = score
+			i += 1
 
-                # update loading bar
-                hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+		# update loading bar
+		hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
-        # remove empty values as list is not always filled
-        return [service for service in best_services if service != 0]
+	# remove empty values as list is not always filled
+	return [service for service in best_services if service != 0]
 
 
 
