@@ -154,7 +154,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 		G = graph.G
 
 		# initialize service
-		service = S.service(Graph)
+		service = S.service(graph)
 
 		# adding all edges as tuples to all_edges_list
 		all_edge_list = [edge for edge in graph.edges]
@@ -274,12 +274,12 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 
 		#print("test")
 
-		if round(new_service.s_score) > 9620: # and round(new_service.s_score) <= 9700:
-			test_counter += 1
-			print("test_counter: ", end="")
-			print(test_counter)
-			print("service.self score: ", end="")
-			print(new_service.s_score)
+		# if round(new_service.s_score) > 9620: # and round(new_service.s_score) <= 9700:
+		# 	test_counter += 1
+		# 	print("test_counter: ", end="")
+		# 	print(test_counter)
+		# 	print("service.self score: ", end="")
+		# 	print(new_service.s_score)
 
 		# print("service.self score: ", end="")
 		# print(new_service.s_score)
@@ -318,9 +318,9 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 			best_services[i % max_service_amount] = deepcopy(service)
 			best_score = new_service.s_score
 			i += 1
-		
+
 		# update loading bar
-		hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+		hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# remove empty values as list is not always filled
 
