@@ -1,0 +1,17 @@
+infrasturctuur: makkelijk vijf punten halen, nog even readme verbeteren (code goed uitleggen)
+algoritmes: met grafiek
+
+maak requirements file in git met benodigde python libraries (zoek internet)
+niet te veel plaatjes in git (geen 70 mb bestand)
+
+modulariteit
+readability (beperkt comments in code en readme) (handleiding)
+bruikbaar
+resultaten zijn reproduceerbaar (vinden waar het kan worden gereproduceerd)
+begrijpbaar
+hardreq: python3, requirements.txt (voor pip libraries) (anders link), lijst van externe libraries in readme, data voor runnen meeleveren
+inleveren als .zip
+runtime in niet belangrijk
+consistent styling
+
+
