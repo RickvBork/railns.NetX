@@ -2,7 +2,6 @@ import helpers as hlp
 import random
 import line_analysis as ana
 import networkx as nx
-import collections # for Hierholzer's
 import line_node_class as N
 import track_class as T
 import service_class as S
@@ -10,6 +9,7 @@ from copy import deepcopy
 import service_class as sc
 from time import sleep
 import itertools # for Hierholzer's
+import collections # maar mogelijk naar helpers
 
 '''
 Pure, random walk. No heuristics. Takes a graph object and an iterator as arguments. Returns an unordered list of 5 best service classes.
@@ -113,7 +113,7 @@ def smart_random_walk(Graph, iterator, max_number_of_tracks, max_time):
 			# add new track to service
 			serivce.add_track(track)
 
-                score = service.s_score
+			score = service.s_score
 
                 # remember best scores (unordered)
                 if score > best_score:
@@ -129,27 +129,26 @@ def smart_random_walk(Graph, iterator, max_number_of_tracks, max_time):
 
 
 
-''''
-Hierholzer's algorithm
-'''
-def hierholzer(graph, iterator):
+def hierholzer(graph, max_track_length, max_track_amount, iterator):
+	'''
+	Hierholzer's algorithm. 
+	'''
 
 	print("======HIERHOLZER======")
 	
-	# determine maximum time of tracks, and maximum amount of tracks per service
-	max_track_length = 180
-	max_track_amount = 20
+	test_counter = 0
+	
+	service_list = []
 
 	# inititialize variables to save and return best service(s)
 	best_score = 0
-	max_service_amount = 5
+	max_service_amount = iterator
 	best_services = [0] * max_service_amount
 
-	# do the walk iterator amount of times
-	for i in range(iterator):		
+	critical_station_list = ['Alkmaar', 'Amsterdam Centraal', 'Arnhem Centraal', 'Breda', 'Den Haag Centraal', 'Den Haag HS', 'Dordrecht', 'Eindhoven', 'Enschede', 'Groningen', 'Haarlem', 'Heerlen', 'Hengelo', 'Leeuwarden', 'Leiden Centraal', 'Maastricht', 'Nijmegen', 'Rotterdam Centraal', 'Schiphol Airport', 'Sittard', 'Tilburg', 'Utrecht Centraal', 'Zwolle']
 
-		# initializing list for all tracks
-		connections_traversed = []
+	# do the walk iterator amount of times
+	for i in range(iterator):
 
 		# for access to the graph
 		G = graph.G
@@ -181,25 +180,7 @@ def hierholzer(graph, iterator):
 			# make new track object (one for each track)
 			track = T.track(graph)
 
-			# make list with every station as much as they have untraversed edges
-			stations_in_edges_amount_list = [elem for t in all_edge_list for elem in t]
-
-			# initalize list for stations with only one untraversed edge
-			one_edge_list = []
-
-			# determine which stations have only one edge, adding these to one_edge_list
-			counter = collections.Counter(stations_in_edges_amount_list)
-			for station, count in counter.items():
-				if count == 1:
-					one_edge_list.append(station)
-
-			# get random starting station that has only one edge, if possible
-			if one_edge_list != []:
-				current_node = random.choice(one_edge_list)
-			else:
-				current_node = random.choice(list(graph.nodes))
-
-			#### eind mogelijke functie
+			current_node = hlp.get_one_edge_node(all_edge_list, graph, service)
 
 			# loop for each edge in each track
 			while True:
@@ -215,9 +196,6 @@ def hierholzer(graph, iterator):
 
 						# remove last edge
 						track.remove_edge()
-
-					# add this track to connections traversed
-					connections_traversed.append(track)
 
 					service.add_track(track)
 
@@ -242,9 +220,6 @@ def hierholzer(graph, iterator):
 
 					# remove last edge to make length less than 120 minutes
 					track.remove_edge()
-
-					# add track to list of all tracks
-					connections_traversed.append(track)
 
 					service.add_track(track)
 
@@ -273,109 +248,76 @@ def hierholzer(graph, iterator):
 					# make neighbor node current node, so that this node can go through the while loop to create a track
 					current_node = random_neighbor_node
 
-		# list to store new tracks (to add to track object after iteration)
-		tmp_new_track_list = []
+		# determine amount of tracks service has
+		#track_counter = len(new_service.tracks)
 
-		# iterate over all tracks
-		for i in range(len(service.tracks)):
-			# for each track, iterate over all other tracks
-			for j in range(len(service.tracks)):
-				# ensure that track is not compared to itself
-				if i != j:
-					# if track time combined is less than the maximum time
-					if (service.tracks[i].time + service.tracks[j].time) < max_track_length:
-						# if starting station for both stations is the same
-						if service.tracks[i].edges[0][0] == service.tracks[j].edges[0][0]:
+		# for i in range(track_counter):
+		# 	if service.tracks[i].
 
-							reversed_list = []
-							partially_reversed_list = list(reversed(service.tracks[j].edges))
-							for item in partially_reversed_list:
-								reversed_list.append(tuple(reversed(item)))
 
-							# make new list with edges of new track
-							combined_list = reversed_list + connections_traversed[i].edges
-							
-							check_list = []
-
-							# if new route is not in reversed already in tmp_new_track_list:
-							for item in list(reversed(combined_list)):
-								check_list.append(tuple(reversed(item))) 
-
-							booleanTrack = False
-							# iterate over lists of routes in tmp list
-							for item in tmp_new_track_list:
-								# if check_list is in tmp, than there is no need to add new combined list to 
-								if item == check_list:
-									# set boolean to true, to prevent combined list from being add
-									booleanTrack = True
-
-							if booleanTrack == False:
-
-								# add new route to tmp list
-								tmp_new_track_list.append(combined_list)
-
-								# indicate that track can later be removed from service
-								service.tracks[i].necessary = False
-								service.tracks[j].necessary = False
-							
-						# if starting station and ending station is the same
-						elif service.tracks[i].edges[0][0] == service.tracks[j].edges[-1][1]:
-
-							combined_list = service.tracks[j].edges + service.tracks[i].edges
-							
-							# add new route to tmp list
-							tmp_new_track_list.append(combined_list)
-
-							# indicate that track can later be removed from service
-							service.tracks[i].necessary = False					
-							service.tracks[j].necessary = False
-
-		# ensure that next part is skipped if no new tracks were made
-		if tmp_new_track_list != []:
-
-			# for all - old - tracks in the service
-			for track in service.tracks:
-
-				# if track is redundant
-				if track.necessary != True:
-
-					# remove track from service
-					service.remove_track(track)
-
-			# for all new track routes in tmp list
-			for item in tmp_new_track_list:
-
-				# make new track object
-				track = T.track(graph)
-
-				# add new track route to new track object
-				track.add_edge_list(item)
-
-				# add new track to service to replace redundant tracks
-				service.add_track(track)
+		# optimization: combine two tracks to one track, in some situations; see helpers.py
+		new_service = hlp.track_combination(service, max_track_length, graph)
+		#new_service = service
 
 		# determine amount of tracks service has
-		track_counter = len(service.tracks)	
+		track_counter = len(new_service.tracks)
 
-		for i in range(track_counter):
-			print("track: ", end="")
-			print(service.tracks[i].edges)
-			print()
 
-		print("track_counter: ", end="")
-		print(track_counter)
+		# for i in range(track_counter):
+		# 	print("track: ", end="")
+		# 	print(service.tracks[i].edges)
+		# 	print()
 
-		print("service.self score")
-		print(service.s_score)
+		# print("track_counter: ", end="")
+		# print(track_counter)
 
-		# get score of service
-		score = service.s_score
+		#print("test")
+
+		if round(new_service.s_score) > 9620: # and round(new_service.s_score) <= 9700:
+			test_counter += 1
+			print("test_counter: ", end="")
+			print(test_counter)
+			print("service.self score: ", end="")
+			print(new_service.s_score)
+
+		# print("service.self score: ", end="")
+		# print(new_service.s_score)
+
+
+
+		######################
+		# track_counter2 = 0
+
+		# if round(new_service.s_score) == 9380:
+		# 	for i in range(track_counter):
+		# 		print("track: ", end="")
+		# 		print(service.tracks[i].edges)
+		# 		for j in range(len(service.tracks[i].edges)):
+		# 			track_counter2 += 1
+		# 			print(track_counter2)
+
+		# 		print()
+
+		# if round(new_service.s_score) == 9900:
+		# 	for i in range(track_counter):
+		# 		print("track: ", end="")
+		# 		print(service.tracks[i].edges)
+		# 		for j in range(len(service.tracks[i].edges)):
+		# 			track_counter2 += 1
+		# 			print(track_counter2)
+		# 		print()
+		############################	
+
+		#print()
+
+		service_list.append(deepcopy(service))
 
 		# remember best scores (unordered)
-		if score > best_score:
+		if new_service.s_score > best_score:
 			best_services[i % max_service_amount] = deepcopy(service)
-			best_score = score
+			best_score = new_service.s_score
 			i += 1
 		
 	# remove empty values as list is not always filled
-	return [service for service in best_services if service != 0]
+	#return [service for service in best_services if service != 0]
+	return service_list
