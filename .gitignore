@@ -5,7 +5,7 @@
 
 # ignore content folders
 trash/
-visualization/
+#visualization/
 
 # ignore all .txt files, except requirements & feedback
 *.txt
