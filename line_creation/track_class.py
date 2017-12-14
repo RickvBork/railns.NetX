@@ -4,18 +4,27 @@
 import line_graph_class as grc
 
 class track:
-	def __init__(self, graph):
+	def __init__(self, G):
 
-		self.G = graph.G
-		self.critical_edge_list = graph.critical_edge_list
+		# AANPSSING
+		self.G = G
+
+		# OUDE VERSIE
+		# self.G = graph.G
+		# self.critical_edge_list = graph.critical_edge_list
+
 		self.edges = []	
 		self.critical_lines_traversed = []	
 		self.time = 0
 		self.stations = []
 		self.necessary = True
 
-		# AANPASSEN TOT LIJST MET EDGES!
+		# GET_TIME nutteloos?
 		self.time = self.get_time()
+
+	# hashes a track for quick lookup
+	def __hash__(self):
+		return hash(tuple(self.edges))
 
 	def get_time(self):
 		time = 0
@@ -37,6 +46,8 @@ class track:
 		# edge = ('station a', 'station b')
 		# check if current last station is starting point of new edge since trains cannot teleport
 		if self.edges != []:
+
+			# WAAROM VERSCHIL MAKEN?
 			current_last_station = self.edges[-1][1]
 			if current_last_station == edge[0]:
 				self.edges.append(edge)	
@@ -70,10 +81,15 @@ class track:
 	def update_critical_lines_traversed(self):
 		edges = self.edges
 		for edge in edges:
-			station0 = edge[0]
-			station1 = edge[1]
-			edge_reversed = (station1, station0)
-			if (edge in self.critical_edge_list or edge_reversed in self.critical_edge_list):
+			station_0 = edge[0]
+			station_1 = edge[1]
+
+			# OUDE VERSIE
+			edge_reversed = (station_1, station_0)
+			# if (edge in self.critical_edge_list or edge_reversed in self.critical_edge_list):
+
+			# AANPSSSING
+			if self.G[station_0][station_1]['color'] == 'r':
 				if (edge not in self.critical_lines_traversed and edge_reversed not in self.critical_lines_traversed):
 					self.critical_lines_traversed.append(edge)
 					#print("add critical line traversed")
@@ -85,4 +101,3 @@ class track:
 			
 		if to_node not in self.stations:
 			self.stations.append(to_node)
-

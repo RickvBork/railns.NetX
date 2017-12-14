@@ -8,10 +8,18 @@ track is object as defined in track_class.py
 '''
 
 class service:
-	def __init__(self, graph_c):
+	def __init__(self, G):
 		self.tracks = []
-		self.graph = graph_c
-		self.all_critical_edges = graph_c.critical_edge_list 
+
+		# OPTIMALISATIE! GEEN GRAAF! PASSEER ALLEEN critical edge list als arg
+		self.G = G
+
+		# Een int te geven? Want meer is niet nodig voor score
+		# self.all_critical_edges = graph_c.critical_edge_list
+
+		# tijdelijk even leger lijst van 20 lang voor score
+		self.all_critical_edges = [0] * 20
+
 		self.critical_edges_traversed = []
 		self.all_edges_traversed = []
 		self.time = 0
@@ -29,10 +37,15 @@ class service:
 
 	def update_critical_edges_traversed(self, track):
 		for edge in track.edges:
-			station0 = edge[0]
-			station1 = edge[1]
-			edge_reversed = (station1, station0)
-			if (edge in self.all_critical_edges or edge_reversed in self.all_critical_edges):
+			station_0 = edge[0]
+			station_1 = edge[1]
+
+			# OUDE VERSIE
+			edge_reversed = (station_1, station_0)
+			# if (edge in self.all_critical_edges or edge_reversed in self.all_critical_edges):
+
+			# AANPASSING (track.G[x][y]['color'] is hetzelfde...)
+			if self.G[station_0][station_1]['color'] == 'r':
 				if (edge not in self.critical_edges_traversed) and (edge_reversed not in self.critical_edges_traversed):
 					self.critical_edges_traversed.append(edge)
 

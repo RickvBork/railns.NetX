@@ -7,6 +7,7 @@ import track_class as T
 import service_class as S
 from copy import deepcopy
 import service_class as sc
+# from time import sleep
 from time import sleep
 import itertools # for Hierholzer's
 import collections # maar mogelijk naar helpers
@@ -35,7 +36,7 @@ def random_walk(Graph, iterator, max_number_of_tracks, max_time):
 	for j in range(iterator):
 
 		# build service loop
-		service = sc.service(Graph)
+		service = sc.service(G)
 
 		# rand number of tracks 1 up to including 7
 		number_of_tracks_in_service = random.randint(1, max_number_of_tracks)
