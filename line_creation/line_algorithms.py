@@ -145,7 +145,8 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 	max_service_amount = iterator
 	best_services = [0] * max_service_amount
 
-	critical_station_list = ['Alkmaar', 'Amsterdam Centraal', 'Arnhem Centraal', 'Breda', 'Den Haag Centraal', 'Den Haag HS', 'Dordrecht', 'Eindhoven', 'Enschede', 'Groningen', 'Haarlem', 'Heerlen', 'Hengelo', 'Leeuwarden', 'Leiden Centraal', 'Maastricht', 'Nijmegen', 'Rotterdam Centraal', 'Schiphol Airport', 'Sittard', 'Tilburg', 'Utrecht Centraal', 'Zwolle']
+	critical_station_list = ['Alkmaar', 'Amsterdam Centraal', 'Den Haag Centraal', 'Gouda', 'Haarlem', 'Rotterdam Centraal', 'Zaandam']
+	#critical_station_list = ['Alkmaar', 'Amsterdam Centraal', 'Arnhem Centraal', 'Breda', 'Den Haag Centraal', 'Den Haag HS', 'Dordrecht', 'Eindhoven', 'Enschede', 'Groningen', 'Haarlem', 'Heerlen', 'Hengelo', 'Leeuwarden', 'Leiden Centraal', 'Maastricht', 'Nijmegen', 'Rotterdam Centraal', 'Schiphol Airport', 'Sittard', 'Tilburg', 'Utrecht Centraal', 'Zwolle']
 
 	# do the walk iterator amount of times
 	for i in range(iterator):
@@ -180,7 +181,8 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 			# make new track object (one for each track)
 			track = T.track(graph)
 
-			current_node = hlp.get_one_edge_node(all_edge_list, graph, service)
+			#current_node = hlp.get_one_edge_node(all_edge_list, graph, service)
+			current_node = random.choice(critical_station_list)
 
 			# loop for each edge in each track
 			while True:
@@ -256,8 +258,8 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 
 
 		# optimization: combine two tracks to one track, in some situations; see helpers.py
-		new_service = hlp.track_combination(service, max_track_length, graph)
-		#new_service = service
+		#new_service = hlp.track_combination(service, max_track_length, graph)
+		new_service = service
 
 		# determine amount of tracks service has
 		track_counter = len(new_service.tracks)
