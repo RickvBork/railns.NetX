@@ -292,7 +292,8 @@ seperate function for generate_random_track
 '''
 def generate_random_track(Graph, start, max_track_length):
 	
-	track = tc.track(Graph)
+	G = Graph.G
+	track = tc.track(G)
 	
 	while track.time < max_track_length:
 
@@ -313,7 +314,9 @@ def generate_random_track(Graph, start, max_track_length):
 
 def generate_smart_random_track(Graph, start, max_track_length):
 
-	track = tc.track(Graph)	
+	G = Graph.G
+
+	track = tc.track(G)	
 	start = start.name
 
 	while track.time < max_track_length:

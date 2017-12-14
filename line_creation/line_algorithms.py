@@ -36,7 +36,7 @@ def random_walk(Graph, iterator, max_number_of_tracks, max_time):
 	for j in range(iterator):
 
 		# build service loop
-		service = sc.service(G)
+		service = sc.service(Graph)
 
 		# rand number of tracks 1 up to including 7
 		number_of_tracks_in_service = random.randint(1, max_number_of_tracks)
@@ -127,8 +127,6 @@ def smart_random_walk(Graph, iterator, max_number_of_tracks, max_time):
 
 	# remove empty values as list is not always filled
 	return [service for service in best_services if service != 0]
-
-
 
 def hierholzer(graph, max_track_length, max_track_amount, iterator):
 	'''
