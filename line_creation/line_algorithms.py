@@ -145,7 +145,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 	best_services = [0] * max_service_amount
 
 	# initiate loading bar
-	#hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# do the walk iterator amount of times
 	for i in range(iterator):
@@ -320,7 +320,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 			i += 1
 		
 		# update loading bar
-		#hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+		hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# remove empty values as list is not always filled
 
