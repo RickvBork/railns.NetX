@@ -8,18 +8,16 @@ track is object as defined in track_class.py
 '''
 
 class service:
-	def __init__(self, G):
+	def __init__(self, Graph):
 		self.tracks = []
 
 		# OPTIMALISATIE! GEEN GRAAF! PASSEER ALLEEN critical edge list als arg
-		self.G = G
+		self.G = Graph.G
 
 		# Een int te geven? Want meer is niet nodig voor score
 		# self.all_critical_edges = graph_c.critical_edge_list
 
-		# tijdelijk even leger lijst van 20 lang voor score
-		self.all_critical_edges = [0] * 20
-
+		self.all_critical_edges = Graph.critical_edge_list
 		self.critical_edges_traversed = []
 		self.all_edges_traversed = []
 		self.time = 0
