@@ -3,6 +3,7 @@ import line_node_class as N
 import os, errno
 import track_class as tc
 import random
+import helpers as hlp
 
 '''
 Helpers file.
@@ -83,9 +84,6 @@ def get_prefered_neighbors(graph, starting_station, all_connections, track):
 	# get list of  critical neighbors of starting_station
 	critical_neighbors = [station for station in list(graph.G[starting_station]) if station in graph.critical_station_list]
 
-	for i in range(track + 1):
-		print(all_connections['tracks'][str(i)])
-	print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 	prefered_neighbors = list(neighbors)
 	for i in range(track + 1):	
 		for neighbor in neighbors:
@@ -97,6 +95,7 @@ def get_prefered_neighbors(graph, starting_station, all_connections, track):
 	print(prefered_neighbors)
 	
 	return prefered_neighbors
+
 
 def test(edge, critical_edges, critical_edges_traversed):
 
@@ -197,12 +196,12 @@ def generate_smart_track(Graph, start, max_track_length):
 	while track.time < max_track_length:
 				
 		# get list of critical neighbours of starting_station
-		critical_neighbors = [station for station in list(Graph.G[starting_station]) if station in graph.critical_station_list]
+		critical_neighbors = [station for station in list(Graph.G[start]) if station in Graph.critical_station_list]
 	
-		prefered_neighbors = hlp.get_prefered_neighbors(graph, starting_station, all_connections, track)
+		prefered_neighbors = hlp.get_prefered_neighbors(Graph, start, Graph.edges, track)
 
 		if prefered_neighbors == []:
-			random_neighbor = random.choice(list(G[starting_station]))
+			random_neighbor = random.choice(list(Graph.G[start]))
 		else: 
 			random_neighbor = random.choice(prefered_neighbors)
 
@@ -211,11 +210,11 @@ def generate_smart_track(Graph, start, max_track_length):
 		# update start
 		start = neighbor
 
-        # make sure track is minimum of one edge
-        if len(track.edges) != 1:
-                track.remove_edge()
+	# make sure track is minimum of one edge
+	if len(track.edges) != 1:
+		track.remove_edge()
 
-        return track
+	return track
 
 
 
