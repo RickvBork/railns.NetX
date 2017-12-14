@@ -6,10 +6,10 @@ takes service oject consisting of several tracks. Tries to optimize service by i
 import hillclimber_helper as hh
 import helpers as hlp
 import random
-import line_analysis as ana
+import analysis as ana
 import networkx as nx
 import collections # for Hierholzer's
-import line_node_class as N
+import node_class as N
 from copy import deepcopy
 import track_class as tc
 

@@ -1,13 +1,13 @@
 # run in terminal: exec(open("./initialize_tracks.py").read())
 # to run this script
 
-import line_algorithms as alg
-import line_analysis as ana
-import line_graph_class
+import algorithms as alg
+import analysis as ana
+import graph_class
 import helpers as hlp
 import csv
 import numpy
-import line_edges_class as tc2
+import edges_class as tc2
 import service_class as sc
 import track_class as tc3
 

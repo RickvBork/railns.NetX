@@ -1,7 +1,7 @@
 '''
 @author Team Stellar Heuristiek
 '''
-import line_graph_class as grc
+import graph_class as grc
 
 class track:
 	def __init__(self, G):
