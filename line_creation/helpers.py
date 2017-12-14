@@ -216,7 +216,7 @@ def generate_smart_random_track(Graph, start, max_track_length):
 
 	return track
 
-def get_one_edge_node(all_edge_list, graph, service):
+def get_one_edge_node(all_edge_list, G, service):
 
 	# make list with every station as much as they have untraversed edges
 	stations_in_edges_amount_list = [elem for t in all_edge_list for elem in t]
@@ -246,12 +246,12 @@ def get_one_edge_node(all_edge_list, graph, service):
 		current_node = random.choice(one_edge_list)
 	# else get random starting node
 	else:
-		current_node = random.choice(list(graph.nodes))
+		current_node = random.choice(list(G.nodes))
 
 	return current_node
 
 
-def track_combination(service, max_track_length, graph):
+def track_combination(service, max_track_length, G):
 
 	# list to store new tracks (to add to track object after iteration)
 	tmp_new_track_list = []
@@ -328,7 +328,7 @@ def track_combination(service, max_track_length, graph):
 		for item in tmp_new_track_list:
 
 			# make new track object
-			track = tc.track(graph)
+			track = tc.track(G)
 
 			# add new track route to new track object
 			track.add_edge_list(item)
