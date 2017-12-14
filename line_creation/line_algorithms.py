@@ -108,10 +108,10 @@ def smart_random_walk(Graph, iterator, max_number_of_tracks, max_time):
 			# TODO: make sure node is critical
 			start = random.choice(node_list)
 
-			track = hlp.generate_smart_track(Graph, start, max_time)
+			track = hlp.generate_smart_random_track(Graph, start, max_time)
 			
 			# add new track to service
-			serivce.add_track(track)
+			service.add_track(track)
 
 		score = service.s_score
 
@@ -122,7 +122,7 @@ def smart_random_walk(Graph, iterator, max_number_of_tracks, max_time):
 			i += 1
 
 		# update loading bar
-		hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+		hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# remove empty values as list is not always filled
 	return [service for service in best_services if service != 0]
