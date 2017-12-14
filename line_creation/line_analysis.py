@@ -29,11 +29,14 @@ def draw_graph(Graph, service = None):
 			node_color_map.append(nx.get_node_attributes(G, 'color')[node])
 			node_size_map.append(nx.get_node_attributes(G, 'size')[node])
 
+		edge_weight_map = nx.get_edge_attributes(G,'weight')
+		nx.draw_networkx_edge_labels(G, pos, edge_labels = edge_weight_map)
+
 		# list comprehension to get edge color map
 		edge_color_map = [nx.get_edge_attributes(G,'color')[edge] for edge in G.edges()]
 
 		# draw everything except labels and show plot
-		nx.draw_networkx(G, pos, node_color = node_color_map, node_size = node_size_map, edge_color = edge_color_map, with_labels = True)
+		nx.draw_networkx(G, pos, node_color = node_color_map, node_size = node_size_map, edge_color = edge_color_map, with_labels = False)
 
 		# show plot
 		plt.show()

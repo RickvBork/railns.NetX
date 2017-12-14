@@ -163,3 +163,124 @@ def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length
 	if iteration == total: 
 		print()
 
+'''
+Check if added track creates a track with a junction at the end.
+'''
+def update_hash_dict(Track, Node, edge, hash_dict):
+
+	if len(Node.neighbors) > 2:
+		print('\n\t!___Found Junction___!')
+		print('\tHash Point: {}'.format(Node.name))
+		print('\tHash track:\n\t{}'.format(Track.edges))
+
+		# put the walked edge in dict
+		key = hash(Track)
+		try:
+			walked_edges = hash_dict[key]
+			print('\tOld track found')
+		except KeyError:
+			hash_dict[key] = [edge]
+			print('\tNew track found')
+	
+	return hash_dict
+
+'''
+Always returns the first valid neighbor of a list of neighbor Nodes. Always walks forward.
+'''
+def get_neighbor(Node):
+
+	print('\nCurrent Node: {}'.format(Node.name))
+	for neighbor in Node.neighbors:
+		if neighbor != Node.previous: 
+			if neighbor.previous == None:
+				print('\tChosen Neighbor: {}'.format(neighbor.name))
+				return False, neighbor
+			else:
+				print('Found Loop!')
+				return True, neighbor
+		else:
+			print('\tNeglected {}'.format(neighbor.name))
+
+'''
+Checks wether a node is a junction.
+'''
+def is_junction(Node):
+
+	if len(Node.neighbors) > 2:
+		print('\t{} is a junction'.format(Node.name))
+		return True
+	else:
+		print('\t{} is not a junction'.format(Node.name))
+		return False
+
+'''
+Hashes a track leading up to a junction and adds the next walked edge.
+'''
+def update_new_path(Track, path, edge):
+
+	key = hash(Track)
+	print('\n\tHashed New Track:\n\t{}\n'.format(Track.edges))
+	print('\tAdded Edge: {}'.format(edge))
+	path[key] = [edge]
+	return path
+
+def update_old_path(Track, path, edge):
+
+	print('\n\tHashed Old Track:\n\t{}\n'.format(Track.edges))
+	print('\tAdded Edge: {}'.format(edge))
+	key = hash(Track)
+	path[key].append(edge)
+	return path
+
+'''
+Returns a list of junction edges for a given track which ends in a junction Node.
+'''
+def junction_edges(Track, path):
+
+	key = hash(Track)
+	junction_edges = path[key]
+	return junction_edges
+
+'''
+Checks neighbors of a junction Node against the previously walked Node, and all directed junction edges that can be created with the neighbors.
+'''
+def get_junction_neighbor(Start, junction_edges):
+	
+	for neighbor in Start.neighbors:
+		if neighbor != Start.previous:
+			edge = (Start.name, neighbor.name)
+			if not edge in junction_edges:
+				print('New junction Edge found: {}'.format(edge))
+				return neighbor
+			else:
+				print('{} Old junction Edge been walked'.format(edge))
+		else:
+			print('{} is Previous'.format(neighbor))
+	return None
+
+'''
+Links two nodes. It sets the previous of the last node to the first node.
+'''
+def link_nodes(Start, Neighbor):
+
+	print('\n\t++++++++++Link Nodes++++++++++')
+	print('\n\tCurrent start is: {}'.format(Start.name))
+	Neighbor.previous = Start
+	print('\tSet previous of {}, to {}'.format(Neighbor.name, Start.name))
+	Start = Neighbor
+	print('\tNew start is: {}\n'.format(Start.name))
+	return Start
+
+'''
+Delinks two nodes. It sets the previous of the last node to 'None' and returns the node before the last node as the new start.
+'''
+def delink_nodes(Start):
+
+	print('\n\t----------Delink Nodes----------')
+	print('\n\tCurrent start is: {}'.format(Start.name))
+	previous = Start.previous
+	print('\tSet previous of {}, to \'None\''.format(Start.name))
+	Start.previous = None
+	Start = previous
+	print('\tNew start is: {}\n'.format(Start.name))
+	return Start

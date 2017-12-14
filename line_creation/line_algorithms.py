@@ -8,7 +8,7 @@ import track_class as T
 import service_class as S
 from copy import deepcopy
 import service_class as sc
-from time import sleep
+# from time import sleep
 
 '''
 Pure, random walk. No heuristics. Takes a graph object and an iterator as arguments. Returns an unordered list of 5 best service classes.
@@ -35,10 +35,10 @@ def random_walk(Graph, iterator):
 	for j in range(iterator):
 
 		# build service loop
-		service = sc.service(Graph)
+		service = sc.service(G)
 		for k in range(random.randint(1, 7)):
 
-			track = T.track(Graph)
+			track = T.track(G)
 			max_track_length = random.randint(minimum_weight, 120)
 			start = random.choice(node_list)
 
