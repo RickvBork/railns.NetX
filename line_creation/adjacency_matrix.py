@@ -3,9 +3,9 @@
 used to test functions, file is ignored by git.
 '''
 
-import line_algorithms as alg
-import line_analysis as ana
-import line_graph_class
+import algorithms as alg
+import analysis as ana
+import graph_class
 import helpers as hlp
 import csv
 import networkx

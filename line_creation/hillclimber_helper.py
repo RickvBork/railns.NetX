@@ -4,10 +4,10 @@ helper for hillclimber, based on random_walk
 
 import helpers as hlp
 import random
-import line_analysis as ana
+import analysis as ana
 import networkx as nx
 import collections # for Hierholzer's
-import line_node_class as N
+import node_class as N
 # import line_edges_class as E
 from copy import deepcopy
 import track_class as tc

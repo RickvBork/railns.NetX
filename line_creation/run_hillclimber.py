@@ -2,9 +2,9 @@
 used to test functions, file is ignored by git.
 '''
 
-import line_algorithms as alg
-import line_analysis as ana
-import line_graph_class
+import algorithms as alg
+import analysis as ana
+import graph_class
 import helpers as hlp
 import csv
 import numpy
@@ -22,7 +22,7 @@ path_stations_file = '../data/StationsNationaal.csv'
 path_tracks_file = '../data/ConnectiesNationaal.csv'
 
 # initialise graph class
-Graph = line_graph_class.Graph
+Graph = graph_class.Graph
 
 # make graph instance (Noord Holland)
 g = Graph("NH", path_stations_file, path_tracks_file)
