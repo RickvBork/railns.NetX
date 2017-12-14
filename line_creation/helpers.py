@@ -6,6 +6,7 @@ import random
 import collections # for Hierholzer's
 import helpers as hlp
 
+
 '''
 Helpers file.
 
@@ -79,22 +80,20 @@ def ordered_counter(score_list):
 
 	return ordered_dict
 
-def get_prefered_neighbors(graph, starting_station, all_connections, track):
+def get_prefered_neighbors(graph, starting_station, track):
+	'''
+	Takes graph, and a track (in progress) to a starting station. 
+	Returns all neighbors from starting stations where tracks hasn't been.
+	'''
 	# get list of neighbors of starting station
 	neighbors = [station for station in list(graph.G[starting_station])]
-	# get list of  critical neighbors of starting_station
-	critical_neighbors = [station for station in list(graph.G[starting_station]) if station in graph.critical_station_list]
 
 	prefered_neighbors = list(neighbors)
-	for i in range(track + 1):	
-		for neighbor in neighbors:
-			if ((starting_station, neighbor) in all_connections['tracks'][str(i)] or (starting_station, neighbor) in all_connections['tracks'][str(i)]):
-				#print(starting_station, neighbor)
-				if neighbor in prefered_neighbors:
-					prefered_neighbors.remove(neighbor)
-					
-	print(prefered_neighbors)
-	
+
+	for neighbor in neighbors:
+		if ((starting_station, neighbor) in track.edges or (neighbor, starting_station) in track.edges):
+			prefered_neighbors.remove(neighbor)
+
 	return prefered_neighbors
 
 
@@ -189,7 +188,7 @@ def generate_random_track(Graph, start, max_track_length):
 
 	return track 
 
-def generate_smart_track(Graph, start, max_track_length):
+def generate_smart_random_track(Graph, start, max_track_length):
 
 	track = tc.track(Graph)	
 	start = start.name
@@ -199,7 +198,7 @@ def generate_smart_track(Graph, start, max_track_length):
 		# get list of critical neighbours of starting_station
 		critical_neighbors = [station for station in list(Graph.G[start]) if station in Graph.critical_station_list]
 	
-		prefered_neighbors = hlp.get_prefered_neighbors(Graph, start, Graph.edges, track)
+		prefered_neighbors = hlp.get_prefered_neighbors(Graph, start, track)
 
 		if prefered_neighbors == []:
 			random_neighbor = random.choice(list(Graph.G[start]))
@@ -209,7 +208,7 @@ def generate_smart_track(Graph, start, max_track_length):
 		track.add_edge((start, random_neighbor))
 
 		# update start
-		start = neighbor
+		start = random_neighbor
 
 	# make sure track is minimum of one edge
 	if len(track.edges) != 1:
