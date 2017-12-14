@@ -373,7 +373,7 @@ def get_one_edge_node(all_edge_list, graph, service):
 
 	return current_node
 
-def track_combination(service, max_track_length, G):
+def track_combination(service, max_track_length, graph):
 
 	# list to store new tracks (to add to track object after iteration)
 	tmp_new_track_list = []
