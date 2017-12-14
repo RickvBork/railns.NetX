@@ -146,9 +146,6 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 	max_service_amount = iterator
 	best_services = [0] * max_service_amount
 
-	#critical_station_list = ['Alkmaar', 'Amsterdam Centraal', 'Den Haag Centraal', 'Gouda', 'Haarlem', 'Rotterdam Centraal', 'Zaandam']
-	#critical_station_list = ['Alkmaar', 'Amsterdam Centraal', 'Arnhem Centraal', 'Breda', 'Den Haag Centraal', 'Den Haag HS', 'Dordrecht', 'Eindhoven', 'Enschede', 'Groningen', 'Haarlem', 'Heerlen', 'Hengelo', 'Leeuwarden', 'Leiden Centraal', 'Maastricht', 'Nijmegen', 'Rotterdam Centraal', 'Schiphol Airport', 'Sittard', 'Tilburg', 'Utrecht Centraal', 'Zwolle']
-
 	# initiate loading bar
 	#hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
@@ -159,7 +156,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 		G = graph.G
 
 		# initialize service
-		service = S.service(G)
+		service = S.service(graph)
 
 		# adding all edges as tuples to all_edges_list
 		all_edge_list = [edge for edge in graph.edges]
