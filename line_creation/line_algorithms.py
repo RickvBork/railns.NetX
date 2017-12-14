@@ -185,7 +185,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 			# make new track object (one for each track)
 			track = T.track(G)
 
-			current_node = hlp.get_one_edge_node(all_edge_list, G, service)
+			current_node = hlp.get_one_edge_node(all_edge_list, graph, service)
 			#current_node = random.choice(critical_station_list)
 
 			# loop for each edge in each track

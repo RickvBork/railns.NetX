@@ -339,7 +339,7 @@ def generate_smart_random_track(Graph, start, max_track_length):
 
 	return track
 
-def get_one_edge_node(all_edge_list, G, service):
+def get_one_edge_node(all_edge_list, graph, service):
 
 	# make list with every station as much as they have untraversed edges
 	stations_in_edges_amount_list = [elem for t in all_edge_list for elem in t]
@@ -369,7 +369,7 @@ def get_one_edge_node(all_edge_list, G, service):
 		current_node = random.choice(one_edge_list)
 	# else get random starting node
 	else:
-		current_node = random.choice(list(G.nodes))
+		current_node = random.choice(list(graph.nodes))
 
 	return current_node
 
