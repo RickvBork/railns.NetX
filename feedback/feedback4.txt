@@ -1,0 +1,23 @@
+infrstructuur:
+	zeggen dat git mooi is
+	check template readme!
+	readme per folder over welke functies in script zitten (maar geen comments) alleen wat code doet
+	prerequests
+	google: readme template
+	code uitleggen mag evt in lokale readme
+	docstring in functies (vooral return en input parameters uitleggen)
+
+datastructuur:
+	volledige implementatie van classes (nodes, track, service) is laatste punt waard
+
+	bestand van git verwijderen met git rm file.txt
+
+	git opruimen en structureren (let op imports)
+	
+
+	Experimenten:
+Dimitri heeft nu tabellen, Quinten stelt voor om histogram te maken. Thom gaat Dimitri hierbij helpen.
+ 
+	Algoritmes:
+depth first en verbetering hierholzer en verbetering hillclimber
+	hillclimber: simulated annealing met temperatuur?
