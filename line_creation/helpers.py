@@ -231,18 +231,18 @@ def get_one_edge_node(all_edge_list, graph, service):
 			one_edge_list.append(station)
 
 	# #make list for nodes with one edge, and the node at other end of edge is critical
-	# super_special = []
+	super_special = []
 
-	# # fill super special list
-	# for station in one_edge_list:
-	# 	if station in dict(service.all_critical_edges):
-	# 		super_special.append(station)
+	# fill super special list
+	for station in one_edge_list:
+		if station in dict(service.all_critical_edges):
+			super_special.append(station)
 
-	# # get random starting station that has only one edge with other node critical, if possible
-	# if super_special != []:
-	# 	current_node = random.choice(super_special)
-	# else get random starting node with only one edge
-	if one_edge_list != []:
+	# get random starting station that has only one edge with other node critical, if possible
+	if super_special != []:
+		current_node = random.choice(super_special)
+	#else get random starting node with only one edge
+	elif one_edge_list != []:
 		current_node = random.choice(one_edge_list)
 	# else get random starting node
 	else:
