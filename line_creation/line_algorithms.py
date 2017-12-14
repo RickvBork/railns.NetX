@@ -149,7 +149,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 	#critical_station_list = ['Alkmaar', 'Amsterdam Centraal', 'Arnhem Centraal', 'Breda', 'Den Haag Centraal', 'Den Haag HS', 'Dordrecht', 'Eindhoven', 'Enschede', 'Groningen', 'Haarlem', 'Heerlen', 'Hengelo', 'Leeuwarden', 'Leiden Centraal', 'Maastricht', 'Nijmegen', 'Rotterdam Centraal', 'Schiphol Airport', 'Sittard', 'Tilburg', 'Utrecht Centraal', 'Zwolle']
 
 	# initiate loading bar
-	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+	#hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# do the walk iterator amount of times
 	for i in range(iterator):
@@ -158,7 +158,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 		G = graph.G
 
 		# initialize service
-		service = S.service(graph)
+		service = S.service(G)
 
 		# adding all edges as tuples to all_edges_list
 		all_edge_list = [edge for edge in graph.edges]
@@ -182,10 +182,10 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 				break
 
 			# make new track object (one for each track)
-			track = T.track(graph)
+			track = T.track(G)
 
-			#current_node = hlp.get_one_edge_node(all_edge_list, graph, service)
-			current_node = random.choice(critical_station_list)
+			current_node = hlp.get_one_edge_node(all_edge_list, G, service)
+			#current_node = random.choice(critical_station_list)
 
 			# loop for each edge in each track
 			while True:
@@ -229,7 +229,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 					service.add_track(track)
 
 					# initialize new track object
-					track = T.track(graph)
+					track = T.track(G)
 
 				# if track with new edge is not longer than maximum track length
 				else:
@@ -324,9 +324,11 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 			i += 1
 		
 		# update loading bar
-		hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+		#hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# remove empty values as list is not always filled
+
+	ana.draw_graph(graph,service)
 
 	return [service for service in best_services if service != 0]
 	#return service_list
