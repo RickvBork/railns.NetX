@@ -12,7 +12,9 @@ Route determining is done both by using a random walk and by random walk with ce
 ## Getting started
 
 Download the project from the current git directory:
-*
+*https://github.com/RickvBork/railns.NetX.git
+
+Next run the requirements.txt. See **Prerequisites**.
 
 ### Prerequisites
 
@@ -38,17 +40,35 @@ until finished
 
 End with an example of getting some data out of the system or using it for a little demo
 
-## Running the tests - ??????????
+## Running the algorithms
 
-Explain how to run the automated tests for this system
+TODO:
+User runs main.py
+Console prints a choice to load csv file:
+*Noord Holland 
+*Netherlands
 
-### Break down into end to end tests - ??????????????
+Next, the console prints a choice list of algorithms. Here, if applicable, the user can set:
+*Maximum track number per service
+*Maximum track length 
+*number of iterations (e.g. for the random walk or hillclimber)
+*plot service
+*plot barchart (if applicable)
 
-Explain what these tests test and why
+### Algorithms
 
-```
-Give an example
-```
+Random Walk:
+Randomly generates a track. No heuristics involved.
+
+Hillclimber:
+Uses a randomly generated service as a starting point. Then alters various dimensions of the service to 'climb' to higher scores.
+Stops if the maximum number of iterations has been reached.
+
+Hierholzer:
+Fills the graph with tracks that, when combined, cover each edge once. Then using certain heuristics, tracks are coupled or shortened to improve the service score.
+
+Depth First Seach (Not finished yet):
+From a start node, it walks each valid track possible. Then results of other nodes are combined to form a service with the least number of comflicts and the highest possible coverage of critical tracks.
 
 ## Authors
 
