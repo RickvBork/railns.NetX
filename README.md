@@ -14,7 +14,7 @@ Route determining is done both by using a random walk and by random walk with ce
 Download the project from the current git directory:
 *https://github.com/RickvBork/railns.NetX.git
 
-Next run the requirements.txt. See **Prerequisites**.
+Next, from the source directory, run the requirements.txt. See **Prerequisites**.
 
 ### Prerequisites
 
@@ -45,8 +45,8 @@ End with an example of getting some data out of the system or using it for a lit
 TODO:
 User runs main.py
 Console prints a choice to load csv file:
-*Noord Holland 
-*Netherlands
+* Noord Holland 
+* Netherlands
 
 Next, the console prints a choice list of algorithms. Here, if applicable, the user can set:
 *Maximum track number per service
