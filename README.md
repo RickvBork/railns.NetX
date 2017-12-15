@@ -3,22 +3,22 @@
 
 One paragraph of project description goes here
 
-Program that models railway network into a graph. Using this structure routes can are calculated with certain constraints. Routes are given a score depending on the number of critical conenctions that are driven. Here, a railline between two stations is defined as critical whenever at least of of the two stations is defined as critical. For this definition, a csv file is used. 
+  Program that models railway networks into a graph. Tracks are calculated with certain constraints and are given a score depending on the number of critical conenctions that are covered. Here, a railline between two stations is defined as critical whenever at least of of the two stations is defined as critical. For this definition, a csv file is used. 
 Route determining is done both by using a random walk and by random walk with certain restrictions and instructions, the latter leading to routes that score higher scores.
-Scores are calculated in different ways. Usually they depend on P, which is fraction of critical railconnections between two station that is passed on by a train at least once in at least one direction. Other variables that are taken into account are the number of trains in a one service (usually varying from one to seven) and the total number of minutes these trains in one service need for their route.
+
+  Scores are calculated in different ways. Usually they depend on P, which is fraction of critical railconnections between two station that is passed on by a train at least once in at least one direction. Other variables that are taken into account are the number of trains in a one service (usually varying from one to seven) and the total number of minutes these trains in one service need for their route.
 
 
 ## Getting started
 
-TODO: These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+Download the project from the current git directory:
+*
 
 ### Prerequisites
 
-TODO: What things you need to install the software and how to install them.
+Move to the directory where requirements.txt is located. It is located in the project source folder (Heuristieken). Next run the following command:
 
-'''
-Give examples
-'''
+pip install -r requirements.txt
 
 ### Installing
 
@@ -49,28 +49,6 @@ Explain what these tests test and why
 ```
 Give an example
 ```
-
-### And coding style tests - ?????????????????????/
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment - ?????????????????
-
-Add additional notes about how to deploy this on a live system
-
-## Built With - ??????????????????
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Versioning - ??????????????????
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
