@@ -49,11 +49,11 @@ Console prints a choice to load csv file:
 * Netherlands
 
 Next, the console prints a choice list of algorithms. Here, if applicable, the user can set:
-*Maximum track number per service
-*Maximum track length 
-*number of iterations (e.g. for the random walk or hillclimber)
-*plot service
-*plot barchart (if applicable)
+* Maximum track number per service
+* Maximum track length 
+* number of iterations (e.g. for the random walk or hillclimber)
+* plot service
+* plot barchart (if applicable)
 
 ### Algorithms
 
