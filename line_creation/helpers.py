@@ -348,7 +348,7 @@ def get_one_edge_node(all_edge_list, graph, service):
 	# get random starting station that has only one edge with other node critical, if possible
 	if super_special != []:
 		current_node = random.choice(super_special)
-	#else get random starting node with only one edge
+	# #else get random starting node with only one edge
 	elif one_edge_list != []:
 		current_node = random.choice(one_edge_list)
 	# else get random starting node
@@ -357,7 +357,7 @@ def get_one_edge_node(all_edge_list, graph, service):
 
 	return current_node
 
-def track_combination(service, max_track_length, graph):
+def track_combination(service, max_track_length, G):
 
 	# list to store new tracks (to add to track object after iteration)
 	tmp_new_track_list = []

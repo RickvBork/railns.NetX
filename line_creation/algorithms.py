@@ -8,6 +8,7 @@ from copy import deepcopy
 from time import sleep
 import itertools # for Hierholzer's
 import collections # maar mogelijk naar helpers
+import numpy as np
 
 '''
 Pure, random walk. No heuristics. Takes a graph object and an iterator as arguments. Returns an unordered list of 5 best service classes.
@@ -133,6 +134,8 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 	print("======HIERHOLZER======")
 	
 	test_counter = 0
+
+	mean_list = []
 	
 	service_list = []
 
@@ -142,7 +145,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 	best_services = [0] * max_service_amount
 
 	# initiate loading bar
-	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+	#hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# do the walk iterator amount of times
 	for i in range(iterator):
@@ -254,8 +257,8 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 
 
 		# optimization: combine two tracks to one track, in some situations; see helpers.py
-		#new_service = hlp.track_combination(service, max_track_length, graph)
-		new_service = service
+		new_service = hlp.track_combination(service, max_track_length, G)
+		#new_service = service
 
 		# determine amount of tracks service has
 		track_counter = len(new_service.tracks)
@@ -271,7 +274,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 
 		#print("test")
 
-		# if round(new_service.s_score) > 9620: # and round(new_service.s_score) <= 9700:
+		# if round(new_service.s_score) < 9000: # and round(new_service.s_score) <= 9700:
 		# 	test_counter += 1
 		# 	print("test_counter: ", end="")
 		# 	print(test_counter)
@@ -308,6 +311,8 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 
 		#print()
 
+		mean_list.append(deepcopy(service.s_score))
+
 		service_list.append(deepcopy(service))
 
 		# remember best scores (unordered)
@@ -317,11 +322,18 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 			i += 1
 
 		# update loading bar
-		hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+		#hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# remove empty values as list is not always filled
 
 	ana.draw_graph(graph,service)
+
+	print("mean_list")
+	print(mean_list)
+
+	print("mean:")
+	print(np.mean(mean_list))
+
 
 	return [service for service in best_services if service != 0]
 	#return service_list
