@@ -1,6 +1,6 @@
 import helpers as hlp
 import random
-import line_analysis as ana
+import analysis as ana
 import networkx as nx
 import node_class as N
 import track_class as T
