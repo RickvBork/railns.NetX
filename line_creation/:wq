@@ -13,7 +13,7 @@ class service:
 		self.tracks = []
 
 		# OPTIMALISATIE! GEEN GRAAF! PASSEER ALLEEN critical edge list als arg
-		self.G = Graph
+		self.G = Graph.G
 
 		# Een int te geven? Want meer is niet nodig voor score
 		# self.all_critical_edges = graph_c.critical_edge_list
