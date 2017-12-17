@@ -1,7 +1,6 @@
 '''
 @author Team Stellar Heuristiek
 '''
-import graph_class as grc
 
 class track:
 	def __init__(self, G):
@@ -24,7 +23,10 @@ class track:
 
 	# hashes a track for quick lookup
 	def __hash__(self):
-		return hash(tuple(self.edges))
+		if self.edges:
+			return hash(tuple(self.edges))
+		else:
+			return 1
 
 	def get_time(self):
 		time = 0

@@ -4,13 +4,14 @@ class Node(object):
 		self.name = name
 		self.neighbors = []
 		self.previous = None
+		self.test = {}
 		self.next = None
 		self.junction = False
 
 	def __ne__(self, other):
 		
 		try:
-			print('Unequal:\t{} != {} = {}'.format(self.name, other.name, self.name != other.name))
+			# print('Unequal:\t{} != {} = {}'.format(self.name, other.name, self.name != other.name))
 			return self.name != other.name
 		except AttributeError:
 

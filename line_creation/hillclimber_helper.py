@@ -1,17 +1,11 @@
 '''
 helper for hillclimber, based on random_walk
 '''
+from classes import service_class as svc, track_class as trc 
 
 import helpers as hlp
 import random
-import analysis as ana
-import networkx as nx
-import collections # for Hierholzer's
-import node_class as N
-# import line_edges_class as E
 from copy import deepcopy
-import track_class as tc
-import service_class as sc
 
 def random_walk(Graph, iterator, max_number_of_tracks, max_time):
 
@@ -32,7 +26,7 @@ def random_walk(Graph, iterator, max_number_of_tracks, max_time):
 	for i in range(iterator):
 
 		# build service loop
-		service = sc.service(Graph)
+		service = svc.service(Graph)
 
 		# rand number of tracks 1 up to including 7
 		number_of_tracks_in_service = random.randint(1, max_number_of_tracks)
@@ -68,7 +62,7 @@ seperate function for generate_random_track
 '''
 def generate_random_track(Graph, start, max_track_length):
 	
-	track = tc.track(Graph)
+	track = trc.track(Graph)
 	
 	while track.time < max_track_length:
 

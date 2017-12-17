@@ -1,7 +1,6 @@
+from classes import node_class as ndc, track_class as trc 
 import collections as col
-import line_node_class as N
 import os, errno
-import track_class as tc
 import random
 import collections # for Hierholzer's
 import helpers as hlp
@@ -114,7 +113,7 @@ def get_node_list(G, nodes):
 
 	node_dict = {}
 	for node in nodes:
-		node_dict[node] = N.Node(node)
+		node_dict[node] = ndc.Node(node)
 
 	node_list = []
 	for node in nodes:
@@ -165,43 +164,29 @@ def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length
 		print()
 
 '''
-<<<<<<< HEAD
 Check if added track creates a track with a junction at the end.
 '''
 def update_hash_dict(Track, Node, edge, hash_dict):
 
 	if len(Node.neighbors) > 2:
-		print('\n\t!___Found Junction___!')
-		print('\tHash Point: {}'.format(Node.name))
-		print('\tHash track:\n\t{}'.format(Track.edges))
 
-		# put the walked edge in dict
 		key = hash(Track)
 		try:
 			walked_edges = hash_dict[key]
-			print('\tOld track found')
 		except KeyError:
 			hash_dict[key] = [edge]
-			print('\tNew track found')
-	
 	return hash_dict
 
 '''
 Always returns the first valid neighbor of a list of neighbor Nodes. Always walks forward.
 '''
-def get_neighbor(Node):
+def get_neighbor(Node, Previous):
 
-	print('\nCurrent Node: {}'.format(Node.name))
 	for neighbor in Node.neighbors:
-		if neighbor != Node.previous: 
-			if neighbor.previous == None:
-				print('\tChosen Neighbor: {}'.format(neighbor.name))
-				return False, neighbor
-			else:
-				print('Found Loop!')
-				return True, neighbor
-		else:
-			print('\tNeglected {}'.format(neighbor.name))
+		if neighbor != Previous: 
+			return neighbor
+		elif len(Node.neighbors) == 1:
+			return neighbor
 
 '''
 Checks wether a node is a junction.
@@ -209,27 +194,26 @@ Checks wether a node is a junction.
 def is_junction(Node):
 
 	if len(Node.neighbors) > 2:
-		print('\t{} is a junction'.format(Node.name))
 		return True
 	else:
-		print('\t{} is not a junction'.format(Node.name))
 		return False
 
 '''
 Hashes a track leading up to a junction and adds the next walked edge.
 '''
-def update_new_path(Track, path, edge):
+def update_path(Track, path, edge):
 
 	key = hash(Track)
-	print('\n\tHashed New Track:\n\t{}\n'.format(Track.edges))
-	print('\tAdded Edge: {}'.format(edge))
-	path[key] = [edge]
+	try:
+		walked_edges = path[key]
+		if edge not in walked_edges:
+			path[key].append(edge)
+	except KeyError:
+		path[key] = [edge]
 	return path
 
 def update_old_path(Track, path, edge):
 
-	print('\n\tHashed Old Track:\n\t{}\n'.format(Track.edges))
-	print('\tAdded Edge: {}'.format(edge))
 	key = hash(Track)
 	path[key].append(edge)
 	return path
@@ -246,45 +230,42 @@ def junction_edges(Track, path):
 '''
 Checks neighbors of a junction Node against the previously walked Node, and all directed junction edges that can be created with the neighbors.
 '''
-def get_junction_neighbor(Start, junction_edges):
+def get_junction_neighbor(Start, Previous, junction_edges):
 	
 	for neighbor in Start.neighbors:
-		if neighbor != Start.previous:
+		if neighbor != Previous:
 			edge = (Start.name, neighbor.name)
 			if not edge in junction_edges:
-				print('New junction Edge found: {}'.format(edge))
 				return neighbor
-			else:
-				print('{} Old junction Edge been walked'.format(edge))
-		else:
-			print('{} is Previous'.format(neighbor))
 	return None
+
+def get_previous(Start, key):
+	try:
+		Previous = Start.test[key]
+	except KeyError:
+		Previous = None
+	return Previous
 
 '''
 Links two nodes. It sets the previous of the last node to the first node.
 '''
-def link_nodes(Start, Neighbor):
+def link_nodes(Start, Neighbor, key):
 
-	print('\n\t++++++++++Link Nodes++++++++++')
-	print('\n\tCurrent start is: {}'.format(Start.name))
-	Neighbor.previous = Start
-	print('\tSet previous of {}, to {}'.format(Neighbor.name, Start.name))
+	Neighbor.test[key] = Start
 	Start = Neighbor
-	print('\tNew start is: {}\n'.format(Start.name))
 	return Start
 
 '''
 Delinks two nodes. It sets the previous of the last node to 'None' and returns the node before the last node as the new start.
 '''
-def delink_nodes(Start):
-
-	print('\n\t----------Delink Nodes----------')
-	print('\n\tCurrent start is: {}'.format(Start.name))
-	previous = Start.previous
-	print('\tSet previous of {}, to \'None\''.format(Start.name))
-	Start.previous = None
-	Start = previous
-	print('\tNew start is: {}\n'.format(Start.name))
+def delink_nodes(Start, key):
+	
+	try:
+		Previous = Start.test[key]
+		del Start.test[key]
+		Start = Previous
+	except KeyError:
+		pass
 	return Start
 
 '''' 
@@ -293,7 +274,7 @@ seperate function for generate_random_track
 def generate_random_track(Graph, start, max_track_length):
 	
 	G = Graph.G
-	track = tc.track(G)
+	track = trc.track(G)
 	
 	while track.time < max_track_length:
 
@@ -316,7 +297,7 @@ def generate_smart_random_track(Graph, start, max_track_length):
 
 	G = Graph.G
 
-	track = tc.track(G)	
+	track = trc.track(G)	
 	start = start.name
 
 	while track.time < max_track_length:
@@ -453,7 +434,7 @@ def track_combination(service, max_track_length, graph):
 		for item in tmp_new_track_list:
 
 			# make new track object
-			track = tc.track(G)
+			track = trc.track(G)
 
 			# add new track route to new track object
 			track.add_edge_list(item)

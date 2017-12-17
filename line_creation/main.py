@@ -1,6 +1,6 @@
 import algorithms as alg
 import analysis as ana
-import graph_class
+import graph_class as grc
 import helpers as hlp
 import csv
 
@@ -9,7 +9,7 @@ path_stations_file = '../data/StationsHolland.csv'
 path_tracks_file = '../data/ConnectiesHolland.csv'
 
 # initialise graph class
-Graph = line_graph_class.Graph
+Graph = grc.Graph
 
 # make graph instance (Noord Holland)
 g = Graph("NH", path_stations_file, path_tracks_file)

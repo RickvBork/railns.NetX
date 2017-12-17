@@ -1,6 +1,8 @@
 # run in terminal: exec(open("./initialize_tracks.py").read())
 # to run this script
 
+# KAN DEZE WEG?
+
 import algorithms as alg
 import analysis as ana
 import graph_class
