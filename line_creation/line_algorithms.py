@@ -2,7 +2,7 @@ import helpers as hlp
 import random
 import line_analysis as ana
 import networkx as nx
-#import line_node_class as N
+import line_node_class as N
 import track_class as T
 import service_class as S
 from copy import deepcopy
