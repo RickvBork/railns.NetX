@@ -3,22 +3,24 @@
 
 One paragraph of project description goes here
 
-Program that models railway network into a graph. Using this structure routes can are calculated with certain constraints. Routes are given a score depending on the number of critical conenctions that are driven. Here, a railline between two stations is defined as critical whenever at least of of the two stations is defined as critical. For this definition, a csv file is used. 
+  Program that models railway networks into a graph. Tracks are calculated with certain constraints and are given a score depending on the number of critical conenctions that are covered. Here, a railline between two stations is defined as critical whenever at least of of the two stations is defined as critical. For this definition, a csv file is used. 
 Route determining is done both by using a random walk and by random walk with certain restrictions and instructions, the latter leading to routes that score higher scores.
-Scores are calculated in different ways. Usually they depend on P, which is fraction of critical railconnections between two station that is passed on by a train at least once in at least one direction. Other variables that are taken into account are the number of trains in a one service (usually varying from one to seven) and the total number of minutes these trains in one service need for their route.
+
+  Scores are calculated in different ways. Usually they depend on P, which is fraction of critical railconnections between two station that is passed on by a train at least once in at least one direction. Other variables that are taken into account are the number of trains in a one service (usually varying from one to seven) and the total number of minutes these trains in one service need for their route.
 
 
 ## Getting started
 
-TODO: These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+Download the project from the current git directory:
+*https://github.com/RickvBork/railns.NetX.git
+
+Next, from the source directory, run the requirements.txt. See **Prerequisites**.
 
 ### Prerequisites
 
-TODO: What things you need to install the software and how to install them.
+Move to the directory where requirements.txt is located. It is located in the project source folder (Heuristieken). Next run the following command:
 
-'''
-Give examples
-'''
+pip install -r requirements.txt
 
 ### Installing
 
@@ -38,39 +40,35 @@ until finished
 
 End with an example of getting some data out of the system or using it for a little demo
 
-## Running the tests - ??????????
+## Running the algorithms
 
-Explain how to run the automated tests for this system
+TODO:
+User runs main.py
+Console prints a choice to load csv file:
+* Noord Holland 
+* Netherlands
 
-### Break down into end to end tests - ??????????????
+Next, the console prints a choice list of algorithms. Here, if applicable, the user can set:
+* Maximum track number per service
+* Maximum track length 
+* number of iterations (e.g. for the random walk or hillclimber)
+* plot service
+* plot barchart (if applicable)
 
-Explain what these tests test and why
+### Algorithms
 
-```
-Give an example
-```
+Random Walk:
+Randomly generates a track. No heuristics involved.
 
-### And coding style tests - ?????????????????????/
+Hillclimber:
+Uses a randomly generated service as a starting point. Then alters various dimensions of the service to 'climb' to higher scores.
+Stops if the maximum number of iterations has been reached.
 
-Explain what these tests test and why
+Hierholzer:
+Fills the graph with tracks that, when combined, cover each edge once. Then using certain heuristics, tracks are coupled or shortened to improve the service score.
 
-```
-Give an example
-```
-
-## Deployment - ?????????????????
-
-Add additional notes about how to deploy this on a live system
-
-## Built With - ??????????????????
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Versioning - ??????????????????
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+Depth First Seach (Not finished yet):
+From a start node, it walks each valid track possible. Then results of other nodes are combined to form a service with the least number of comflicts and the highest possible coverage of critical tracks.
 
 ## Authors
 
