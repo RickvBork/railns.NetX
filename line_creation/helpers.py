@@ -1,5 +1,9 @@
 from classes import node_class as ndc, track_class as trc 
 import collections as col
+
+import node_class as N
+#import line_node_class as N
+
 import os, errno
 import random
 import collections # for Hierholzer's

@@ -10,14 +10,16 @@ import analysis as ana
 import networkx as nx
 import collections # for Hierholzer's
 from copy import deepcopy
+import track_class as tc
+import math
 
 def hillclimber_random(service, track_number):
 	old_service_score_s = service.s_score
 	track0 = service.tracks[track_number]	
 	max_track_length = 120
-	Graph = service.graph
-	nodes = Graph.nodes
-	node_list = hlp.get_node_list(Graph.G, nodes)
+	Graph = service.G
+	nodes = list(self.Graph.edges())
+	node_list = hlp.get_node_list(Graph, nodes)
 	
 	# generate new track
 	start = random.choice(node_list) 
@@ -54,7 +56,7 @@ def hillclimber_random(service, track_number):
 		service.remove_track(track_new)
 
 
-def hillclimber_sim_an(service, track_number):
+def hillclimber_sim_an(service, track_number, temperature):
 	old_service_score_s = service.s_score
 	track0 = service.tracks[track_number]	
 	max_track_length = 120
@@ -70,7 +72,14 @@ def hillclimber_sim_an(service, track_number):
 
 	# check if score is higher
 	new_service_score_s = service.s_score
+
+	# accept new track if score is higher with probability one
+	# if score of service with new track is lower, accept new track in service with probability 1/temperature
+
 	# undo adding new track is score is lower
 	if old_service_score_s > new_service_score_s:
-		service.add_track(track0)
-		service.remove_track(track_new)
+		random_int = random.choice(range(1000))
+		probability = math.e ** -1 
+		if (float(random_int/1000) <=  probability):
+			service.add_track(track0)
+			service.remove_track(track_new)

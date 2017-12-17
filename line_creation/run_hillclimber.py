@@ -53,7 +53,7 @@ hillclimber_scores = []
 for j in range(number_of_tries):
 	for i in range(number_of_tracks):
 		for k in range(number_of_tries):
-			hc.hillclimber(service1,i)
+			hc.hillclimber_sim_an(service1,i,k*i*j)
 			print(service1.s_score)
 			hillclimber_scores.append(service1.s_score) 
 
