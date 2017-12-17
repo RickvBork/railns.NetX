@@ -34,7 +34,7 @@ def random_walk(Graph, iterator, max_number_of_tracks, max_time):
 	for j in range(iterator):
 
 		# build service loop
-		service = sc.service(Graph)
+		service = svc.service(Graph)
 
 		# rand number of tracks 1 up to including 7
 		number_of_tracks_in_service = random.randint(1, max_number_of_tracks)
