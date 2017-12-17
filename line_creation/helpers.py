@@ -1,5 +1,6 @@
 import collections as col
 import node_class as N
+#import line_node_class as N
 import os, errno
 import track_class as tc
 import random
