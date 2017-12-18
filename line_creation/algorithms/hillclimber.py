@@ -108,7 +108,7 @@ def hillclimber_smart(service, track_number, max_number_of_tracks, \
 	
 	# generate new track
 	start = random.choice(node_list) 
-	track_new = hh.generate_smart_random_track(Graph, start, max_track_time)
+	track_new = hlp.generate_smart_random_track(Graph, start, max_track_time)
 
 	# add new track to service, remove old one if max_number_of_tracks is 
 	# reached	
