@@ -18,7 +18,7 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 		(3) The amount of services to be made
 
 	Returns:
-		A list with a few of the best services
+		A list of five of the best services.
 	
 	For each of the tracks of each of the services, Hierholzer's algoritm 
 	chooses a random starting station, which has only one edge and a neighbor 

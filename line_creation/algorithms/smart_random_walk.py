@@ -14,10 +14,10 @@ def smart_random_walk(Graph, max_number_of_tracks, max_time, iterator):
 		(3) The amount of services to be made
 
 	Returns:
-		A list of the 5 best services.
+		A list of five of the best services.
 	
 	For each of the tracks of each of the services, the random walk algoritm chooses a random
-	starting station. Then a random neighboring edge is chosen and added to the track until the track is over the maximum time. The extra edge is removed and the track is added to the service.
+	starting station. Edges are chosen based on preference. If an edge is critical, then the algorithm will prefer to walk this edge. Else 
 	'''
 
 	print("\n======SMART RANDOM WALK======\n")

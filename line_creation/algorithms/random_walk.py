@@ -14,7 +14,7 @@ def random_walk(Graph, max_number_of_tracks, max_time, iterator):
 		(3) The amount of services to be made
 
 	Returns:
-		A list, with an ever changing length, of a few of the best services
+		A list of five of the best services.
 	
 	For each of the tracks of each of the services, the random walk algoritm chooses a random
 	starting station. Then a random neighboring edge is chosen and added to the track until the track is over the maximum time. The extra edge is removed and the track is added to the service.
@@ -25,6 +25,10 @@ def random_walk(Graph, max_number_of_tracks, max_time, iterator):
 	G = Graph.G
 	minimum_weight = Graph.minimal_edge_weight
 	nodes = Graph.nodes
+
+	# preven user input from causing an error with randint function
+	if max_time < 5:
+		max_time =+ minimum_weight + 1
 
 	# build node structure
 	node_list = hlp.get_node_list(G, nodes)

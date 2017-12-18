@@ -6,12 +6,6 @@ takes service oject consisting of several tracks. Tries to optimize service by i
 from algorithms import hillclimber_helper as hh
 import helpers as hlp
 import random
-import analysis as ana
-import networkx as nx
-import collections # for Hierholzer's
-from copy import deepcopy
-from classes import track_class as tc
-import math
 import csv
 from helpers import clear
 
@@ -26,7 +20,7 @@ def run_hillclimber_sim_an(service, max_number_of_tracks, max_track_time, number
 		number_of_tracks = len(service.tracks)
 		for i in range(number_of_tracks):
 			for k in range(number_of_iterations):
-				service = hillclimber_sim_an(service,i,max_number_of_tracks, max_track_time, j+k)
+				service = hillclimber_sim_an(service,i,max_number_of_tracks, max_track_time, j + k)
 							
 				if (service.s_score != last_score):
 					last_score = service.s_score
@@ -77,7 +71,7 @@ def hillclimber_sim_an(service, track_number, max_number_of_tracks, max_track_ti
 	# undo adding new track is score is lower
 	if old_service_score_s > new_service_score_s:
 		random_int = random.choice(range(1000))
-		probability = math.e ** (-1 * temperature) 
+		probability = math.e ** ( - 1 * temperature) 
 		if (float(random_int/1000) >=  probability):
 			service.add_track(track0)
 			service.remove_track(track_new)
