@@ -2,7 +2,7 @@
 # Line_creation
 *@author Team Stellar Heuristiek
 Rick van der Bork - 11990503
-Dimitri van Cappeleveen - 122
+Dimitri van Cappeleveen - 12017485
 Thom Oosterhuis - 10893806*
 
 This folder contains all the code necessary for running the algorithms. It contains the .py files that model a railnetwork using a graph and that create trainservices consisting of multiply trains driving on a traject for a specified amount of time. 
