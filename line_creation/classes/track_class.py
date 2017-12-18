@@ -1,24 +1,19 @@
 '''
-@author Team Stellar Heuristiek
+@Author Team Stellar Heuristiek
 '''
-
 class track:
+	'''
+	Track class models a track, i.e. a single train riding between station on a networkx graph.
+	Edges as well as critical edges that are traversed are stored in list.
+	'''
 	def __init__(self, G):
 
-		# AANPSSING
 		self.G = G
-
-		# OUDE VERSIE
-		# self.G = graph.G
-		# self.critical_edge_list = graph.critical_edge_list
-
 		self.edges = []	
 		self.critical_lines_traversed = []	
 		self.time = 0
 		self.stations = []
 		self.necessary = True
-
-		# GET_TIME nutteloos?
 		self.time = self.get_time()
 
 	# hashes a track for quick lookup
@@ -45,18 +40,16 @@ class track:
 		self.update_critical_lines_traversed()
 
 	def add_edge(self, edge):
-		# edge = ('station a', 'station b')
 		# check if current last station is starting point of new edge since trains cannot teleport
 		if self.edges != []:
-
-			# WAAROM VERSCHIL MAKEN?
+			# check if departing station is indeed the station where the train is 
 			current_last_station = self.edges[-1][1]
 			if current_last_station == edge[0]:
 				self.edges.append(edge)	
 				self.update_time()
 				self.update_critical_lines_traversed()
-			# else:
-			# 	print("cannot depart from station other then the current station")
+			else:
+				print("Error, cannot depart from station where train is located")
 		else:
 			self.edges.append(edge)	
 			self.update_time()
@@ -85,16 +78,12 @@ class track:
 		for edge in edges:
 			station_0 = edge[0]
 			station_1 = edge[1]
-
-			# OUDE VERSIE
 			edge_reversed = (station_1, station_0)
-			# if (edge in self.critical_edge_list or edge_reversed in self.critical_edge_list):
-
-			# AANPSSSING
+			# Check if station is critical 
 			if self.G[station_0][station_1]['color'] == 'r':
+				# check if line is already in critical_lines_traversed, if not, add edge to critical_lines_traversed
 				if (edge not in self.critical_lines_traversed and edge_reversed not in self.critical_lines_traversed):
 					self.critical_lines_traversed.append(edge)
-					#print("add critical line traversed")
 	
 	def add_station(self, from_node, to_node):
 

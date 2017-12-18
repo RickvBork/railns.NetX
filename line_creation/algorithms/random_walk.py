@@ -5,13 +5,19 @@ import random
 
 def random_walk(Graph, max_number_of_tracks, max_time, iterator):
 	'''
-	Pure, random walk. No heuristics. Takes a graph object and an iterator as arguments. Returns an unordered list of 5 best service classes.
+	A random walk algorithm, defined as such that no heuristics are involved.
 
 	Arguments:
-	(0)
-	(1)
-	(2)
-	(3)
+		(0) A networkx graph, which contains the data needed to make tracks and services
+		(1) The maximum amount of tracks for each service
+		(2) The maximum lenght of each track
+		(3) The amount of services to be made
+
+	Returns:
+		A list, with an ever changing length, of a few of the best services
+	
+	For each of the tracks of each of the services, the random walk algoritm chooses a random
+	starting station. Then a random neighboring edge is chosen and added to the track until the track is over the maximum time. The extra edge is removed and the track is added to the service.
 	'''
 
 	print("\n======RANDOM WALK======\n")

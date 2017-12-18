@@ -1,6 +1,5 @@
 '''
-
-used to test functions, file is ignored by git.
+Make adjacency matrix for every station pair using Dijkstra shortest path algorithm.
 '''
 
 import algorithms as alg
