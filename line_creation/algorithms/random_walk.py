@@ -6,6 +6,12 @@ import random
 def random_walk(Graph, max_number_of_tracks, max_time, iterator):
 	'''
 	Pure, random walk. No heuristics. Takes a graph object and an iterator as arguments. Returns an unordered list of 5 best service classes.
+
+	Arguments:
+	(0)
+	(1)
+	(2)
+	(3)
 	'''
 
 	print("\n======RANDOM WALK======\n")

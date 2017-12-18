@@ -13,6 +13,12 @@ Here all functions not directly important to
 algorithm functioning and classes are defined
 '''
 
+def clear():
+	'''
+	Clears the console screen.
+	'''
+	os.system('cls' if os.name == 'nt' else 'clear')
+
 '''
 Gets the percentage of critical connections traversed.
 '''

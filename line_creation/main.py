@@ -1,15 +1,14 @@
+#!/usr/bin/env python
+
 from classes import graph_class as grc
 from algorithms import hierholzer as hh, random_walk as rw, smart_random_walk as srw
-import sys, os
+from helpers import clear
 
 # initialize datafiles
 stations_0 = '../data/StationsHolland.csv'
 connections_0 = '../data/ConnectiesHolland.csv'
 stations_1 = '../data/StationsNationaal.csv'
 connections_1 = '../data/ConnectiesNationaal.csv'
-
-# function for clearing the console
-clear = lambda: os.system('cls')
 
 def main_menu():
 	'''
@@ -75,31 +74,29 @@ def algo_0(algo, g, hillclimber = False):
 	else:
 		# get user inputs
 		max_track_number, max_track_time, iteration = get_input()
-
-		# TODO make arguments consistent for similar algo's
 		services = algo(g, max_track_number, max_track_time, iteration)
 
 		for service in services:
-			print(service.s_score)
+			print('Service score: {}'.format(service.s_score))
 
-def algo_menu_1(g):
-	choice = '0'
-	while choice == '0':
-		print('Hillclimber seed algorithm menu:\n')
-		print('Please select the algorithm you want to seed the hillclimber with')
-		print('1. Random Walk')
-		print('2. Hierholzer')
+# def algo_menu_1(g):
+# 	choice = '0'
+# 	while choice == '0':
+# 		print('Hillclimber seed algorithm menu:\n')
+# 		print('Please select the algorithm you want to seed the hillclimber with')
+# 		print('1. Random Walk')
+# 		print('2. Hierholzer')
 
-		choice = input(' >> ')
-		clear()
+# 		choice = input(' >> ')
+# 		clear()
 
-		# pass the chosen algorithm and the graph
-		if choice == '1':
-			pass
-			# TODO
-		elif choice == '2':
-			max_track_number, max_track_time, iteration = get_input()
-			return hh.hierholzer(g, max_track_number, max_track_time, iteration)
+# 		# pass the chosen algorithm and the graph
+# 		if choice == '1':
+# 			pass
+# 			# TODO
+# 		elif choice == '2':
+# 			max_track_number, max_track_time, iteration = get_input()
+# 			return hh.hierholzer(g, max_track_number, max_track_time, iteration)
 
 def get_input():
 
@@ -110,4 +107,5 @@ def get_input():
 	return max_track_number, max_track_time, iteration
 
 if __name__ == '__main__':
+	clear()
 	main_menu()
