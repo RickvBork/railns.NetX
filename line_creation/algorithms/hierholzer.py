@@ -157,7 +157,8 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 		# iterate over all tracks
 		for track in new_service.tracks:
 			# check which tracks actually traverse critical edges
-			check_list = [edge for edge in track.edges if edge in graph.critical_edge_list or tuple(reversed(edge)) in graph.critical_edge_list]
+			check_list = [edge for edge in track.edges if edge in graph.critical_edge_list \
+			or tuple(reversed(edge)) in graph.critical_edge_list]
 			# if track traverses no critical edges
 			if not check_list:
 				# remove track
@@ -167,7 +168,8 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 
 		# remember best scores (unordered), get key of minimum value in dict
 		if score > min_score:
-			score_list, service_list, min_score, min_index = hlp.update_lists(score, min_index, service, score_list, service_list)
+			score_list, service_list, min_score, min_index = hlp.update_lists(score, min_index, service, \
+			score_list, service_list)
 
 		# update loading bar
 		hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
