@@ -26,7 +26,7 @@ def run_hillclimber(service, max_number_of_tracks, max_track_time, number_of_ite
 		number_of_tracks = len(service.tracks)
 		for i in range(number_of_tracks):
 			for k in range(number_of_iterations):
-				service = hillclimber_random(service,i,max_number_of_tracks, max_track_time, j+k)
+				service = hillclimber_random(service,i,max_number_of_tracks, max_track_time)
 							
 				if (service.s_score != last_score):
 					last_score = service.s_score
