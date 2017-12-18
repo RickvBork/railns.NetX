@@ -3,6 +3,7 @@
 from classes import graph_class as grc
 from algorithms import hierholzer as hh, random_walk as rw, smart_random_walk as srw, hillclimber as hc, hillclimber_sim_an as hs
 from helpers import clear
+from analysis import draw_graph
 
 # initialize datafiles
 stations_0 = '../data/StationsHolland.csv'
@@ -13,9 +14,6 @@ connections_1 = '../data/ConnectiesNationaal.csv'
 error0 = 'Please select a valid integer!\n'
 
 def main_menu():
-	'''
-	A main menu for loading different datafiles necessary to initiate a graph (object). Calls another menu function.
-	'''
 
 	choice = '0'
 	while choice == '0':
@@ -39,9 +37,6 @@ def main_menu():
 			choice = '0'
 
 def algo_menu_0(g):
-	'''
-	A simple menu for choosing between different functions. Takes a graph object, and calls another menu function passing the graph and the chosen algorithm.
-	'''
 
 	choice = '0'
 	while choice == '0':
@@ -72,17 +67,10 @@ def algo_menu_0(g):
 			choice = '0'
 
 def algo_0(algo, g, hillclimber = False):
-	'''
-	A simple menu for setting the starting values for a given algorithm. Takes an algorithm (function) and a graph (object).
-	'''
 
 	seed = None
 	if hillclimber:
 		seed = algo_1(g)
-		
-		# print(seed.s_score)
-		# for track in seed.tracks:
-		# 	print(track.edges)
 
 		max_track_number, max_track_time, iteration = get_input()
 		service = algo(seed, max_track_number, max_track_time, iteration)
@@ -91,8 +79,7 @@ def algo_0(algo, g, hillclimber = False):
 		max_track_number, max_track_time, iteration = get_input()
 		services = algo(g, max_track_number, max_track_time, iteration)
 
-		for service in services:
-			print('Service score: {}'.format(service.s_score))
+		draw_menu(services, g)
 
 def algo_1(g):
 
@@ -121,11 +108,11 @@ def algo_1(g):
 
 def get_input():
 
-	print('\nYou have created a service object!\nPlease select preferred values for the Hillclimber Suggestions for viable simulations are behind the inputs:\n')
+	print('\nYou have created a service object!\nPlease select preferred values for the Hillclimber. Suggestions for viable simulations are behind the inputs:\n')
 
 	max_track_time = int(input('Input maximum track time (1 - 180): '))
 	max_track_number = int(input('Input maximum number of tracks per service (1 - 20): '))
-	iteration = int(input('Input iteration amount (1 - 10.000): '))
+	iteration = int(input('Input iteration amount (5 - 10.000): '))
 	clear()
 
 	return max_track_number, max_track_time, iteration
@@ -140,6 +127,42 @@ def get_small_input():
 	clear()
 
 	return max_track_number, max_track_time, iteration
+
+def draw_menu(services, g):
+
+	clear()
+
+	# print service scores
+	for service in services:
+		print('Score: {}'.format(service.s_score))
+
+	choice = '0'
+	while choice == '0':
+		print('\nDraw menu:\n')
+		print('Please select a service you want to visualize.\nServices are saved in: \'visualization\plots\', as seperate PNG files')
+		print('1. Service 1')
+		print('2. Service 2')
+		print('3. Service 3')
+		print('4. Service 4')
+		print('5. Service 5')
+
+		choice = input(' >> ')
+		clear()
+
+		# pass the chosen algorithm and the graph
+		if choice == '1':
+			draw_graph(g, services[0])
+		elif choice == '2':
+			draw_graph(g, services[1])
+		elif choice == '3':
+			draw_graph(g, services[2])
+		elif choice == '4':
+			draw_graph(g, services[3])
+		elif choice == '5':
+			draw_graph(g, services[4])
+		else:
+			print(error0)
+			choice = '0'
 
 if __name__ == '__main__':
 	clear()
