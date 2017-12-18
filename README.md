@@ -1,7 +1,7 @@
 # Project: RailNL
-*@author Team Stellar Heuristiek
-Rick van der Bork - 11990503
-Dimitri van Cappeleveen - 122
+*@author Team Stellar Heuristiek: \
+Rick van der Bork - 11990503 \
+Dimitri van Cappeleveen - 122 \
 Thom Oosterhuis - 10893806*
 
 One paragraph of project description goes here
@@ -11,68 +11,33 @@ Route determining is done both by using a random walk and by random walk with ce
 
   Scores are calculated in different ways. Usually they depend on P, which is fraction of critical railconnections between two station that is passed on by a train at least once in at least one direction. Other variables that are taken into account are the number of trains in a one service (usually varying from one to seven) and the total number of minutes these trains in one service need for their route.
 
+## Motivation
+
+This project is for..
+
 
 ## Getting started
 
 Download the project from the current git directory:
-*https://github.com/RickvBork/railns.NetX.git
+*https://github.com/RickvBork/railns.NetX.git*
 
 Next, from the source directory, run the requirements.txt. See **Prerequisites**.
 
 ### Prerequisites
 
-Move to the directory where requirements.txt is located. It is located in the project source folder (Heuristieken). Next run the following command:
+In the project source folder (Heuristieken) you will find the file requirements.txt. Next run the following command:
 
 pip install -r requirements.txt
 
-### Installing
+## Structure
 
-TODO: A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
-
-'''
-Give the example
-'''
-
-And repeat
-
-'''
-until finished
-'''
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the algorithms
-
-How to run the algorithms is explained in the README in the folder line_creation.
-
-
-### Algorithms
-
-Random Walk:
-Randomly generates a track. No heuristics involved.
-
-Hillclimber:
-Uses a randomly generated service as a starting point. Then alters various dimensions of the service to 'climb' to higher scores.
-Stops if the maximum number of iterations has been reached.
-
-Hierholzer:
-Fills the graph with tracks that, when combined, cover each edge once. Then using certain heuristics, tracks are coupled or shortened to improve the service score.
-
-Depth First Seach (Not finished yet):
-From a start node, it walks each valid track possible. Then results of other nodes are combined to form a service with the least number of comflicts and the highest possible coverage of critical tracks.
+* Data: Contains the .csv data files containing the stations and connections of the railwaynetwork. These .csv files are used when creating the graph class. It also contains some scores from the Hierholzer algorithm (see the folder line_creation) for experimentation.
+* Feedback: This folder contains the feedback which we received, mainly during techassist (credits to Quinten van der Post) while we were working on this project.
+* Line_creation: Contains the python files that model the graph and the functions used to generate paths and trainservices. There are explained in greater detail in the README within the directory. How to actually run the algorithms is also explained in the README file in this folder.
+* Trash: The name says it all.
+* Visualization: Contains the results of visualisations. These are graphical displays of the railnetwork as well as barcharts from the scores of train services genereated by different algorithms. It also contains a folder with histograms based on the results of the data of the Hierholzer experiments in the Data folder.
 
 ## Acknowledgments
 
 We are grateful to Quinten van der Post, Wouter Vrielink and everyone at our workgroup.
-
-
-oude readme, kan denk ik weg, hiervoor kijken mensen wel in de directory's zelf (moeten er niet ook readme's voor deze allemaal komen?)
-### Structure ###
-The 'visualization' map contains the results of visualisations. These are graphical displays of the railnetwork as well as barcharts from the scores of train services genereated by different algorithms.
-The 'data' map contains the .csv data files containing the stations and connections of the railwaynetwork. These .csv files are used when creating the graph class.
-The 'feedback' map contains notes that are made by the authors during the techassist hour with the techassist.
-The 'line_creation' map contains the python files that model the graph and the functions used to generate paths and trainservices. There are explained in greater detail in the README within the directory.
-
 
