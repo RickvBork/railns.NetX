@@ -4,12 +4,12 @@ Rick van der Bork - 11990503 \
 Dimitri van Cappeleveen - 122 \
 Thom Oosterhuis - 10893806*
 
-This programm models railway networks into a graph. Tracks are calculated with certain constraints and are given a score depending on the number of critical connections that are traversed. Here, a railline between two stations is defined as critical whenever at least of of the two stations is defined as critical. For this definition, a csv file is used. 
-Route determining is done by several algorithms. The score is calculated with the following formula:
+This programm models railway networks into a graph. Tracks are calculated with certain constraints and are given a score depending on the number of critical connections traversed. Here, a railline between two stations is defined as critical whenever at least of of the two stations is defined as critical. For this definition, a csv file is used. 
+Route determining is done by several algorithms. The score is calculated using the following formula:
 
 Score = p x 10000 - (t x 20 + min/100000)
 
-P is the percentage of critical connections traversed, t the number of tracks and m the total number of minutes of all the tracks combined.
+Here, p is the percentage of critical connections traversed, t the number of tracks and m the total tracktime.
 
 ## Motivation
 
