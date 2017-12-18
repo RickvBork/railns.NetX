@@ -19,7 +19,9 @@ from helpers import clear
 def run_hillclimber(service, max_number_of_tracks, max_track_time, \
 	number_of_iterations):
 	'''
-	Runs hillclimber
+	Runs hillclimber. Hillclimber is runned number_of_iteration times on
+	each single track of the service.
+	Then this proces is repeated a number_of_iteration times.
 	'''
 	hillclimber_scores = []
 	last_score = 0
