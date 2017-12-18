@@ -22,15 +22,15 @@ This folder contains, as the name suggests, our algorithms:
 ### Running the algorithms
 
 Main.py is used to run the different algorithms. After you run main.py, you will be asked to:
-Please select the files you want to load, and you will be given two options:
-	1. North Holland
-	2. Netherlands
-After you choose either 1 or 2, specific .csv files will be loaded, and Networkx will be used to generate specific graphs. Now, you can choose which of the algorithms you would like to run:
-	1. Random Walk
-	2. Smart Random Walk
-	3. Hierholzer
-	4. Hillclimber
-	5. Hillclimber with Simulated Annealing
+Please select the files you want to load, and you will be given two options: \
+	1. North Holland \
+	2. Netherlands \
+After you choose either 1 or 2, specific .csv files will be loaded, and Networkx will be used to generate specific graphs. Now, you can choose which of the algorithms you would like to run: \
+	1. Random Walk \ 
+	2. Smart Random Walk \
+	3. Hierholzer \
+	4. Hillclimber \
+	5. Hillclimber w ith Simulated Annealing \
 After an algorithm is chosen, 
 
 ## Classes folder
