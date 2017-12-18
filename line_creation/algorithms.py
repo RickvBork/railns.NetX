@@ -155,11 +155,8 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 		G = graph.G
 
 		# initialize service
-<<<<<<< HEAD
-		service = svc.service(graph)
-=======
 		service = svc.service(G)
->>>>>>> d6366e7c7477005c1b8fccca7cb5459305a69681
+
 
 		# adding all edges as tuples to all_edges_list
 		all_edge_list = [edge for edge in graph.edges]

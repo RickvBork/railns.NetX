@@ -9,7 +9,7 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 	Hierholzer's algorithm. A variation on Carl Hierholzer's efficient algorithm to find Eularian Cycles,
 	here used to make services.
 
-	Args:
+	Arguments:
 		(0) A networkx graph, which contains the data needed to make tracks and services
 		(1) The maximum amount of tracks for each service
 		(2) The maximum lenght of each track
