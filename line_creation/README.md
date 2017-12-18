@@ -14,10 +14,9 @@ This directory contains, as the name suggests, our algorithms (for a description
 * Hierholzer: Fills the graph with tracks that, when combined, cover each edge once. Then using certain heuristics, tracks are coupled or shortened to improve the service score.
 * Hillclimber: Uses a randomly generated service as a starting point. Then alters various dimensions of the service to 'climb' to higher scores. Stops if the maximum number of iterations has been reached.
 	* Hillclimber helper: Helper file which contains functions specifically for the Hillclimber
-	* Hillclimber Simulated Annealing: TODO.
+	* Hillclimber Simulated Annealing: Same as the helper, but to avoid getting stucked in local maximums, a new service is sometimes also accepted when the score of the new service is lower the the score of the service it replaces. This happens with a probability e^-t, where t is the temperature, which increases as the number of times the hillclimber is executed, increases.
 * Random Walk: Randomly generates a track. No heuristics involved.
-* Smart Random Walk: A variation of the Random Walk, with some heuristics: TODO.
-* Depth First Seach (Not finished yet): TODO - From a start node, it walks each valid track possible. Then results of other nodes are combined to form a service with the least number of comflicts and the highest possible coverage of critical tracks.
+* Smart Random Walk: A variation of the Random Walk, with some heuristics: When choosing a neighbor node as next station, the history of the current track that is build is taken into account. When there is a neighbor station that is now yet traversed by the current track, that station is chosen over stations that are already traversed.
 
 ## Classes directory
 
@@ -40,8 +39,7 @@ This python file contains functions used by the algorithms.
 
 ## Main
 
-This python file is used to run the algorithms. After you run main.py, you will be asked to:
-Please select the files you want to load, and you will be given two options: \
+This python file is used to run the algorithms. After you run main.py, you will be asked to select the files you want to load, and you will be given two options: \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. North Holland \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Netherlands \
 After you choose either 1 or 2, specific .csv files will be loaded, and Networkx will be used to generate specific graphs. Now, you can choose which of the algorithms you would like to run: \
@@ -49,13 +47,26 @@ After you choose either 1 or 2, specific .csv files will be loaded, and Networkx
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Smart Random Walk \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. Hierholzer \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4. Hillclimber \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. Hillclimber with Simulated Annealing \
-After an algorithm is chosen, TODO
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. Hillclimber with Simulated Annealing
+
+If a non hillclimber type algorithm is chosen, the user is prompted to enter his/her preferred settings to run the algorithm in the following order:
+* Maximum time each track may last
+* Maximum number of tracks per service
+* Iteration amount
+
+Next the user may choose to save a generated service as several PNG files, one for each track, within the vizualization\plots folder. 
+
+If a hillclimber type algorithm is chosen, the user is first prompted to 'seed' it with a service object. This is chosen by a user preferren algorithm. The user can choose between the following algorithms: \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Random Walk \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Smart Random Walk
+
+The user can again enter his/her preferred settings. The user is however, advised to enter settings that will generate a service object with a low score, as this gives any hillclimber more freedom to climb to better scores.
+
+The user is advised that a service object has been created, and is again prompted to enter his/her preferred settings, this time as inputs for the hillclimbing algorithm.
 
 ## Built With
 
 * [Networkx](https://networkx.github.io) - Used to generate the graphs.
-TODO?
 
 
 
