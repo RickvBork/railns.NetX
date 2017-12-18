@@ -57,14 +57,7 @@ This python file is used to run the algorithms. See description above: Running t
 
 ## Built With
 
-* Networkx. This library is used to generate the graphs.
-TODO?
-
-Dit hieronder was van het voorbeeld
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Networkx](https://networkx.github.io) - Used to generate the graphs.
 
 
 
