@@ -13,7 +13,7 @@ Here, p is the percentage of critical connections traversed, t the number of tra
 
 ## Motivation
 
-This project is for the course Heuristieken, part of the Minor Programming, of the University of Amsterdam.
+This project is for the course Heuristieken, part of the Minor Programming of the University of Amsterdam.
 
 ## Getting started
 
