@@ -8,8 +8,6 @@ import helpers as hlp
 import random
 import analysis as ana
 import networkx as nx
-import collections # for Hierholzer's
-from copy import deepcopy
 from classes import track_class as tc
 import math
 import csv
