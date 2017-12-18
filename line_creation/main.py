@@ -141,12 +141,16 @@ def draw_menu(services, g):
 
 	clear()
 
-	# print service scores
-	for service in services:
-		print('Score: {}'.format(service.s_score))
-
 	choice = '0'
 	while choice == '0':
+
+		# print service scores
+		i = 0
+		print('Service\tScore')
+		for service in services:
+			print('   {}.\t{}'.format(i + 1, service.s_score))
+			i += 1
+
 		print('\nDraw menu:\n')
 		print('Please select a service you want to visualize.\nServices are saved in: \'visualization\plots\', as seperate PNG')
 		print('1. Service 1')
