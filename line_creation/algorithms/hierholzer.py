@@ -3,6 +3,7 @@ import helpers as hlp
 import random
 from copy import deepcopy
 import analysis as ana
+import math
 
 def hierholzer(graph, max_track_amount, max_track_length, iterator):
 	'''
@@ -35,10 +36,12 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 	'''
 	print("======HIERHOLZER======")
 	
-	# inititialize variables to save and return best service(s)
-	best_score = 0
+	# set lists to save five best services
 	max_service_amount = 5
-	best_services = [0] * max_service_amount
+	score_list = [- math.inf] * max_service_amount
+	service_list = [None] * max_service_amount
+	min_score = score_list[0]
+	min_index = 0
 
 	# initiate loading bar
 	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
@@ -163,14 +166,15 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 		print("score: ", end="")
 		print(new_service.s_score)
 
+		score = new_service.s_score
+
 		# remember best scores (unordered)
-		if new_service.s_score >= best_score:
-			best_services[i % max_service_amount] = deepcopy(service)
-			best_score = new_service.s_score
-			i += 1
+		# get key of minimum value in dict
+		if score > min_score:
+			score_list, service_list, min_score, min_index = hlp.update_lists(score, min_index, service, score_list, service_list)
 
 		# update loading bar
 		hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
-	# remove empty values as list is not always filled
-	return [service for service in best_services if service != 0]
+	# return five best services
+	return service_list
