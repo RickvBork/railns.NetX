@@ -49,12 +49,13 @@ After you choose either 1 or 2, specific .csv files will be loaded, and Networkx
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Smart Random Walk \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. Hierholzer \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4. Hillclimber \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. Hillclimber w ith Simulated Annealing \
-After an algorithm is chosen, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. Hillclimber with Simulated Annealing \
+After an algorithm is chosen, TODO
 
 ## Built With
 
 * [Networkx](https://networkx.github.io) - Used to generate the graphs.
+TODO?
 
 
 
