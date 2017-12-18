@@ -47,7 +47,7 @@ After you choose either 1 or 2, specific .csv files will be loaded, and Networkx
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Smart Random Walk \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. Hierholzer \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4. Hillclimber \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. Hillclimber with Simulated Annealing \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. Hillclimber with Simulated Annealing
 
 If a non hillclimber type algorithm is chosen, the user is prompted to enter his/her preferred settings to run the algorithm in the following order:
 * Maximum time each track may last
