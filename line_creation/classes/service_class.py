@@ -1,23 +1,20 @@
 import helpers as hlp
 import networkx as nx
 
-'''
-service class models service (nl: 'lijnvoering') consisting of several tracks
-argument to construct service is a graph as defined in line_graph_class.py
-tracks are added seperately using add_track(self, track)
-track is object as defined in track_class.py
-'''
+
 
 class service:
+	'''
+	Service class models service (nl: 'lijnvoering') consisting of several tracks.
+	Argument to construct service is a networkx graph. 
+	Tracks are added seperately using add_track(self, track)
+	track is object as defined in track_class.py
+	'''
 	def __init__(self, G):
 		self.tracks = []
 
-		# OPTIMALISATIE! GEEN GRAAF! PASSEER ALLEEN critical edge list als arg
 		self.G = G
-
-		# Een int te geven? Want meer is niet nodig voor score
-		# self.all_critical_edges = graph_c.critical_edge_list
-
+		
 		#self.all_critical_edges = Graph.critical_edge_list
 		critical_dict = nx.get_edge_attributes(self.G, 'color')
 		self.all_critical_edges = [edge for edge in critical_dict if critical_dict[edge] == 'r']
@@ -75,5 +72,4 @@ class service:
 	def update_all_edges_traversed_remove(self, track):
 		self.all_edges_traversed = []
 		for track in self.tracks:
-			self.update_all_edges_traversed(track
-)
+			self.update_all_edges_traversed(track)

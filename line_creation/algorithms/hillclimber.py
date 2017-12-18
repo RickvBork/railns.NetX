@@ -13,10 +13,12 @@ from copy import deepcopy
 from classes import track_class as tc
 import math
 import csv
-import sys, os
-clear = lambda: os.system('clear')
+from helpers import clear
 
 def run_hillclimber(service, max_number_of_tracks, max_track_time, number_of_iterations):
+	'''
+	Runs hillclimber
+	'''
 	hillclimber_scores = []
 	last_score = 0
 	
@@ -24,7 +26,7 @@ def run_hillclimber(service, max_number_of_tracks, max_track_time, number_of_ite
 		number_of_tracks = len(service.tracks)
 		for i in range(number_of_tracks):
 			for k in range(number_of_iterations):
-				service = hillclimber_sim_an(service,i,max_number_of_tracks, max_track_time, j*k*10)
+				service = hillclimber_sim_an(service,i,max_number_of_tracks, max_track_time, j+k)
 							
 				if (service.s_score != last_score):
 					last_score = service.s_score
@@ -43,6 +45,10 @@ def run_hillclimber(service, max_number_of_tracks, max_track_time, number_of_ite
 	
 
 def hillclimber_random(service, track_number, max_number_of_tracks, max_track_time):
+	'''
+	Replaces a single track of a service by by a new random track. 
+	If service has higher score with new random track, service with new random track is returned. If not, old service remains unchanged.
+	'''
 	old_service_score_s = service.s_score
 	track0 = service.tracks[track_number]	
 	
@@ -71,6 +77,10 @@ def hillclimber_random(service, track_number, max_number_of_tracks, max_track_ti
 	return service
 
 def hillclimber_smart(service, track_number, max_number_of_tracks, max_track_time):
+	'''
+	Replaces a single track of a service by by a new smart track. 
+	If service has higher score with new random track, service with new random track is returned. If not, old service remains unchanged.
+	'''
 	old_service_score_s = service.s_score
 	track0 = service.tracks[track_number]	
 	
@@ -97,8 +107,15 @@ def hillclimber_smart(service, track_number, max_number_of_tracks, max_track_tim
 		if old_track_removed:		
 			service.add_track(track0)
 
+	return service
+
 
 def hillclimber_sim_an(service, track_number, max_number_of_tracks, max_track_time, temperature):
+	'''
+	Replaces a single track of a service by by a new random track. 
+	If service has higher score with new random track, service with new random track is returned. 
+	If not, old service is replaced by new service by a probability of 1 / e^temperature.
+	'''
 	old_service_score_s = service.s_score
 	track0 = service.tracks[track_number]	
 	
