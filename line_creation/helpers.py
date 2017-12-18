@@ -140,7 +140,7 @@ def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length
 
 	1: User chooses for update every 1% or .1% (update = 100, 1000)
 
-	2: Always update every iteration. Show .1% increases.
+	2: Always update every iteration. Show .1% increases
 
 	Arguments:
 		(0) The current iteration number (integer)
@@ -151,7 +151,7 @@ def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length
 		(5) The length of the loading bar in amount of chars
 		(6) The char to fill the loading bar with
 		(7) The update amount, 100 is per percent, 1000 is per tenth of percent
-		(8) The amount at which the behaviour of the loading bar automatically switches.
+		(8) The amount at which the behaviour of the loading bar automatically switches
 	'''
 
 	# behaviour mode 1: every update %
@@ -173,26 +173,17 @@ def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length
 	if iteration == total: 
 		print()
 
-def update_hash_dict(Track, Node, edge, hash_dict):
-	'''
-	Check if added track creates a track with a junction at the end.
-	'''
-
-	if len(Node.neighbors) > 2:
-
-		key = hash(Track)
-		try:
-			walked_edges = hash_dict[key]
-		except KeyError:
-			hash_dict[key] = [edge]
-	return hash_dict
-
-
 def get_neighbor(Node, Previous):
 	'''
-	Always returns the first valid neighbor of a list of neighbor Nodes. Always walks forward.
-	'''
+	Gets any neighbor a node except the previous neighbor if the node has more than one neighbor. If the node has one neighbor this behaviour is overwritten.
 
+	Arguments:
+		(0) A node to be checked for neighbors
+		(1) A node object which is the previous of the node to be checked for neighbors
+
+	Returns:
+		A neighbor (node object).
+	'''
 	for neighbor in Node.neighbors:
 		if neighbor != Previous: 
 			return neighbor
@@ -202,7 +193,13 @@ def get_neighbor(Node, Previous):
 
 def is_junction(Node):
 	'''
-	Checks wether a node is a junction.
+	Checks wether a node is a junction. A junction is defined as any node with more than two neighbors.
+
+	Arguments:
+		(0) A node object to be checked if it is a junction
+
+	Returns:
+		True if the node is a junction, False otherwise (Boolean)
 	'''
 
 	if len(Node.neighbors) > 2:
@@ -213,7 +210,15 @@ def is_junction(Node):
 
 def update_path(Track, path, edge):
 	'''
-	Hashes a track leading up to a junction and adds the next walked edge.
+	Updates a dictionary of hashed tracks ending in a junction node keying edges that have been traversed any track previously made by the DFS algorithm.
+
+	Arguments:
+		(0) A track object
+		(1) A dictionary to be updated
+		(2) An edge to be added to the list keyed by the hashed track if it is not already in the list
+
+	Returns:
+		The updated dictionary.
 	'''
 
 	key = hash(Track)
@@ -225,15 +230,16 @@ def update_path(Track, path, edge):
 		path[key] = [edge]
 	return path
 
-def update_old_path(Track, path, edge):
-
-	key = hash(Track)
-	path[key].append(edge)
-	return path
-
 def junction_edges(Track, path):
 	'''
-	Returns a list of junction edges for a given track which ends in a junction Node.
+	For a given track ending in a junction node, returns the edges that have been traversed by other tracks.
+	
+	Arguments:
+		(0) A track object
+		(1) A dictionary where hashed tracks key traversed edges
+
+	Returns:
+		A list of edges traversed by any other track.
 	'''
 
 	key = hash(Track)
