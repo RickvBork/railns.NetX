@@ -2,7 +2,7 @@ from classes import node_class as ndc, track_class as trc
 import collections as col
 import os, errno
 import random
-import collections # for Hierholzer's
+import collections
 import helpers as hlp
 
 
@@ -19,20 +19,20 @@ def clear():
 	'''
 	os.system('cls' if os.name == 'nt' else 'clear')
 
-'''
-Gets the percentage of critical connections traversed.
-'''
+
 def get_p(critical_connections_traversed, critical_connections):
+	'''
+	Gets the percentage of critical connections traversed.
+	'''
 	return len(critical_connections_traversed) / len(critical_connections)
 
-'''
-Calculates the score and rounds to nearest 10.
-m term small, hence the rounding. Plus makes searching for
-score occurrence easier.
-'''
 
-# ROUND IN VISUALISATION, OTHERWHILE HILLCLIMBER WON'T RECOGNISE SMALL SCORE INCREASES!
 def get_score(p, track_amount, total_track_time):
+	'''
+	Calculates the score and rounds to nearest 10.
+	m term small, hence the rounding. Plus makes searching for
+	score occurrence easier.
+	'''
 	return p * 10000 - (track_amount * 20 + total_track_time / 100000)
 
 '''
@@ -112,10 +112,10 @@ def test(edge, critical_edges, critical_edges_traversed):
 			critical_edges_traversed.append(edge)
 	return critical_edges_traversed
 
-'''
-makes node objects complete with their neighbors as nodes
-'''
 def get_node_list(G, nodes):
+	'''
+	makes node objects complete with their neighbors as nodes
+	'''
 
 	node_dict = {}
 	for node in nodes:
@@ -129,10 +129,11 @@ def get_node_list(G, nodes):
 
 	return node_list
 
-'''
-Removes files, checks if file exists and silently ignores error if the error is a 'no such file or directory exists'.
-'''
+
 def file_remove(path_file_name):
+	'''
+	Removes files, checks if file exists and silently ignores error if the error is a 'no such file or directory exists'.
+	'''
 
 	try:
 		os.remove(path_file_name)
@@ -140,14 +141,14 @@ def file_remove(path_file_name):
 		if e.errno != errno.ENOENT:
 			raise
 
-'''
-Loading bar. Two modes for faster computation of large iteration numbers. Switch sets the total iteration number where behaviour switches between modes.
+def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '.', update = 100, switch = 100):
+	'''
+	Loading bar. Two modes for faster computation of large iteration numbers. Switch sets the total iteration number where behaviour switches between modes.
 
-1: User chooses for update every 1% or .1% (update = 100, 1000)
+	1: User chooses for update every 1% or .1% (update = 100, 1000)
 
-2: Always update every iteration. Show .1% increases.
-'''
-def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', update = 100, switch = 100):
+	2: Always update every iteration. Show .1% increases.
+	'''
 
 	# behaviour mode 1: every update %
 	if total >= switch and (iteration % (total / update)) == 0:
@@ -169,10 +170,10 @@ def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length
 	if iteration == total: 
 		print()
 
-'''
-Check if added track creates a track with a junction at the end.
-'''
 def update_hash_dict(Track, Node, edge, hash_dict):
+	'''
+	Check if added track creates a track with a junction at the end.
+	'''
 
 	if len(Node.neighbors) > 2:
 
@@ -183,10 +184,11 @@ def update_hash_dict(Track, Node, edge, hash_dict):
 			hash_dict[key] = [edge]
 	return hash_dict
 
-'''
-Always returns the first valid neighbor of a list of neighbor Nodes. Always walks forward.
-'''
+
 def get_neighbor(Node, Previous):
+	'''
+	Always returns the first valid neighbor of a list of neighbor Nodes. Always walks forward.
+	'''
 
 	for neighbor in Node.neighbors:
 		if neighbor != Previous: 
@@ -194,20 +196,22 @@ def get_neighbor(Node, Previous):
 		elif len(Node.neighbors) == 1:
 			return neighbor
 
-'''
-Checks wether a node is a junction.
-'''
+
 def is_junction(Node):
+	'''
+	Checks wether a node is a junction.
+	'''
 
 	if len(Node.neighbors) > 2:
 		return True
 	else:
 		return False
 
-'''
-Hashes a track leading up to a junction and adds the next walked edge.
-'''
+
 def update_path(Track, path, edge):
+	'''
+	Hashes a track leading up to a junction and adds the next walked edge.
+	'''
 
 	key = hash(Track)
 	try:
@@ -224,19 +228,20 @@ def update_old_path(Track, path, edge):
 	path[key].append(edge)
 	return path
 
-'''
-Returns a list of junction edges for a given track which ends in a junction Node.
-'''
 def junction_edges(Track, path):
+	'''
+	Returns a list of junction edges for a given track which ends in a junction Node.
+	'''
 
 	key = hash(Track)
 	junction_edges = path[key]
 	return junction_edges
 
-'''
-Checks neighbors of a junction Node against the previously walked Node, and all directed junction edges that can be created with the neighbors.
-'''
+
 def get_junction_neighbor(Start, Previous, junction_edges):
+	'''
+	Checks neighbors of a junction Node against the previously walked Node, and all directed junction edges that can be created with the neighbors.
+	'''
 	
 	for neighbor in Start.neighbors:
 		if neighbor != Previous:
@@ -252,19 +257,19 @@ def get_previous(Start, key):
 		Previous = None
 	return Previous
 
-'''
-Links two nodes. It sets the previous of the last node to the first node.
-'''
 def link_nodes(Start, Neighbor, key):
+	'''
+	Links two nodes. It sets the previous of the last node to the first node.
+	'''
 
 	Neighbor.test[key] = Start
 	Start = Neighbor
 	return Start
 
-'''
-Delinks two nodes. It sets the previous of the last node to 'None' and returns the node before the last node as the new start.
-'''
 def delink_nodes(Start, key):
+	'''
+	Delinks two nodes. It sets the previous of the last node to 'None' and returns the node before the last node as the new start.
+	'''
 	
 	try:
 		Previous = Start.test[key]
@@ -274,10 +279,10 @@ def delink_nodes(Start, key):
 		pass
 	return Start
 
-'''' 
-seperate function for generate_random_track
-'''
 def generate_random_track(Graph, start, max_track_length):
+	'''
+	seperate function for generate_random_track
+	'''
 	
 	G = Graph
 	track = trc.track(G)
