@@ -9,11 +9,11 @@ track is object as defined in track_class.py
 '''
 
 class service:
-	def __init__(self, Graph):
+	def __init__(self, G):
 		self.tracks = []
 
 		# OPTIMALISATIE! GEEN GRAAF! PASSEER ALLEEN critical edge list als arg
-		self.G = Graph
+		self.G = G
 
 		# Een int te geven? Want meer is niet nodig voor score
 		# self.all_critical_edges = graph_c.critical_edge_list

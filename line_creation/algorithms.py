@@ -126,7 +126,7 @@ def smart_random_walk(Graph, iterator, max_number_of_tracks, max_time):
 	# remove empty values as list is not always filled
 	return [service for service in best_services if service != 0]
 
-def hierholzer(graph, max_track_length, max_track_amount, iterator):
+def hierholzer(graph, max_track_amount, max_track_length, iterator):
 	'''
 	Hierholzer's algorithm. 
 	'''
@@ -154,7 +154,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 		G = graph.G
 
 		# initialize service
-		service = svc.service(graph)
+		service = svc.service(G)
 
 		# adding all edges as tuples to all_edges_list
 		all_edge_list = [edge for edge in graph.edges]
