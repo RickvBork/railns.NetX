@@ -163,13 +163,9 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 				# remove track
 				new_service.remove_track(track)
 
-		print("score: ", end="")
-		print(new_service.s_score)
-
 		score = new_service.s_score
 
-		# remember best scores (unordered)
-		# get key of minimum value in dict
+		# remember best scores (unordered), get key of minimum value in dict
 		if score > min_score:
 			score_list, service_list, min_score, min_index = hlp.update_lists(score, min_index, service, score_list, service_list)
 
