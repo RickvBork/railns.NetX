@@ -10,7 +10,124 @@ import itertools # for Hierholzer's
 import collections # maar mogelijk naar helpers
 import numpy as np
 
-def hierholzer(graph, max_track_amount, max_track_length, iterator):
+
+'''
+Pure, random walk. No heuristics. Takes a graph object and an iterator as arguments. Returns an unordered list of 5 best service classes.
+'''
+def random_walk(Graph, iterator, max_number_of_tracks, max_time):
+
+	G = Graph.G
+	minimum_weight = Graph.minimal_edge_weight
+	nodes = Graph.nodes
+
+	# build node structure
+	node_list = hlp.get_node_list(G, nodes)
+
+	# initialise list for best services
+	max_service_amount = 5
+	best_services = [0] * max_service_amount
+	best_score = - 140
+	i = 0
+
+	# initiate loading bar
+	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+
+	for j in range(iterator):
+
+		# build service loop
+		service = svc.service(Graph)
+
+		# rand number of tracks 1 up to including 7
+		number_of_tracks_in_service = random.randint(1, max_number_of_tracks)
+		number_of_tracks_in_service = max_number_of_tracks
+
+		for k in range(number_of_tracks_in_service):
+
+			# pick random starting station 
+			start = random.choice(node_list)
+
+			# random time for a given track
+			random_time = random.randint(minimum_weight, max_time)
+			random_time = max_time
+
+			track = hlp.generate_random_track(Graph, start, random_time)
+			# add new track to service
+			service.add_track(track)
+
+		score = service.s_score
+
+		# remember best scores (unordered)
+		if score > best_score:
+			best_services[i % max_service_amount] = service
+			best_score = score
+			i += 1
+
+		# update loading bar
+		hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+
+	# remove empty values as list is not always filled
+	return [service for service in best_services if service != 0]
+
+'''
+Smart 'random' walk
+'''
+def smart_random_walk(Graph, iterator, max_number_of_tracks, max_time):
+
+	# get information from graph to perform algorithm
+	G = Graph.G	
+	minimum_weight = Graph.minimal_edge_weight
+	nodes = Graph.nodes
+	
+	#build node structure
+	node_list = hlp.get_node_list(G, nodes)
+
+	critical_connections = Graph.critical_edge_list
+	total_critical_connections = Graph.total_critical_edges
+	
+	#hlp = test_helpers
+
+	# set lists
+	best_score = - 141	
+	max_service_amount = 5
+	best_services = [0] * max_service_amount
+	
+	p_list = []
+	s_list = []
+	best_tracks = []
+	
+	# do the walk iterator amount of times
+	for i in range(iterator):
+
+		# build service loop
+		service = sc.service(Graph)
+
+		# builds the service of multiple tracks
+		for k in range(max_number_of_tracks):
+
+			# pick random start station 
+			# TODO: make sure node is critical
+			start = random.choice(node_list)
+
+			track = hlp.generate_smart_random_track(G, start, max_time)
+			
+			# add new track to service
+			service.add_track(track)
+
+		score = service.s_score
+
+		# remember best scores (unordered)
+		if score > best_score:
+			best_services[i % max_service_amount] = service
+			best_score = score
+			i += 1
+
+		# update loading bar
+		hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+
+	# remove empty values as list is not always filled
+	return [service for service in best_services if service != 0]
+
+def hierholzer(graph, max_track_length, max_track_amount, iterator):
 	'''
 	Hierholzer's algorithm. 
 	'''
@@ -39,6 +156,7 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 
 		# initialize service
 		service = svc.service(G)
+
 
 		# adding all edges as tuples to all_edges_list
 		all_edge_list = [edge for edge in graph.edges]
