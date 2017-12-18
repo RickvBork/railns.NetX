@@ -7,7 +7,7 @@ from copy import deepcopy
 import collections
 import analysis as ana
 
-def hierholzer(graph, max_track_length, max_track_amount, iterator):
+def hierholzer(graph, max_track_amount, max_track_length, iterator):
 	'''
 	Hierholzer's algorithm. 
 	'''
@@ -162,8 +162,8 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 		# 	print("service.self score: ", end="")
 		# 	print(new_service.s_score)
 
-		# print("service.self score: ", end="")
-		# print(new_service.s_score)
+		print("service.self score: ", end="")
+		print(new_service.s_score)
 
 
 
