@@ -22,14 +22,12 @@ def smart_random_walk(Graph, max_number_of_tracks, max_time, iterator):
 	total_critical_connections = Graph.total_critical_edges
 
 	# set lists
-	best_score = - math.inf
 	max_service_amount = 5
-	best_services = [0] * max_service_amount
-	
-	p_list = []
-	s_list = []
-	best_tracks = []
-	
+	score_list = [- math.inf] * max_service_amount
+	service_list = [None] * max_service_amount
+	min_score = score_list[0]
+	min_index = 0
+
 	# initiate loading bar
 	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
@@ -54,13 +52,12 @@ def smart_random_walk(Graph, max_number_of_tracks, max_time, iterator):
 		score = service.s_score
 
 		# remember best scores (unordered)
-		if score > best_score:
-			best_services[i % max_service_amount] = service
-			best_score = score
-			i += 1
+		# get key of minimum value in dict
+		if score > min_score:
+			score_list, service_list, min_score, min_index = hlp.update_lists(score, min_index, service, score_list, service_list)
 
 		# update loading bar
 		hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# remove empty values as list is not always filled
-	return [service for service in best_services if service != 0]
+	return service_list

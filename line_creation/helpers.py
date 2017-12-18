@@ -276,9 +276,8 @@ def delink_nodes(Start, key):
 '''' 
 seperate function for generate_random_track
 '''
-def generate_random_track(Graph, start, max_track_length):
+def generate_random_track(G, start, max_track_length):
 	
-	G = Graph
 	track = trc.track(G)
 	
 	# always build track one edge longer than allowed
@@ -465,3 +464,12 @@ def track_combination(service, max_track_length, G):
 			service.add_track(track)
 
 	return service
+
+def update_lists(score, min_index, service, score_list, service_list):
+
+	score_list[min_index] = score
+	service_list[min_index] = service
+	min_score = min(score_list)
+	min_index = score_list.index(min_score)
+
+	return score_list, service_list, min_score, min_index
