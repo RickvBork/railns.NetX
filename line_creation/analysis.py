@@ -36,7 +36,7 @@ def draw_graph(Graph, service = None):
 		edge_color_map = [nx.get_edge_attributes(G,'color')[edge] for edge in G.edges()]
 
 		# draw everything except labels and show plot
-		nx.draw_networkx(G, pos, node_color = node_color_map, node_size = node_size_map, edge_color = edge_color_map, with_labels = False)
+		nx.draw_networkx(G, pos, node_color = node_color_map, node_size = node_size_map, edge_color = edge_color_map, with_labels = True)
 
 		# show plot
 		plt.show()
