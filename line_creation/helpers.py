@@ -273,7 +273,7 @@ seperate function for generate_random_track
 '''
 def generate_random_track(Graph, start, max_track_length):
 	
-	G = Graph.G
+	G = Graph
 	track = trc.track(G)
 	
 	while track.time < max_track_length:
@@ -295,7 +295,7 @@ def generate_random_track(Graph, start, max_track_length):
 
 def generate_smart_random_track(Graph, start, max_track_length):
 
-	G = Graph.G
+	G = Graph
 
 	track = trc.track(G)	
 	start = start.name
@@ -308,7 +308,7 @@ def generate_smart_random_track(Graph, start, max_track_length):
 		prefered_neighbors = hlp.get_prefered_neighbors(Graph, start, track)
 
 		if prefered_neighbors == []:
-			random_neighbor = random.choice(list(Graph.G[start]))
+			random_neighbor = random.choice(list(G[start]))
 		else: 
 			random_neighbor = random.choice(prefered_neighbors)
 
