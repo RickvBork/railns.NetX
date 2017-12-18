@@ -525,7 +525,26 @@ def track_combination(service, max_track_length, G):
 	return service
 
 def update_lists(score, min_index, service, score_list, service_list):
+	'''
+	Only ran when a score is found to be higher than the minimum score currently stored in the score list. Uses two lists of corresponding length.
 
+	1: A list of floats whose values at a certain index correspond to the score of a service object in the service_list at the same index.
+
+	2: A list of service objects.
+
+	Arguments:
+		(0) A score to be added (float)
+		(1) An index for selecting the correct score and service object
+		(2) A service object to be added to the service_list
+		(3) A list of floats whose values at a certain index correspond to the score of a service object in the service_list
+		(4) A list of service objects
+
+	Returns:
+		(0) The updated score list (list of floats)
+		(1) The updated service list (list of service objects)
+		(2) The updated minimum score in the score list (float)
+		(3) The updated index corresponding to the minimum score in the score list and alsomto the lowest scoring object in the service list (int)
+	'''
 	score_list[min_index] = score
 	service_list[min_index] = service
 	min_score = min(score_list)
