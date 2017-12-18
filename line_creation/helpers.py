@@ -322,6 +322,9 @@ def generate_smart_random_track(G, start, max_track_length):
 	return track
 
 def get_one_edge_node(all_edge_list, graph, service):
+	'''
+	For Hierholzer's. Returns a node with only one edge with a critical neighbor.
+	'''
 
 	# make list with every station as much as they have untraversed edges
 	stations_in_edges_amount_list = [elem for t in all_edge_list for elem in t]
@@ -356,6 +359,12 @@ def get_one_edge_node(all_edge_list, graph, service):
 	return current_node
 
 def track_combination(service, max_track_length, G):
+	'''
+	For Hierholzer's. Combines two tracks into one track if: the total track length of the 
+	two tracks doesn't exceed the maximum track length, and if the two tracks have either
+	the same starting station, which means that the edges of one of the two tracks have to be
+	reversed, or if the two tracks have the same ending and starting station.
+	'''
 
 	# list to store new tracks (to add to track object after iteration)
 	tmp_new_track_list = []
