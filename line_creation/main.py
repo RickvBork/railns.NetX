@@ -1,5 +1,5 @@
 from classes import graph_class as grc
-from algorithms import hierholzer as hh
+from algorithms import hierholzer as hh, random_walk as rw
 import sys, os
 
 # initialize datafiles
@@ -32,9 +32,9 @@ def main_menu():
 		elif choice == '2':
 			g = grc.Graph('NH', stations_1, connections_1)
 
-		algo_menu(g)
+		algo_menu_0(g)
 
-def algo_menu(g):
+def algo_menu_0(g):
 	'''
 	A simple menu for choosing between different functions. Takes a graph object, and calls another menu function.
 	'''
@@ -45,31 +45,65 @@ def algo_menu(g):
 		print('Please select the algorithm you want to run')
 		print('1. Random Walk')
 		print('2. Hierholzer')
-		# TODO ADD MORE ALGO's
+		print('3. Hillclimber')
 
 		choice = input(' >> ')
 		clear()
 
 		# pass the chosen algorithm and the graph
 		if choice == '1':
-			# algo_0(rw, g)
+			algo_0(rw.random_walk, g)
+		elif choice == '2':
+			algo_0()
+		elif choice == '3':
+			algo_0(hh.hierholzer, g)
+		elif choice == '4':
 			# TODO
 			pass
-		elif choice == '2':
-			algo_0(hh.hierholzer, g)
 
-def algo_0(algo, g):
+def algo_0(algo, g, hillclimber = False):
 	'''
 	A simple menu for setting the starting values for a given algorithm. Takes an algorithm (function) and a graph (object).
 	'''
 
-	# get user inputs
+	seed = None
+	if hillclimber:
+		seed = algo_menu_1(g)
+		max_track_number, max_track_time, iteration = get_input()
+
+	else:
+		# get user inputs
+		max_track_number, max_track_time, iteration = get_input()
+
+		# TODO make arguments consistent for similar algo's
+		algo(g, max_track_number, max_track_time, iteration)
+
+def algo_menu_1(g):
+	choice = '0'
+	while choice == '0':
+		print('Hillclimber seed algorithm menu:\n')
+		print('Please select the algorithm you want to seed the hillclimber with')
+		print('1. Random Walk')
+		print('2. Hierholzer')
+
+		choice = input(' >> ')
+		clear()
+
+		# pass the chosen algorithm and the graph
+		if choice == '1':
+			pass
+			# TODO
+		elif choice == '2':
+			max_track_number, max_track_time, iteration = get_input()
+			return hh.hierholzer(g, max_track_number, max_track_time, iteration)
+
+def get_input():
+
 	max_track_time = int(input('Input maximum track time: '))
 	max_track_number = int(input('Input maximum number of tracks per service: '))
 	iteration = int(input('Input iteration amount: '))
 
-	# TODO make arguments consistent for similar algo's
-	algo(g, max_track_number, max_track_time, iteration)
+	return max_track_number, max_track_time, iteration
 
 if __name__ == '__main__':
 	main_menu()

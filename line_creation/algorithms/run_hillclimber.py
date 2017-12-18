@@ -21,6 +21,8 @@ import hillclimber_helper as hh
 path_stations_file = '../data/StationsNationaal.csv'
 path_tracks_file = '../data/ConnectiesNationaal.csv'
 
+
+
 # initialise graph class
 Graph = graph_class.Graph
 
