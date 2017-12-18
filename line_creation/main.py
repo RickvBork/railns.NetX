@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from classes import graph_class as grc
-from algorithms import hierholzer as hh, random_walk as rw, smart_random_walk as srw, hillclimber as hc
+from algorithms import hierholzer as hh, random_walk as rw, smart_random_walk as srw, hillclimber as hc, hillclimber_sim_an as hs
 from helpers import clear
 
 # initialize datafiles
@@ -51,7 +51,7 @@ def algo_menu_0(g):
 		print('2. Smart Random Walk')
 		print('3. Hierholzer')
 		print('4. Hillclimber')
-		print('5. Simulated Annealing')
+		print('5. Hillclimber with Simulated Annealing')
 
 		choice = input(' >> ')
 		clear()
@@ -65,6 +65,8 @@ def algo_menu_0(g):
 			algo_0(hh.hierholzer, g)
 		elif choice == '4':
 			algo_0(hc.run_hillclimber, g, True)
+		elif choice == '5':
+			algo_0(hs.run_hillclimber_sim_an, g, True)
 		else:
 			print(error0)
 			choice = '0'
@@ -119,7 +121,7 @@ def algo_1(g):
 
 def get_input():
 
-	print('You have created a service object! Please select preferred values for the Hillclimber Suggestions for viable simulations are behind the inputs:\n')
+	print('\nYou have created a service object!\nPlease select preferred values for the Hillclimber Suggestions for viable simulations are behind the inputs:\n')
 
 	max_track_time = int(input('Input maximum track time (1 - 180): '))
 	max_track_number = int(input('Input maximum number of tracks per service (1 - 20): '))
