@@ -1,29 +1,70 @@
-import algorithms as alg
-import analysis as ana
-import graph_class
-import helpers as hlp
-import csv
+from classes import graph_class as grc
+from algorithms import random_walk as rw, hierholzer as hh
+import sys, os
 
-# initialize path files for Noord Holland graph
-path_stations_file = '../data/StationsHolland.csv'
-path_tracks_file = '../data/ConnectiesHolland.csv'
+# initialize datafiles
+stations_0 = '../data/StationsHolland.csv'
+connections_0 = '../data/ConnectiesHolland.csv'
+stations_1 = '../data/StationsNationaal.csv'
+connections_1 = '../data/ConnectiesNationaal.csv'
 
-# initialise graph class
-Graph = line_graph_class.Graph
+# function for clearing the console
+clear = lambda: os.system('cls')
 
-# make graph instance (Noord Holland)
-g = Graph("NH", path_stations_file, path_tracks_file)
+def main_menu():
+	'''
+	A main menu for loading different datafiles necessary to initiate a graph (object). Calls another menu function.
+	'''
 
-scores, p_scores, best_tracks = alg.random_walk(g, 1000)
+	choice = '0'
+	while choice == '0':
+		print('Datafiles menu\n')
+		print('Please select the files you want to load')
+		print('1. North Holland')
+		print('2. Netherlands')
 
-ana.draw_graph(g)
+		choice = input(' >> ')
+		clear()
 
+		# build chosen graph object
+		if choice == '1':
+			g = grc.Graph('NH', stations_0, connections_0)
+		elif choice == '2':
+			g = grc.Graph('NH', stations_1, connections_1)
 
-# write scores to csv
-# ref: https://stackoverflow.com/questions/39282516/python-list-to-csv-throws-error-iterable-expected-not-numpy-int64
-# ref: https://docs.python.org/3/library/csv.html
-with open('../data/results.csv', 'w', newline='') as myfile:
-	wr = csv.writer(myfile,delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-	wr.writerows(map(lambda x: [x], scores))
+		algo_menu(g)
 
+def algo_menu(g):
+	'''
+	A simple menu for choosing between different functions. Takes a graph object, and calls another menu function.
+	'''
 
+	choice = '0'
+	while choice == '0':
+		print('Algorithm menu:\n')
+		print('Please select the algorithm you want to run')
+		print('1. Random Walk')
+		# TODO ADD MORE ALGO's
+
+		choice = input(' >> ')
+		clear()
+
+		# pass the chosen algorithm and the graph
+		if choice == '1':
+			algo_0(rw, g)
+
+def algo_0(algo, g):
+	'''
+	A simple menu for setting the starting values for a given algorithm. Takes an algorithm (function) and a graph (object).
+	'''
+
+	# get user inputs
+	max_track_time = int(input('Input maximum track time: '))
+	max_track_number = int(input('Input maximum number of tracks per service: '))
+	iteration = int(input('Input iteration amount: '))
+
+	# TODO make arguments consistent for similar algo's
+	algo(g, iteration, max_track_number, max_track_time)
+
+if __name__ == '__main__':
+	main_menu()

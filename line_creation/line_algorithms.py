@@ -1,6 +1,6 @@
 import helpers as hlp
 import random
-#import line_analysis as ana
+import analysis as ana
 import networkx as nx
 #import line_node_class as N
 import track_class as T
@@ -37,7 +37,7 @@ def random_walk(Graph, iterator, max_number_of_tracks, max_time):
 	for j in range(iterator):
 
 		# build service loop
-		service = sc.service(Graph)
+		service = sc.service(G)
 
 		# rand number of tracks 1 up to including 7
 		number_of_tracks_in_service = random.randint(1, max_number_of_tracks)
@@ -101,7 +101,7 @@ def smart_random_walk(Graph, iterator, max_number_of_tracks, max_time):
 	for i in range(iterator):
 
 		# build service loop
-		service = sc.service(Graph)
+		service = sc.service(G)
 
 		# builds the service of multiple tracks
 		for k in range(max_number_of_tracks):
