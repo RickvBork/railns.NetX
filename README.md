@@ -1,20 +1,19 @@
 # Project: RailNL
-*@author Team Stellar Heuristiek: \
+*@author Team Stellar Heuristiek \
 Rick van der Bork - 11990503 \
 Dimitri van Cappeleveen - 122 \
 Thom Oosterhuis - 10893806*
 
-One paragraph of project description goes here
+This programm models railway networks into a graph. Tracks are calculated with certain constraints and are given a score depending on the number of critical connections that are traversed. Here, a railline between two stations is defined as critical whenever at least of of the two stations is defined as critical. For this definition, a csv file is used. 
+Route determining is done by several algorithms. The score is calculated with the following formula:
 
-  Program that models railway networks into a graph. Tracks are calculated with certain constraints and are given a score depending on the number of critical conenctions that are covered. Here, a railline between two stations is defined as critical whenever at least of of the two stations is defined as critical. For this definition, a csv file is used. 
-Route determining is done both by using a random walk and by random walk with certain restrictions and instructions, the latter leading to routes that score higher scores.
+Score = p*10000 - (t*20 + min/100000)
 
-  Scores are calculated in different ways. Usually they depend on P, which is fraction of critical railconnections between two station that is passed on by a train at least once in at least one direction. Other variables that are taken into account are the number of trains in a one service (usually varying from one to seven) and the total number of minutes these trains in one service need for their route.
+P is the percentage of critical connections traversed, t the number of tracks and m the total number of minutes of all the tracks combined.
 
 ## Motivation
 
-This project is for..
-
+This project is for the course Heuristieken, part of the Minor Programming, of the University of Amsterdam.
 
 ## Getting started
 
@@ -36,6 +35,10 @@ pip install -r requirements.txt
 * Line_creation: Contains the python files that model the graph and the functions used to generate paths and trainservices. There are explained in greater detail in the README within the directory. How to actually run the algorithms is also explained in the README file in this folder.
 * Trash: The name says it all.
 * Visualization: Contains the results of visualisations. These are graphical displays of the railnetwork as well as barcharts from the scores of train services genereated by different algorithms. It also contains a folder with histograms based on the results of the data of the Hierholzer experiments in the Data folder.
+
+## Contributors
+
+Since this is a school assignment, this project is not open for contributing.
 
 ## Acknowledgments
 
