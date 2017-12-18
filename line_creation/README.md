@@ -40,8 +40,9 @@ This folder contains several classes used by the algorithms:
  * The Graph class: This models a railnetwork, using Networkx.
  * The Node class: Models a node, i.e. the connection between two single stations.
  * The Service class: Models a train service (nl: 'lijnvoering') which consists of several tracks driven by several trains.
- * The Track class: Models the route of a single train. \
-All these classes contain relevant information such as the time a train takes for its route, the critical edges a train rides during the route etc.
+ * The Track class: Models the route of a single train.
+
+All of these classes contain relevant information such as the time a train takes for its route, the critical edges a train rides during the route etc.
 
 ## Analysis
 
