@@ -119,22 +119,44 @@ def algo_1(g):
 
 def get_input():
 
-	max_track_time = int(input('Input maximum track time (1 - 180): '))
-	max_track_number = int(input('Input maximum number of tracks per service (1 - 20): '))
-	iteration = int(input('Input iteration amount (5 - 10.000): '))
-	clear()
+	while True:
+		try:
+			max_track_time = int(input('Input maximum track time (1 - 180): '))
+			max_track_number = int(input('Input maximum number of tracks per service (1 - 20): '))
+			iteration = int(input('Input iteration amount (5 - 10.000): '))
+		except ValueError:
+			print('Please provide a valid integer!')
+		else:
+			if iteration < 5:
+				clear()
+				print('Iteration number must be at least 5!')
+				continue
+			else:
+				break
 
+	clear()
 	return max_track_number, max_track_time, iteration
 
 def get_small_input():
 
 	print('Please select small values to allow Hillclimber to \'climb\' to better services. Suggestions for generating a bad service are behind the inputs:\n')
 
-	max_track_time = int(input('Input maximum track time (1 - 50): '))
-	max_track_number = int(input('Input maximum number of tracks per service (1 - 3): '))
-	iteration = int(input('Input iteration amount (1 - 10): '))
-	clear()
+	while True:
+		try:
+			max_track_time = int(input('Input maximum track time (1 - 50): '))
+			max_track_number = int(input('Input maximum number of tracks per service (1 - 3): '))
+			iteration = int(input('Input iteration amount (1 - 10): '))
+		except ValueError:
+			print('Please provide a valid integer!')
+		else:
+			if iteration < 5:
+				clear()
+				print('Iteration number must be at least 5!')
+				continue
+			else:
+				break
 
+	clear()
 	return max_track_number, max_track_time, iteration
 
 def draw_menu(services, g):
