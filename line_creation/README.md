@@ -2,17 +2,17 @@
 # Line_creation
 *@author Team Stellar Heuristiek
 Rick van der Bork - 11990503
-Dimitri van Cappeleveen - 122
+Dimitri van Cappeleveen - 12017485
 Thom Oosterhuis - 10893806*
 
 This folder contains all the code necessary for running the algorithms. It contains the .py files that model a railnetwork using a graph and that create trainservices consisting of multiply trains driving on a traject for a specified amount of time. 
-More specifically, this folder contains the folders algorithms and the folder classes. Furthermore it contains the files analysis.py, helpers.py and main.py. All the files contain docstrings and comments to explain in more detail than given below their content.
+More specifically, this folder contains the folders algorithms and the folder classes. Furthermore it contains the files analysis.py, helpers.py and main.py. All the files contain docstrings and comments to explain their content in more detail than given below.
 
 ## Algorithms folder
 
+This folder contains, as the name suggests, our algorithms:
 
-
-Random Walk:
+* Random Walk:
 Randomly generates a track. No heuristics involved.
 
 Hillclimber:
