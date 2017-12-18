@@ -14,7 +14,7 @@ This directory contains, as the name suggests, our algorithms (for a description
 * Hierholzer: Fills the graph with tracks that, when combined, cover each edge once. Then using certain heuristics, tracks are coupled or shortened to improve the service score.
 * Hillclimber: Uses a randomly generated service as a starting point. Then alters various dimensions of the service to 'climb' to higher scores. Stops if the maximum number of iterations has been reached.
 	* Hillclimber helper: Helper file which contains functions specifically for the Hillclimber
-	* Hillclimber Simulated Annealing: TODO.
+	* Hillclimber Simulated Annealing: Same as the helper, but to avoid getting stucked in local maximums, a new service is sometimes also accepted when the score of the new service is lower the the score of the service it replaces. This happens with a probability e^-t, where t is the temperature, which increases as the number of times the hillclimber is executed, increases.
 * Random Walk: Randomly generates a track. No heuristics involved.
 * Smart Random Walk: A variation of the Random Walk, with some heuristics: TODO.
 
