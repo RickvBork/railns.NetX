@@ -4,12 +4,12 @@ used to test functions, file is ignored by git.
 
 import algorithms as alg
 import analysis as ana
-import graph_class
+from classes import graph_class
 import helpers as hlp
 import csv
 import numpy
-import service_class as sc
-import track_class as tc
+from classes import service_class as sc
+from classes import track_class as tc
 import hillclimber as hc
 import hillclimber_helper as hh
 
