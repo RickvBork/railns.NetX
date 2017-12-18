@@ -16,7 +16,7 @@ This directory contains, as the name suggests, our algorithms (for a description
 	* Hillclimber helper: Helper file which contains functions specifically for the Hillclimber
 	* Hillclimber Simulated Annealing: Same as the helper, but to avoid getting stucked in local maximums, a new service is sometimes also accepted when the score of the new service is lower the the score of the service it replaces. This happens with a probability e^-t, where t is the temperature, which increases as the number of times the hillclimber is executed, increases.
 * Random Walk: Randomly generates a track. No heuristics involved.
-* Smart Random Walk: A variation of the Random Walk, with some heuristics: TODO.
+* Smart Random Walk: A variation of the Random Walk, with some heuristics: When choosing a neighbor node as next station, the history of the current track that is build is taken into account. When there is a neighbor station that is now yet traversed by the current track, that station is chosen over stations that are already traversed.
 
 ## Classes directory
 
