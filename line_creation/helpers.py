@@ -201,7 +201,6 @@ def is_junction(Node):
 	Returns:
 		True if the node is a junction, False otherwise (Boolean)
 	'''
-
 	if len(Node.neighbors) > 2:
 		return True
 	else:
@@ -220,7 +219,6 @@ def update_path(Track, path, edge):
 	Returns:
 		The updated dictionary.
 	'''
-
 	key = hash(Track)
 	try:
 		walked_edges = path[key]
@@ -239,9 +237,8 @@ def junction_edges(Track, path):
 		(1) A dictionary where hashed tracks key traversed edges
 
 	Returns:
-		A list of edges traversed by any other track.
+		A list of edges (tuples) traversed by any other track.
 	'''
-
 	key = hash(Track)
 	junction_edges = path[key]
 	return junction_edges
@@ -249,9 +246,16 @@ def junction_edges(Track, path):
 
 def get_junction_neighbor(Start, Previous, junction_edges):
 	'''
-	Checks neighbors of a junction Node against the previously walked Node, and all directed junction edges that can be created with the neighbors.
+	Checks wether a node object has a neighbor wich may be a valid junction neighbor. A junction neighbor is a neighbor of a node which has more than two neighbors.
+
+	Arguments:
+		(0) A starting node object
+		(1) A node object which is the previous of the node to be checked for junction neighbors
+		(2) A list of previously traversed edges from the starting node object
+
+	Returns:
+		A valid junction neighbor node object. Or None if there are no junction neighbors available.
 	'''
-	
 	for neighbor in Start.neighbors:
 		if neighbor != Previous:
 			edge = (Start.name, neighbor.name)
@@ -260,6 +264,16 @@ def get_junction_neighbor(Start, Previous, junction_edges):
 	return None
 
 def get_previous(Start, key):
+	'''
+	Gets the previous node keyed by a hashed track.
+
+	Arguments:
+		(0) A starting node object which is the last in the current track
+		(1) The hashed current track as a key
+
+	Returns:
+		A valid neighbor node object. Or None if the node is the first node in the track
+	'''
 	try:
 		Previous = Start.test[key]
 	except KeyError:
@@ -268,18 +282,31 @@ def get_previous(Start, key):
 
 def link_nodes(Start, Neighbor, key):
 	'''
-	Links two nodes. It sets the previous of the last node to the first node.
-	'''
+	Links node objects for a given track.
 
+	Arguments:
+		(0) A starting node object which is the second to last in the current track
+		(1) The neighbor to be added as a key
+		(2) The hashed current track as a key with the neighbor as the last node
+
+	Returns:
+		An updated starting node object which has now been linked to the previous node object.
+	'''
 	Neighbor.test[key] = Start
 	Start = Neighbor
 	return Start
 
 def delink_nodes(Start, key):
 	'''
-	Delinks two nodes. It sets the previous of the last node to 'None' and returns the node before the last node as the new start.
+	Delinks last two node objects for a given track and returns the second to last station of a track as a new start.
+
+	Arguments:
+		(0) A starting node object which is the last in the current track
+		(1) The key of the current track
+
+	Returns:
+		An updated starting node object which has now been delinked to the previous node object.
 	'''
-	
 	try:
 		Previous = Start.test[key]
 		del Start.test[key]
@@ -290,9 +317,16 @@ def delink_nodes(Start, key):
 
 def generate_random_track(G, start, max_track_length):
 	'''
-	seperate function for generate_random_track
+	Generates a random track.
+
+	Arguments:
+		(0) A networkx Graph object
+		(1) A starting node object
+		(2) A maximum track length
+
+	Returns:
+		A single track object
 	'''
-	
 	track = trc.track(G)
 	
 	# always build track one edge longer than allowed
@@ -314,7 +348,17 @@ def generate_random_track(G, start, max_track_length):
 	return track 
 
 def generate_smart_random_track(G, start, max_track_length):
+	'''
+	Generates a semi random track. Uses previously walked edges as a heuristic for choosing new neighbor node objects to walk to. Prefers to walk new edges.
 
+	Arguments:
+		(0) A networkx Graph object
+		(1) A starting node object
+		(2) A maximum track length
+
+	Returns:
+		A single track object.
+	'''
 	track = trc.track(G)	
 	start = start.name
 
