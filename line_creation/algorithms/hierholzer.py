@@ -65,7 +65,7 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 		while True:
 
 			# if all edges are traversed
-			if all_edge_list == []:
+			if not all_edge_list:
 
 				# break to end making of new tracks, and continue to the combining of tracks
 				break
@@ -89,7 +89,7 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 				remaining_edge_check = [item for item in all_edge_list if current_node in item]
 				
 				# if current_node has no unused edges
-				if remaining_edge_check == []:
+				if not remaining_edge_check:
 
 					# if last track made track longer than maximum track length
 					if track.time > max_track_length:
@@ -157,21 +157,19 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 		# iterate over all tracks
 		for track in new_service.tracks:
 			# check which tracks actually traverse critical edges
-			check_list = [edge for edge in track.edges if edge in graph.critical_edge_list or tuple(reversed(edge)) in graph.critical_edge_list]
+			check_list = [edge for edge in track.edges if edge in graph.critical_edge_list \
+			or tuple(reversed(edge)) in graph.critical_edge_list]
 			# if track traverses no critical edges
 			if not check_list:
 				# remove track
 				new_service.remove_track(track)
 
-		print("score: ", end="")
-		print(new_service.s_score)
-
 		score = new_service.s_score
 
-		# remember best scores (unordered)
-		# get key of minimum value in dict
+		# remember best scores (unordered), get key of minimum value in dict
 		if score > min_score:
-			score_list, service_list, min_score, min_index = hlp.update_lists(score, min_index, service, score_list, service_list)
+			score_list, service_list, min_score, min_index = hlp.update_lists(score, min_index, service, \
+			score_list, service_list)
 
 		# update loading bar
 		hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)

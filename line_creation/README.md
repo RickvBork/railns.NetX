@@ -1,36 +1,63 @@
 
 # Line_creation
-*@author Team Stellar Heuristiek*
+*@author Team Stellar Heuristiek
+Rick van der Bork - 11990503
+Dimitri van Cappeleveen - 122
+Thom Oosterhuis - 10893806*
 
-This file contains 
+This folder contains all the code necessary for running the algorithms. It contains the .py files that model a railnetwork using a graph and that create trainservices consisting of multiply trains driving on a traject for a specified amount of time. 
+More specifically, this folder contains the folders algorithms and the folder classes. Furthermore it contains the files analysis.py, helpers.py and main.py. All the files contain docstrings and comments to explain in more detail than given below their content.
 
-van oude readme;
-The 'line_creation' map contains the python files that model the graph and the functions used to generate paths and trainservices. There are explained in greater detail in the README within the directory.
-This directory contains the .py files that model a railnetwork using a graph and that create trainservices consisting of multiply trains driving on a traject for a specified amount of time. 
+## Algorithms folder
 
-The *helpers* contains functions that are used by other functions. Score functions to calculate a score for a trainservice are defined in here.
 
-The *line_algorithms* file contains the algorithms that will generate a route for several train constructing together a trainservice. 
-An example is the random_walk function. This function takes a instantion of the Graph class and a integer iterator. A random station from the network will be chosen as starting station for a train. After that, one of the stattions neigbors will be choses as the the next destination for the train. Keeping track of the time the train uses to get from the beginning station to the next stations, the train will stop riding after the amount of time exceeds the variable random_time. If the number of trains is lower then random_tracks, a new train will start riding from a new random station as described. When the number of trains equals random_tracks, a trainservice consisting of these train routes is created. The score of this trainservice is then calculated. The whole process of generating a trainservice is then repeated an *iterator* number of times.
-Finally the function returns two lists of two different scores of all the trainservices as well as a dictionary containing the five tracks with the best s_score.
 
-The Hierholzer Algorithm
-Finally the *Hierholzer* algorithm creates an amount of services determined by the user via the iterator variable. For each service it creates, it creates as much tracks as needed to traverse all connections, unless the amount of tracks exceeds the maximum amount of tracks allowed. For each of these tracks, a random starting point is chosen, however, the starting station should have, if possible, only one available connection. After that all the other station in the track are also chosen randomly, provided that the connection between the stations is not traversed yet, also not by another track. If a station does not have a connection that is untraversed, the track ends, and a new starting station is chosen, again one with only one untraversed connection if possible. After the tracks have been made, there is some optimization: if two tracks have the same starting station, or the same starting and ending station (the same ending and ending station doesn't occur, since in that case the first laid track needs to stop with a station that still has untraversed connections), and if the time of these two tracks combined doesn't exceed the maximum track time, these two tracks will be combined to form a new track.
+Random Walk:
+Randomly generates a track. No heuristics involved.
+
+Hillclimber:
+Uses a randomly generated service as a starting point. Then alters various dimensions of the service to 'climb' to higher scores.
+Stops if the maximum number of iterations has been reached.
+
+Hierholzer:
+Fills the graph with tracks that, when combined, cover each edge once. Then using certain heuristics, tracks are coupled or shortened to improve the service score.
+
+Depth First Seach (Not finished yet):
+From a start node, it walks each valid track possible. Then results of other nodes are combined to form a service with the least number of comflicts and the highest possible coverage of critical tracks.
+
+### Running the algorithms
+
+Main.py sis used to run the different algorithms. In the case 
+
+## Classes folder
+
+This folder contains the classes that model:
+ * 1. The graph class that models a railnetwork
+ * 2. The node class that models a node, i.e. the connection between two single stations 
+ * 3. The service class that models a train service (nl: 'lijnvoering') which consists of several tracks driven by several trains
+ * 4. The track class that models the route of a single train. 
+All these classes contain relevant information such as the time a train takes for its route, the critical edges a train rides during the route etc.
+
+## Analysis
+
+## Helpers
+
+This python file contains functions that are used by the algorithms. 
+
+## Main
+
+This python file is used to run the algorithms.
+
+
+
+
 
 The *line_graph_class* file contains the code class with the structure of the Graph. A Graph consists of a graph, defined using networkX. Also a Graph has a name, a list of critical stations, the number of critical edges and the minimal_edge_weight, representing the shortest distance between two stations in minutes.
 The *main* contains the code that initialises a Graph and then calls functions on it to generate trainservices. The scores of these trainservices are returned and are passed to a barchar function that gives a graphical visualisation of the scores of the different trainservices.
 
 ref: https://gist.github.com/jxson/1784669
 
-......................................
-
-
-
-
-
-## Running the algorithms
-
-Main.py sis used to run the different algorithms. In the case of 
+of 
 
 ### Break down into end to end tests - ????????????????
 

@@ -1,5 +1,8 @@
 # Project: RailNL
-*@author Team Stellar Heuristiek*
+*@author Team Stellar Heuristiek
+Rick van der Bork - 11990503
+Dimitri van Cappeleveen - 122
+Thom Oosterhuis - 10893806*
 
 One paragraph of project description goes here
 
@@ -42,18 +45,8 @@ End with an example of getting some data out of the system or using it for a lit
 
 ## Running the algorithms
 
-TODO:
-User runs main.py
-Console prints a choice to load csv file:
-* Noord Holland 
-* Netherlands
+How to run the algorithms is explained in the README in the folder line_creation.
 
-Next, the console prints a choice list of algorithms. Here, if applicable, the user can set:
-* Maximum track number per service
-* Maximum track length 
-* number of iterations (e.g. for the random walk or hillclimber)
-* plot service
-* plot barchart (if applicable)
 
 ### Algorithms
 
@@ -69,10 +62,6 @@ Fills the graph with tracks that, when combined, cover each edge once. Then usin
 
 Depth First Seach (Not finished yet):
 From a start node, it walks each valid track possible. Then results of other nodes are combined to form a service with the least number of comflicts and the highest possible coverage of critical tracks.
-
-## Authors
-
-* **Rick van Bork**, **Dimitri van Capelleveen** and **Thom Oosterhuis** *
 
 ## Acknowledgments
 
