@@ -1,17 +1,16 @@
-from classes import node_class as ndc, track_class as trc 
-import collections as col
-import os, errno
-import random
-import collections
-import helpers as hlp
-
-
 '''
 Helpers file.
 
 Here all functions not directly important to
 algorithm functioning and classes are defined
 '''
+
+from classes import node_class as ndc, track_class as trc 
+import collections as col
+import os, errno
+import random
+import collections
+import helpers as hlp
 
 def clear():
 	'''
@@ -22,24 +21,37 @@ def clear():
 
 def get_p(critical_connections_traversed, critical_connections):
 	'''
-	Gets the percentage of critical connections traversed.
+	A function for calculating the percentage of critical tracks traversed of a given service.
+
+	Arguments:
+		(0) A list of the critical connections traversed
+		(1) A list of all critical connections
+
+	Returns:
+		The fraction of critical tracks traversed (float)
 	'''
 	return len(critical_connections_traversed) / len(critical_connections)
 
 
 def get_score(p, track_amount, total_track_time):
 	'''
-	Calculates the score and rounds to nearest 10.
-	m term small, hence the rounding. Plus makes searching for
-	score occurrence easier.
+	A score function for calculating the score of a given service. Taken from: http://heuristieken.nl/wiki/index.php?title=RailNL
+
+	Arguments:
+		(0) Percentage of critical tracks traversed.
+		(1) The amount of tracks in a service
+		(2) Total track time
+
+	Returns:
+		The score of a given service (float)
 	'''
 	return p * 10000 - (track_amount * 20 + total_track_time / 100000)
 
-'''
-Checks wether a certain connection is critical in any direction.
-And wether the critical connection has already been travelled in any direction.
-'''
 def update_critical_connections_travesed(tuple, critical_edges, critical_edges_traversed):
+	'''
+	Checks wether a certain connection is critical in any direction.
+	And wether the critical connection has already been travelled in any direction.
+	'''
 	edge = tuple
 	edge_reversed = (tuple[1], tuple[0])
 
@@ -47,33 +59,6 @@ def update_critical_connections_travesed(tuple, critical_edges, critical_edges_t
 		if not (edge in critical_edges_traversed) and not (edge_reversed in critical_edges_traversed):
 			critical_edges_traversed.append(edge)
 	return critical_edges_traversed
-
-def print_score_information(score_list):
-
-	# get range of score list, ints otherwhise range(min, max) does not take floats
-	minimum = int(min(score_list))
-	maximum = int(max(score_list))
-
-	# make count dict
-	count_dict = col.Counter(score_list)
-
-	print('\nscore, amount\n++++++++++++++')
-
-	# loop through all possible scores
-	for i in range(minimum, maximum + 1, 1):
-
-		score_count = count_dict[i]
-
-		# only print relevant scores
-		if score_count != 0:
-			print('{:<10}'.format(i), end='')
-			print(count_dict[i])
-
-	print('++++++++++++++\n')
-	print('minimum: {}'.format(minimum))
-	print('maximum: {}\n'.format(maximum))
-
-	print(count_dict)
 
 def ordered_counter(score_list):
 
@@ -114,9 +99,15 @@ def test(edge, critical_edges, critical_edges_traversed):
 
 def get_node_list(G, nodes):
 	'''
-	makes node objects complete with their neighbors as nodes
-	'''
+	Connects node objects to their neighbors for easy linking and delinking of nodes within an algorithm.
 
+	Arguments:
+		(0) A networkx Graph object.
+		(1) A list of all nodes of the Graph object as strings.
+
+	Returns:
+		A list of interlinked node objects (list)
+	'''
 	node_dict = {}
 	for node in nodes:
 		node_dict[node] = ndc.Node(node)
@@ -132,9 +123,11 @@ def get_node_list(G, nodes):
 
 def file_remove(path_file_name):
 	'''
-	Removes files, checks if file exists and silently ignores error if the error is a 'no such file or directory exists'.
-	'''
+	Removes files of a given name.
 
+	Arguments:
+		(0) A string which represents the path to the file that is to be removed.
+	'''
 	try:
 		os.remove(path_file_name)
 	except OSError as e:
@@ -148,6 +141,17 @@ def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length
 	1: User chooses for update every 1% or .1% (update = 100, 1000)
 
 	2: Always update every iteration. Show .1% increases.
+
+	Arguments:
+		(0) The current iteration number (integer)
+		(1) The total iteration number
+		(2) Prefix of the loading bar
+		(3) Suffix of the loading bar
+		(4) Amount of decimals to show for the loading percentage amount
+		(5) The length of the loading bar in amount of chars
+		(6) The char to fill the loading bar with
+		(7) The update amount, 100 is per percent, 1000 is per tenth of percent
+		(8) The amount at which the behaviour of the loading bar automatically switches.
 	'''
 
 	# behaviour mode 1: every update %

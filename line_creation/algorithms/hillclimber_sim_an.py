@@ -7,6 +7,7 @@ from algorithms import hillclimber_helper as hh
 import helpers as hlp
 import random
 import csv
+import math
 from helpers import clear
 
 def run_hillclimber_sim_an(service, max_number_of_tracks, max_track_time, number_of_iterations):
