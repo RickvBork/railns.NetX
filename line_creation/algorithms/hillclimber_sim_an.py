@@ -1,6 +1,7 @@
 '''
 Hill cilmber simulated annealing
-takes service oject consisting of several tracks. Tries to optimize service by improving tracks one by one
+takes service oject consisting of several tracks. Tries to optimize service 
+by improving tracks one by one
 '''
 
 from algorithms import hillclimber_helper as hh
@@ -10,7 +11,8 @@ import csv
 import math
 from helpers import clear
 
-def run_hillclimber_sim_an(service, max_number_of_tracks, max_track_time, number_of_iterations):
+def run_hillclimber_sim_an(service, max_number_of_tracks, max_track_time, \
+	number_of_iterations):
 	'''
 	Runs hillclimber
 	'''
@@ -21,7 +23,8 @@ def run_hillclimber_sim_an(service, max_number_of_tracks, max_track_time, number
 		number_of_tracks = len(service.tracks)
 		for i in range(number_of_tracks):
 			for k in range(number_of_iterations):
-				service = hillclimber_sim_an(service,i,max_number_of_tracks, max_track_time, j + k)
+				service = hillclimber_sim_an(service,i,max_number_of_tracks, \
+					max_track_time, j + k)
 							
 				if (service.s_score != last_score):
 					last_score = service.s_score
@@ -32,18 +35,21 @@ def run_hillclimber_sim_an(service, max_number_of_tracks, max_track_time, number
 
 	# write score to csv
 	with open('../data/hillclimber_sim_an.csv', 'w', newline='') as csvfile:
-		wr = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+		wr = csv.writer(csvfile, delimiter=' ', quotechar='|', \
+			quoting=csv.QUOTE_MINIMAL)
 		for score in hillclimber_scores:
 			wr.writerow([score])
 
 	return service
 
 
-def hillclimber_sim_an(service, track_number, max_number_of_tracks, max_track_time, temperature):
+def hillclimber_sim_an(service, track_number, max_number_of_tracks, \
+	max_track_time, temperature):
 	'''
 	Replaces a single track of a service by by a new random track. 
-	If service has higher score with new random track, service with new random track is returned. 
-	If not, old service is replaced by new service by a probability of 1 / e^temperature.
+	If service has higher score with new random track, service with new random 
+	track is returned. If not, old service is replaced by new service by a 
+	probability of 1 / e^temperature.
 	'''
 	old_service_score_s = service.s_score
 	track0 = service.tracks[track_number]	
@@ -67,7 +73,8 @@ def hillclimber_sim_an(service, track_number, max_number_of_tracks, max_track_ti
 	new_service_score_s = service.s_score
 
 	# accept new track if score is higher with probability one
-	# if score of service with new track is lower, accept new track in service with probability 1/temperature
+	# if score of service with new track is lower, accept new track in service 
+	# with probability 1/temperature
 
 	# undo adding new track is score is lower
 	if old_service_score_s > new_service_score_s:

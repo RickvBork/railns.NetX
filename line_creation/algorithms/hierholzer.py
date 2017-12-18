@@ -44,7 +44,8 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 	min_index = 0
 
 	# initiate loading bar
-	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', \
+		length = 50, update = 100)
 
 	# make iterator amount of services
 	for i in range(iterator):
@@ -67,13 +68,16 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 			# if all edges are traversed
 			if not all_edge_list:
 
-				# break to end making of new tracks, and continue to the combining of tracks
+				# break to end making of new tracks, and continue to the 
+				# combining of tracks
 				break
 
-			# if the number of tracks made is the maximum amount of tracks allowed
+			# if the number of tracks made is the maximum amount of tracks 
+			# allowed
 			if (len(service.tracks)) == max_track_amount:
 
-				# break to end making of new tracks, and continue to the combining of tracks
+				# break to end making of new tracks, and continue to the 
+				# combining of tracks
 				break
 
 			# make new track object (one for each track)
@@ -86,7 +90,8 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 			while True:
 
 				# checking if current station has unused edges
-				remaining_edge_check = [item for item in all_edge_list if current_node in item]
+				remaining_edge_check = [item for item in all_edge_list if \
+				current_node in item]
 				
 				# if current_node has no unused edges
 				if not remaining_edge_check:
@@ -135,30 +140,35 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 					if (current_node, random_neighbor_node) in all_edge_list:
 
 						# remove edge from all_edge_list
-						all_edge_list.remove((current_node, random_neighbor_node))
+						all_edge_list.remove((current_node, \
+							random_neighbor_node))
 
 					elif (random_neighbor_node, current_node) in all_edge_list:
 
 						# remove edge from all_edge_list
-						all_edge_list.remove((random_neighbor_node, current_node))
+						all_edge_list.remove((random_neighbor_node, \
+							current_node))
 
 					# add edge to track
 					track.add_edge((current_node, random_neighbor_node))
 
-					# for possibly adding tracks together later on via the optimization
+					# for possibly adding tracks together later on via the 
+					# optimization
 					track.add_station(current_node, random_neighbor_node)
 
-					# make neighbor node current node, so that this node can go through while loop to create track
+					# make neighbor node current node, so that this node can go 
+					# through while loop to create track
 					current_node = random_neighbor_node
 
-		# optimization: combine two tracks to one track, in some situations; see helpers.py
+		# optimization: combine two tracks to one track, in some situations
 		new_service = hlp.track_combination(service, max_track_length, G)
 
 		# iterate over all tracks
 		for track in new_service.tracks:
 			# check which tracks actually traverse critical edges
-			check_list = [edge for edge in track.edges if edge in graph.critical_edge_list \
-			or tuple(reversed(edge)) in graph.critical_edge_list]
+			check_list = [edge for edge in track.edges if edge in \
+			graph.critical_edge_list or tuple(reversed(edge)) in \
+			graph.critical_edge_list]
 			# if track traverses no critical edges
 			if not check_list:
 				# remove track
@@ -168,11 +178,12 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 
 		# remember best scores (unordered), get key of minimum value in dict
 		if score > min_score:
-			score_list, service_list, min_score, min_index = hlp.update_lists(score, min_index, service, \
-			score_list, service_list)
+			score_list, service_list, min_score, min_index = hlp.update_lists(\
+				score, min_index, service, score_list, service_list)
 
 		# update loading bar
-		hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+		hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', \
+			length = 50, update = 100)
 
 	# return five best services
 	return service_list

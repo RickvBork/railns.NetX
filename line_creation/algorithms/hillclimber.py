@@ -15,7 +15,8 @@ import math
 import csv
 from helpers import clear
 
-def run_hillclimber(service, max_number_of_tracks, max_track_time, number_of_iterations):
+def run_hillclimber(service, max_number_of_tracks, max_track_time, \
+	number_of_iterations):
 	'''
 	Runs hillclimber
 	'''
@@ -26,7 +27,8 @@ def run_hillclimber(service, max_number_of_tracks, max_track_time, number_of_ite
 		number_of_tracks = len(service.tracks)
 		for i in range(number_of_tracks):
 			for k in range(number_of_iterations):
-				service = hillclimber_random(service,i,max_number_of_tracks, max_track_time)
+				service = hillclimber_random(service,i,max_number_of_tracks, \
+					max_track_time)
 							
 				if (service.s_score != last_score):
 					last_score = service.s_score
@@ -37,17 +39,20 @@ def run_hillclimber(service, max_number_of_tracks, max_track_time, number_of_ite
 
 	# write score to csv
 	with open('../data/hillclimber_sim_an.csv', 'w', newline='') as csvfile:
-		wr = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+		wr = csv.writer(csvfile, delimiter=' ', quotechar='|', \
+			quoting=csv.QUOTE_MINIMAL)
 		for score in hillclimber_scores:
 			wr.writerow([score])
 
 	return service
 	
 
-def hillclimber_random(service, track_number, max_number_of_tracks, max_track_time):
+def hillclimber_random(service, track_number, max_number_of_tracks, \
+	max_track_time):
 	'''
 	Replaces a single track of a service by by a new random track. 
-	If service has higher score with new random track, service with new random track is returned. If not, old service remains unchanged.
+	If service has higher score with new random track, service with new random 
+	track is returned. If not, old service remains unchanged.
 	'''
 	old_service_score_s = service.s_score
 	track0 = service.tracks[track_number]	
@@ -59,7 +64,8 @@ def hillclimber_random(service, track_number, max_number_of_tracks, max_track_ti
 	# generate new track
 	start = random.choice(node_list) 
 	track_new = hh.generate_random_track(Graph, start, max_track_time)
-	# add new track to service, remove old one if max_number_of_tracks is reached
+	# add new track to service, remove old one if max_number_of_tracks is 
+	# reached
 	old_track_removed = False	
 	service.add_track(track_new)
 	if len(service.tracks) >= max_number_of_tracks:
@@ -76,10 +82,12 @@ def hillclimber_random(service, track_number, max_number_of_tracks, max_track_ti
 
 	return service
 
-def hillclimber_smart(service, track_number, max_number_of_tracks, max_track_time):
+def hillclimber_smart(service, track_number, max_number_of_tracks, \
+	max_track_time):
 	'''
 	Replaces a single track of a service by by a new smart track. 
-	If service has higher score with new random track, service with new random track is returned. If not, old service remains unchanged.
+	If service has higher score with new random track, service with new random 
+	track is returned. If not, old service remains unchanged.
 	'''
 	old_service_score_s = service.s_score
 	track0 = service.tracks[track_number]	
@@ -92,7 +100,8 @@ def hillclimber_smart(service, track_number, max_number_of_tracks, max_track_tim
 	start = random.choice(node_list) 
 	track_new = hh.generate_smart_random_track(Graph, start, max_track_time)
 
-	# add new track to service, remove old one if max_number_of_tracks is reached	
+	# add new track to service, remove old one if max_number_of_tracks is 
+	# reached	
 	old_track_removed = False
 	service.add_track(track_new)
 	if len(service.tracks) >= max_number_of_tracks:
