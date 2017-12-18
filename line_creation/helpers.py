@@ -337,7 +337,7 @@ def get_one_edge_node(all_edge_list, graph, service):
 		if count == 1:
 			one_edge_list.append(station)
 
-	# #make list for nodes with one edge, and the node at other end of edge is critical
+	# make list for nodes with one edge, and the node at other end of edge is critical
 	super_special = []
 
 	# fill super special list
@@ -348,10 +348,10 @@ def get_one_edge_node(all_edge_list, graph, service):
 	# get random starting station that has only one edge with other node critical, if possible
 	if super_special != []:
 		current_node = random.choice(super_special)
-	# #else get random starting node with only one edge
+	# else get random starting node with only one edge
 	elif one_edge_list != []:
 		current_node = random.choice(one_edge_list)
-	# else get random starting node
+	# else get random starting node without constraints
 	else:
 		current_node = random.choice(list(graph.nodes))
 
@@ -375,14 +375,18 @@ def track_combination(service, max_track_length, G):
 						# if starting station for both stations is the same
 						if service.tracks[i].edges[0][0] == service.tracks[j].edges[0][0]:
 
+							# initialize reversed_list to completely reverse one of the tracks
 							reversed_list = []
+							# reverse edges
 							partially_reversed_list = list(reversed(service.tracks[j].edges))
+							# reverse content of edges
 							for item in partially_reversed_list:
 								reversed_list.append(tuple(reversed(item)))
 
 							# make new list with edges of new track
 							combined_list = reversed_list + service.tracks[i].edges
-								
+							
+							# initizialize check_list to check if new track is already made in earlier iteration
 							check_list = []
 
 							# if new route is not in reversed already in tmp_new_track_list:
@@ -409,6 +413,7 @@ def track_combination(service, max_track_length, G):
 						# if starting station and ending station is the same
 						elif service.tracks[i].edges[0][0] == service.tracks[j].edges[-1][1]:
 
+							# make new list with edges for new track
 							combined_list = service.tracks[j].edges + service.tracks[i].edges
 								
 							# add new route to tmp list
