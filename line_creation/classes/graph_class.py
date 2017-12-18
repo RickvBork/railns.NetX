@@ -18,7 +18,8 @@ class Graph:
 		self.edge_weight_dict = {}
 
 		# load csv files into this specific instance of nx
-		self.critical_station_list, self.non_critical_station_list = self.add_csv_nodes(node_file)
+		self.critical_station_list, self.non_critical_station_list = \
+		self.add_csv_nodes(node_file)
 		self.add_csv_edges(edge_file, self.critical_station_list)
 
 		# force iterator object from nx to list
@@ -29,7 +30,8 @@ class Graph:
 		self.total_critical_edges = len(self.critical_edge_list)
 
 	'''
-	print(Object) now returns this string, usefull for profiding short descriptions
+	print(Object) now returns this string, usefull for profiding short 
+	descriptions
 	'''
 	def __str__(self):
 		return "Maybe something for later..."

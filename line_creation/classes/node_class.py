@@ -11,7 +11,8 @@ class Node(object):
 	def __ne__(self, other):
 		
 		try:
-			# print('Unequal:\t{} != {} = {}'.format(self.name, other.name, self.name != other.name))
+			# print('Unequal:\t{} != {} = {}'.format(self.name, other.name, 
+			# self.name != other.name))
 			return self.name != other.name
 		except AttributeError:
 

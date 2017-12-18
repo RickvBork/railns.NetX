@@ -8,7 +8,8 @@ def random_walk(Graph, max_number_of_tracks, max_time, iterator):
 	A random walk algorithm, defined as such that no heuristics are involved.
 
 	Arguments:
-		(0) A networkx graph, which contains the data needed to make tracks and services
+		(0) A networkx graph, which contains the data needed to make tracks and 
+		services
 		(1) The maximum amount of tracks for each service
 		(2) The maximum lenght of each track
 		(3) The amount of services to be made
@@ -16,8 +17,11 @@ def random_walk(Graph, max_number_of_tracks, max_time, iterator):
 	Returns:
 		A list of five of the best services.
 	
-	For each of the tracks of each of the services, the random walk algoritm chooses a random
-	starting station. Then a random neighboring edge is chosen and added to the track until the track is over the maximum time. The extra edge is removed and the track is added to the service.
+	For each of the tracks of each of the services, the random walk algoritm 
+	chooses a random
+	starting station. Then a random neighboring edge is chosen and added to the 
+	track until the track is over the maximum time. The extra edge is removed 
+	and the track is added to the service.
 	'''
 
 	print("\n======RANDOM WALK======\n")
@@ -66,10 +70,12 @@ def random_walk(Graph, max_number_of_tracks, max_time, iterator):
 
 		# get key of minimum value in dict
 		if score > min_score:
-			score_list, service_list, min_score, min_index = hlp.update_lists(score, min_index, service, score_list, service_list)
+			score_list, service_list, min_score, min_index = hlp.update_lists(\
+				score, min_index, service, score_list, service_list)
 
 		# update loading bar
-		hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+		hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', \
+			length = 50, update = 100)
 
 	# remove empty values as list is not always filled
 	return service_list
