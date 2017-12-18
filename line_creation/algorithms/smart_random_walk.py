@@ -3,10 +3,22 @@ import helpers as hlp
 import math
 import random
 
-'''
-Smart 'random' walk
-'''
 def smart_random_walk(Graph, max_number_of_tracks, max_time, iterator):
+	'''
+	A random walk algorithm restricted by several heuristics.
+
+	Arguments:
+		(0) A networkx graph, which contains the data needed to make tracks and services
+		(1) The maximum amount of tracks for each service
+		(2) The maximum lenght of each track
+		(3) The amount of services to be made
+
+	Returns:
+		A list of the 5 best services.
+	
+	For each of the tracks of each of the services, the random walk algoritm chooses a random
+	starting station. Then a random neighboring edge is chosen and added to the track until the track is over the maximum time. The extra edge is removed and the track is added to the service.
+	'''
 
 	print("\n======SMART RANDOM WALK======\n")
 
