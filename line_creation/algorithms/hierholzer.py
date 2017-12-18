@@ -1,25 +1,36 @@
 from classes import service_class as svc, track_class as trc
 import helpers as hlp
-import itertools
 import random
-import networkx as nx
 from copy import deepcopy
-import collections
 import analysis as ana
 
 def hierholzer(graph, max_track_amount, max_track_length, iterator):
 	'''
-	Hierholzer's algorithm. 
-	'''
+	Hierholzer's algorithm. A variation on Carl Hierholzer's efficient algorithm to find Eularian Cycles,
+	here used to make services.
 
+	Arguments:
+		(0) A networkx graph, which contains the data needed to make tracks and services
+		(1) The maximum amount of tracks for each service
+		(2) The maximum lenght of each track
+		(3) The amount of services to be made
+
+	Returns:
+		A list, with an ever changing length, of a few of the best services
+	
+	For each of the tracks of each of the services, Hierholzer's algoritm chooses a random
+	starting station, which has only one edge and a neighbor which is a critical station,
+	if possible. Then every other edge is chosen randomly, with the constraint that it hasn't 
+	been traversed yet, by this track or by any other track in the service. If the track reaches
+	a station with no untraversed edges, or if the track reaches the maximum time allowed, it
+	is completed and added to the service. Until there are no more untraversed edges, or until
+	the maximum amount of tracks is reached, new tracks will be made in the same way.
+		After the completion of the making of new tracks, tracks will be combined if possible.
+	Tracks will be combined if they have a combined length that doesn't exceed the maximum lengt,
+	and if they have either the same starting station, or the same starting and ending station.
+	'''
 	print("======HIERHOLZER======")
 	
-	test_counter = 0
-
-	mean_list = []
-	
-	service_list = []
-
 	# inititialize variables to save and return best service(s)
 	best_score = 0
 	max_service_amount = iterator
@@ -28,14 +39,14 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 	# initiate loading bar
 	#hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
-	# do the walk iterator amount of times
+	# make iterator amount of services
 	for i in range(iterator):
 
 		# for access to the graph
 		G = graph.G
 
 		# initialize service
-		service = svc.service(graph.G)
+		service = svc.service(G)
 
 		# adding all edges as tuples to all_edges_list
 		all_edge_list = [edge for edge in graph.edges]
@@ -61,8 +72,8 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 			# make new track object (one for each track)
 			track = trc.track(G)
 
+			# get random node that has one edge and a critical neighbor
 			current_node = hlp.get_one_edge_node(all_edge_list, graph, service)
-			#current_node = random.choice(critical_station_list)
 
 			# loop for each edge in each track
 			while True:
@@ -79,9 +90,10 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 						# remove last edge
 						track.remove_edge()
 
+					# add complete track to service
 					service.add_track(track)
 
-					# break out of while loop to begin new track
+					# break out of while loop to begin new making of track
 					break
 
 				# choose random neighbor of station
@@ -103,6 +115,7 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 					# remove last edge to make length less than 120 minutes
 					track.remove_edge()
 
+					# add complete track to service
 					service.add_track(track)
 
 					# initialize new track object
@@ -124,97 +137,30 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 					# add edge to track
 					track.add_edge((current_node, random_neighbor_node))
 
-					# for possibly adding tracks together later on
+					# for possibly adding tracks together later on via the optimization
 					track.add_station(current_node, random_neighbor_node)
 
 					# make neighbor node current node, so that this node can go through the while loop to create a track
 					current_node = random_neighbor_node
 
-		# determine amount of tracks service has
-		#track_counter = len(new_service.tracks)
-
-		# for i in range(track_counter):
-		# 	if service.tracks[i].
-
-
 		# optimization: combine two tracks to one track, in some situations; see helpers.py
 		new_service = hlp.track_combination(service, max_track_length, G)
-		#new_service = service
 
 		# determine amount of tracks service has
 		track_counter = len(new_service.tracks)
 
-
-		# for i in range(track_counter):
-		# 	print("track: ", end="")
-		# 	print(service.tracks[i].edges)
-		# 	print()
-
-		# print("track_counter: ", end="")
-		# print(track_counter)
-
-		#print("test")
-
-		# if round(new_service.s_score) < 9000: # and round(new_service.s_score) <= 9700:
-		# 	test_counter += 1
-		# 	print("test_counter: ", end="")
-		# 	print(test_counter)
-		# 	print("service.self score: ", end="")
-		# 	print(new_service.s_score)
-
 		print("service.self score: ", end="")
 		print(new_service.s_score)
-
-
-
-		######################
-		# track_counter2 = 0
-
-		# if round(new_service.s_score) == 9380:
-		# 	for i in range(track_counter):
-		# 		print("track: ", end="")
-		# 		print(service.tracks[i].edges)
-		# 		for j in range(len(service.tracks[i].edges)):
-		# 			track_counter2 += 1
-		# 			print(track_counter2)
-
-		# 		print()
-
-		# if round(new_service.s_score) == 9900:
-		# 	for i in range(track_counter):
-		# 		print("track: ", end="")
-		# 		print(service.tracks[i].edges)
-		# 		for j in range(len(service.tracks[i].edges)):
-		# 			track_counter2 += 1
-		# 			print(track_counter2)
-		# 		print()
-		############################	
-
-		#print()
-
-		mean_list.append(deepcopy(service.s_score))
-
-		service_list.append(deepcopy(service))
 
 		# remember best scores (unordered)
 		if new_service.s_score > best_score:
 			best_services[i % max_service_amount] = deepcopy(service)
 			best_score = new_service.s_score
 			i += 1
+			ana.draw_graph(graph,new_service)
 
 		# update loading bar
 		#hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# remove empty values as list is not always filled
-
-	ana.draw_graph(graph,service)
-
-	# print("mean_list")
-	# print(mean_list)
-
-	# print("mean:")
-	# print(np.mean(mean_list))
-
-
 	return [service for service in best_services if service != 0]
-	#return service_list
