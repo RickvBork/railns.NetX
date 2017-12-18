@@ -19,8 +19,9 @@ def smart_random_walk(Graph, max_number_of_tracks, max_time, iterator):
 	
 	For each of the tracks of each of the services, the random walk algoritm 
 	chooses a random starting station. Edges are chosen based on preference. 
-	If an edge is critical, then the algorithm will prefer to walk this edge. 
-	Else TODO 
+	If an edge is not traversed yet, then the algorithm will prefer to walk
+	this edge. 
+	Else a random new neighbor and thus a new edge is chosen. 
 	'''
 
 	print("\n======SMART RANDOM WALK======\n")
@@ -57,7 +58,6 @@ def smart_random_walk(Graph, max_number_of_tracks, max_time, iterator):
 		for k in range(max_number_of_tracks):
 
 			# pick random start station 
-			# TODO: make sure node is critical
 			start = random.choice(node_list)
 
 			track = hlp.generate_smart_random_track(G, start, max_time)

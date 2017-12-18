@@ -3,14 +3,11 @@ Hill cilmber
 takes service oject consisting of several tracks. Tries to optimize service by improving tracks one by one
 '''
 
-# TODO: TOO MUCH IMPORT?
 from algorithms import hillclimber_helper as hh
 import helpers as hlp
 import random
 import analysis as ana
 import networkx as nx
-import collections # for Hierholzer's
-from copy import deepcopy
 from classes import track_class as tc
 import math
 import csv
@@ -22,6 +19,16 @@ def run_hillclimber(service, max_number_of_tracks, max_track_time, \
 	Runs hillclimber. Hillclimber is runned number_of_iteration times on
 	each single track of the service.
 	Then this proces is repeated a number_of_iteration times.
+	
+	Arguments:
+		(0) A service object as defined in service_class
+		(1) The maximum nnumber of tracks the service that is returned
+		may contain.
+		(2) The maximum length of each track
+		(3) The number of iterations the hillclimber is runned for each
+		track.
+	Returns:
+		The improved service class.
 	'''
 	hillclimber_scores = []
 	last_score = 0
@@ -101,7 +108,7 @@ def hillclimber_smart(service, track_number, max_number_of_tracks, \
 	
 	# generate new track
 	start = random.choice(node_list) 
-	track_new = hh.generate_smart_random_track(Graph, start, max_track_time)
+	track_new = hlp.generate_smart_random_track(Graph, start, max_track_time)
 
 	# add new track to service, remove old one if max_number_of_tracks is 
 	# reached	
