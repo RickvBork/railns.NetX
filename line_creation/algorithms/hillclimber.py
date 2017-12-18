@@ -10,7 +10,7 @@ import analysis as ana
 import networkx as nx
 import collections # for Hierholzer's
 from copy import deepcopy
-import track_class as tc
+from classes import track_class as tc
 import math
 
 def hillclimber_random(service, track_number):
