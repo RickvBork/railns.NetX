@@ -78,18 +78,15 @@ def algo_0(algo, g, hillclimber = False):
 	if hillclimber:
 		seed = algo_1(g)
 		
-		print(seed.s_score)
-		for track in seed.tracks:
-			print(track.edges)
+		# print(seed.s_score)
+		# for track in seed.tracks:
+		# 	print(track.edges)
 
-		string = 'Hillclimber/Simulated Annealing options:\n'
-		max_track_number, max_track_time, iteration = get_input(string)
+		max_track_number, max_track_time, iteration = get_input()
 		service = algo(seed, max_track_number, max_track_time, iteration)
 
 	else:
-		# get user inputs
-		string = 'Please select the values\n'
-		max_track_number, max_track_time, iteration = get_input(string)
+		max_track_number, max_track_time, iteration = get_input()
 		services = algo(g, max_track_number, max_track_time, iteration)
 
 		for service in services:
@@ -107,23 +104,37 @@ def algo_1(g):
 		choice = input(' >> ')
 		clear()
 
-		string = 'Please select small values to allow Hillclimber to \'climb\' to higher values:\n'
-
 		# pass the chosen algorithm and the graph
 		if choice == '1':
-			max_track_number, max_track_time, iteration = get_input(string)
+			max_track_number, max_track_time, iteration = get_small_input()
+
 			return rw.random_walk(g, max_track_number, max_track_time, iteration)[0]
 		elif choice == '2':
-			max_track_number, max_track_time, iteration = get_input(string)
+			max_track_number, max_track_time, iteration = get_small_input()
+
 			return srw.smart_random_walk(g, max_track_number, max_track_time, iteration)[0]
+		else:
+			print(error0)
+			choice = '0'
 
-def get_input(string):
+def get_input():
 
-	print(string)
-	max_track_time = int(input('Input maximum track time: '))
-	max_track_number = int(input('Input maximum number of tracks per service: '))
-	iteration = int(input('Input iteration amount: '))
+	print('You have created a service object! Please select preferred values for the Hillclimber Suggestions for viable simulations are behind the inputs:\n')
 
+	max_track_time = int(input('Input maximum track time (1 - 180): '))
+	max_track_number = int(input('Input maximum number of tracks per service (1 - 20): '))
+	iteration = int(input('Input iteration amount (1 - 10.000): '))
+	clear()
+
+	return max_track_number, max_track_time, iteration
+
+def get_small_input():
+
+	print('Please select small values to allow Hillclimber to \'climb\' to better services. Suggestions for generating a bad service are behind the inputs:\n')
+
+	max_track_time = int(input('Input maximum track time (1 - 50): '))
+	max_track_number = int(input('Input maximum number of tracks per service (1 - 3): '))
+	iteration = int(input('Input iteration amount (1 - 10): '))
 	clear()
 
 	return max_track_number, max_track_time, iteration
