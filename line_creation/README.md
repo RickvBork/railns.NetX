@@ -5,11 +5,11 @@ Rick van der Bork - 11990503 \
 Dimitri van Cappeleveen - 12017485 \
 Thom Oosterhuis - 10893806*
 
-This folder contains all the code necessary for running the algorithms. It contains the .py files that model a railnetwork using a graph and that create trainservices consisting of multiple trains driving on a traject for a specified amount of time. More specifically, this folder contains the folders algorithms and the folder classes, and it contains the files analysis.py, helpers.py and main.py. Below some description of these folders and files is given, but all the files contain docstrings and comments to explain their content in more detail.
+This directory contains all the code necessary for running the algorithms. It contains the .py files that model a railnetwork using a graph and that create trainservices consisting of multiple trains driving on a traject for a specified amount of time. More specifically, this directory contains the directories algorithms and the directory classes, and it contains the files analysis.py, helpers.py and main.py. Below some description of these directories and files is given, but all the files contain docstrings and comments to explain their content in more detail.
 
-## Algorithms folder
+## Algorithms directory
 
-This folder contains, as the name suggests, our algorithms (for a description on how to actually run the algorithms, see Main below):
+This directory contains, as the name suggests, our algorithms (for a description on how to actually run the algorithms, see Main below):
 
 * Hierholzer: Fills the graph with tracks that, when combined, cover each edge once. Then using certain heuristics, tracks are coupled or shortened to improve the service score.
 * Hillclimber: Uses a randomly generated service as a starting point. Then alters various dimensions of the service to 'climb' to higher scores. Stops if the maximum number of iterations has been reached.
@@ -19,9 +19,9 @@ This folder contains, as the name suggests, our algorithms (for a description on
 * Smart Random Walk: A variation of the Random Walk, with some heuristics: TODO.
 * Depth First Seach (Not finished yet): TODO - From a start node, it walks each valid track possible. Then results of other nodes are combined to form a service with the least number of comflicts and the highest possible coverage of critical tracks.
 
-## Classes folder
+## Classes directory
 
-This folder contains several classes used by the algorithms:
+This directory contains several classes used by the algorithms:
 
  * The Graph class: This models a railnetwork, using Networkx.
  * The Node class: Models a node, i.e. the connection between two single stations.
