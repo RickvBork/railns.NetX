@@ -13,6 +13,12 @@ Here all functions not directly important to
 algorithm functioning and classes are defined
 '''
 
+def clear():
+	'''
+	Clears the console screen.
+	'''
+	os.system('cls' if os.name == 'nt' else 'clear')
+
 '''
 Gets the percentage of critical connections traversed.
 '''
@@ -273,7 +279,7 @@ seperate function for generate_random_track
 '''
 def generate_random_track(Graph, start, max_track_length):
 	
-	G = Graph.G
+	G = Graph
 	track = trc.track(G)
 	
 	while track.time < max_track_length:
