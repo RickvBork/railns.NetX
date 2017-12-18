@@ -1,8 +1,6 @@
 import helpers as hlp
 import networkx as nx
 
-
-
 class service:
 	'''
 	Service class models service (nl: 'lijnvoering') consisting of several 

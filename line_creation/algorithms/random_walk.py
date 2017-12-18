@@ -44,6 +44,10 @@ def random_walk(Graph, max_number_of_tracks, max_time, iterator):
 	min_score = score_list[0]
 	min_index = 0
 
+	# initiate loading bar
+	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', \
+		length = 50, update = 100)
+
 	for j in range(iterator):
 
 		# build service loop

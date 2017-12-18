@@ -65,6 +65,7 @@ def update_critical_connections_travesed(tuple, critical_edges, \
 			critical_edges_traversed.append(edge)
 	return critical_edges_traversed
 
+# TODO
 def ordered_counter(score_list):
 
 	# count the number of times an integer is in list
@@ -91,18 +92,6 @@ def get_prefered_neighbors(G, starting_station, track):
 			prefered_neighbors.remove(neighbor)
 
 	return prefered_neighbors
-
-
-def test(edge, critical_edges, critical_edges_traversed):
-
-	edge_reversed = (edge[1], edge[0])
-	print(edge, edge_reversed)
-
-	if not (edge in critical_edges_traversed) and not (edge_reversed in \
-		critical_edges_traversed):
-		if (edge in critical_edges) or (edge_reversed in critical_edges):
-			critical_edges_traversed.append(edge)
-	return critical_edges_traversed
 
 def get_node_list(G, nodes):
 	'''
@@ -144,7 +133,7 @@ def file_remove(path_file_name):
 			raise
 
 def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, \
-	length = 100, fill = '.', update = 100, switch = 100):
+	length = 100, fill = '█', update = 100, switch = 100):
 	'''
 	Loading bar. Two modes for faster computation of large iteration numbers. 
 	Switch sets the total iteration number where behaviour switches between 
@@ -187,164 +176,6 @@ def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, \
 
 	if iteration == total: 
 		print()
-
-def get_neighbor(Node, Previous):
-	'''
-	Gets any neighbor a node except the previous neighbor if the node has more 
-	than one neighbor. If the node has one neighbor this behaviour is 
-	overwritten.
-
-	Arguments:
-		(0) A node to be checked for neighbors
-		(1) A node object which is the previous of the node to be checked for 
-		neighbors
-
-	Returns:
-		A neighbor (node object).
-	'''
-	for neighbor in Node.neighbors:
-		if neighbor != Previous: 
-			return neighbor
-		elif len(Node.neighbors) == 1:
-			return neighbor
-
-
-def is_junction(Node):
-	'''
-	Checks wether a node is a junction. A junction is defined as any node with 
-	more than two neighbors.
-
-	Arguments:
-		(0) A node object to be checked if it is a junction
-
-	Returns:
-		True if the node is a junction, False otherwise (Boolean)
-	'''
-	if len(Node.neighbors) > 2:
-		return True
-	else:
-		return False
-
-
-def update_path(Track, path, edge):
-	'''
-	Updates a dictionary of hashed tracks ending in a junction node keying edges 
-	that have been traversed any track previously made by the DFS algorithm.
-
-	Arguments:
-		(0) A track object
-		(1) A dictionary to be updated
-		(2) An edge to be added to the list keyed by the hashed track if it is 
-		not already in the list
-
-	Returns:
-		The updated dictionary.
-	'''
-	key = hash(Track)
-	try:
-		walked_edges = path[key]
-		if edge not in walked_edges:
-			path[key].append(edge)
-	except KeyError:
-		path[key] = [edge]
-	return path
-
-def junction_edges(Track, path):
-	'''
-	For a given track ending in a junction node, returns the edges that have 
-	been traversed by other tracks.
-	
-	Arguments:
-		(0) A track object
-		(1) A dictionary where hashed tracks key traversed edges
-
-	Returns:
-		A list of edges (tuples) traversed by any other track.
-	'''
-	key = hash(Track)
-	junction_edges = path[key]
-	return junction_edges
-
-
-def get_junction_neighbor(Start, Previous, junction_edges):
-	'''
-	Checks wether a node object has a neighbor wich may be a valid junction 
-	neighbor. A junction neighbor is a neighbor of a node which has more than 
-	two neighbors.
-
-	Arguments:
-		(0) A starting node object
-		(1) A node object which is the previous of the node to be checked for 
-		junction neighbors
-		(2) A list of previously traversed edges from the starting node object
-
-	Returns:
-		A valid junction neighbor node object. Or None if there are no junction 
-		neighbors available.
-	'''
-	for neighbor in Start.neighbors:
-		if neighbor != Previous:
-			edge = (Start.name, neighbor.name)
-			if not edge in junction_edges:
-				return neighbor
-	return None
-
-def get_previous(Start, key):
-	'''
-	Gets the previous node keyed by a hashed track.
-
-	Arguments:
-		(0) A starting node object which is the last in the current track
-		(1) The hashed current track as a key
-
-	Returns:
-		A valid neighbor node object. Or None if the node is the first node in 
-		the track
-	'''
-	try:
-		Previous = Start.test[key]
-	except KeyError:
-		Previous = None
-	return Previous
-
-def link_nodes(Start, Neighbor, key):
-	'''
-	Links node objects for a given track.
-
-	Arguments:
-		(0) A starting node object which is the second to last in the current 
-		track
-		(1) The neighbor to be added as a key
-		(2) The hashed current track as a key with the neighbor as the last node
-
-	Returns:
-		An updated starting node object which has now been linked to the 
-		previous node object.
-	'''
-	Neighbor.test[key] = Start
-	Start = Neighbor
-	return Start
-
-def delink_nodes(Start, key):
-	'''
-	Delinks last two node objects for a given track and returns the second to 
-	last station of a track as a new start.
-
-	Arguments:
-		(0) A starting node object which is the last in the current track
-		(1) The key of the current track
-
-	Returns:
-		An updated starting node object which has now been delinked to the 
-		previous node object.
-	'''
-	try:
-		Previous = Start.test[key]
-		del Start.test[key]
-		Start = Previous
-	except KeyError:
-		pass
-	return Start
 
 def generate_random_track(G, start, max_track_length):
 	'''
