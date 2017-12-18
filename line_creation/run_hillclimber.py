@@ -31,7 +31,7 @@ g = Graph("NH", path_stations_file, path_tracks_file)
 # get services
 max_number_of_tracks = 20
 max_time = 180
-services = hh.random_walk(g, 10, max_number_of_tracks, max_time)
+services = alg.random_walk(g, 10, max_number_of_tracks, max_time)
 
 for service in services:
 	print(service.critical_edges_traversed)
@@ -58,7 +58,7 @@ for j in range(number_of_tries):
 			hillclimber_scores.append(service1.s_score) 
 
 # write score to csv
-with open('../data/hillclimber.csv', 'w', newline='') as csvfile:
-	wr = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-	for score in hillclimber_scores:
-		wr.writerow([score])
+#with open('../data/hillclimber.csv', 'w', newline='') as csvfile:
+#	wr = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+#	for score in hillclimber_scores:
+#		wr.writerow([score])
