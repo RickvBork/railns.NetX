@@ -39,11 +39,11 @@ TODO
 
 ## Helpers
 
-This python file contains functions that are used by the algorithms. 
+This python file contains functions used by the algorithms.
 
 ## Main
 
-This python file is used to run the algorithms. See description above (Running the algorithms).
+This python file is used to run the algorithms. See description above: Running the algorithms.
 
 ## Built With
 
@@ -55,12 +55,6 @@ Dit hieronder was van het voorbeeld
 * [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
 * [Maven](https://maven.apache.org/) - Dependency Management
 * [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Acknowledgments
-
-We are grateful to Quinten van der Post, Wouter Vrielink and everyone at our workgroup.
-
-
 
 
 
