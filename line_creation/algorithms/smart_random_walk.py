@@ -11,7 +11,7 @@ def smart_random_walk(Graph, max_number_of_tracks, max_time, iterator):
 	print("\n======SMART RANDOM WALK======\n")
 
 	# get information from graph to perform algorithm
-	G = Graph.G	
+	G = Graph.G
 	minimum_weight = Graph.minimal_edge_weight
 	nodes = Graph.nodes
 	
@@ -37,7 +37,7 @@ def smart_random_walk(Graph, max_number_of_tracks, max_time, iterator):
 	for i in range(iterator):
 
 		# build service loop
-		service = sc.service(Graph)
+		service = svc.service(G)
 
 		# builds the service of multiple tracks
 		for k in range(max_number_of_tracks):

@@ -1,5 +1,5 @@
 from classes import graph_class as grc
-from algorithms import hierholzer as hh, random_walk as rw
+from algorithms import hierholzer as hh, random_walk as rw, smart_random_walk as srw
 import sys, os
 
 # initialize datafiles
@@ -36,7 +36,7 @@ def main_menu():
 
 def algo_menu_0(g):
 	'''
-	A simple menu for choosing between different functions. Takes a graph object, and calls another menu function.
+	A simple menu for choosing between different functions. Takes a graph object, and calls another menu function passing the graph and the chosen algorithm.
 	'''
 
 	choice = '0'
@@ -44,8 +44,9 @@ def algo_menu_0(g):
 		print('Algorithm menu:\n')
 		print('Please select the algorithm you want to run')
 		print('1. Random Walk')
-		print('2. Hierholzer')
-		print('3. Hillclimber')
+		print('2. Smart Random Walk')
+		print('3. Hierholzer')
+		print('4. Hillclimber')
 
 		choice = input(' >> ')
 		clear()
@@ -54,7 +55,7 @@ def algo_menu_0(g):
 		if choice == '1':
 			algo_0(rw.random_walk, g)
 		elif choice == '2':
-			algo_0()
+			algo_0(srw.smart_random_walk, g)
 		elif choice == '3':
 			algo_0(hh.hierholzer, g)
 		elif choice == '4':
@@ -76,7 +77,10 @@ def algo_0(algo, g, hillclimber = False):
 		max_track_number, max_track_time, iteration = get_input()
 
 		# TODO make arguments consistent for similar algo's
-		algo(g, max_track_number, max_track_time, iteration)
+		services = algo(g, max_track_number, max_track_time, iteration)
+
+		for service in services:
+			print(service.s_score)
 
 def algo_menu_1(g):
 	choice = '0'

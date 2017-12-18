@@ -79,13 +79,13 @@ def ordered_counter(score_list):
 
 	return ordered_dict
 
-def get_prefered_neighbors(graph, starting_station, track):
+def get_prefered_neighbors(G, starting_station, track):
 	'''
 	Takes graph, and a track (in progress) to a starting station. 
 	Returns all neighbors from starting stations where tracks hasn't been.
 	'''
 	# get list of neighbors of starting station
-	neighbors = [station for station in list(graph.G[starting_station])]
+	neighbors = [station for station in list(G[starting_station])]
 
 	prefered_neighbors = list(neighbors)
 
@@ -293,9 +293,7 @@ def generate_random_track(Graph, start, max_track_length):
 
 	return track 
 
-def generate_smart_random_track(Graph, start, max_track_length):
-
-	G = Graph.G
+def generate_smart_random_track(G, start, max_track_length):
 
 	track = trc.track(G)	
 	start = start.name
@@ -303,12 +301,12 @@ def generate_smart_random_track(Graph, start, max_track_length):
 	while track.time < max_track_length:
 				
 		# get list of critical neighbours of starting_station
-		critical_neighbors = [station for station in list(Graph.G[start]) if station in Graph.critical_station_list]
+		critical_neighbors = [station for station in list(G[start]) if G.node[station]['color'] == 'r']
 	
-		prefered_neighbors = hlp.get_prefered_neighbors(Graph, start, track)
+		prefered_neighbors = hlp.get_prefered_neighbors(G, start, track)
 
 		if prefered_neighbors == []:
-			random_neighbor = random.choice(list(Graph.G[start]))
+			random_neighbor = random.choice(list(G[start]))
 		else: 
 			random_neighbor = random.choice(prefered_neighbors)
 
