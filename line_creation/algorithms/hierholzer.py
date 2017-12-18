@@ -37,7 +37,7 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 	best_services = [0] * max_service_amount
 
 	# initiate loading bar
-	#hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+	hlp.loading_bar(0, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# make iterator amount of services
 	for i in range(iterator):
@@ -149,9 +149,6 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 		# determine amount of tracks service has
 		track_counter = len(new_service.tracks)
 
-		print("service.self score: ", end="")
-		print(new_service.s_score)
-
 		# remember best scores (unordered)
 		if new_service.s_score > best_score:
 			best_services[i % max_service_amount] = deepcopy(service)
@@ -160,7 +157,7 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 			ana.draw_graph(graph,new_service)
 
 		# update loading bar
-		#hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
+		hlp.loading_bar(i, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# remove empty values as list is not always filled
 	return [service for service in best_services if service != 0]
