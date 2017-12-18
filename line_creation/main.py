@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from classes import graph_class as grc
-from algorithms import hierholzer as hh, random_walk as rw, smart_random_walk as srw
+from algorithms import hierholzer as hh, random_walk as rw, smart_random_walk as srw, hillclimber as hc
 from helpers import clear
 
 # initialize datafiles
@@ -9,6 +9,8 @@ stations_0 = '../data/StationsHolland.csv'
 connections_0 = '../data/ConnectiesHolland.csv'
 stations_1 = '../data/StationsNationaal.csv'
 connections_1 = '../data/ConnectiesNationaal.csv'
+
+error0 = 'Please select a valid integer!\n'
 
 def main_menu():
 	'''
@@ -28,10 +30,13 @@ def main_menu():
 		# build chosen graph object
 		if choice == '1':
 			g = grc.Graph('NH', stations_0, connections_0)
+			algo_menu_0(g)
 		elif choice == '2':
 			g = grc.Graph('NH', stations_1, connections_1)
-
-		algo_menu_0(g)
+			algo_menu_0(g)
+		else:
+			print(error0)
+			choice = '0'
 
 def algo_menu_0(g):
 	'''
@@ -46,6 +51,7 @@ def algo_menu_0(g):
 		print('2. Smart Random Walk')
 		print('3. Hierholzer')
 		print('4. Hillclimber')
+		print('5. Simulated Annealing')
 
 		choice = input(' >> ')
 		clear()
@@ -58,8 +64,10 @@ def algo_menu_0(g):
 		elif choice == '3':
 			algo_0(hh.hierholzer, g)
 		elif choice == '4':
-			# TODO
-			pass
+			algo_0(hc.run_hillclimber, g, True)
+		else:
+			print(error0)
+			choice = '0'
 
 def algo_0(algo, g, hillclimber = False):
 	'''
@@ -68,41 +76,55 @@ def algo_0(algo, g, hillclimber = False):
 
 	seed = None
 	if hillclimber:
-		seed = algo_menu_1(g)
-		max_track_number, max_track_time, iteration = get_input()
+		seed = algo_1(g)
+		
+		print(seed.s_score)
+		for track in seed.tracks:
+			print(track.edges)
+
+		string = 'Hillclimber/Simulated Annealing options:\n'
+		max_track_number, max_track_time, iteration = get_input(string)
+		service = algo(seed, max_track_number, max_track_time, iteration)
 
 	else:
 		# get user inputs
-		max_track_number, max_track_time, iteration = get_input()
+		string = 'Please select the values\n'
+		max_track_number, max_track_time, iteration = get_input(string)
 		services = algo(g, max_track_number, max_track_time, iteration)
 
 		for service in services:
 			print('Service score: {}'.format(service.s_score))
 
-# def algo_menu_1(g):
-# 	choice = '0'
-# 	while choice == '0':
-# 		print('Hillclimber seed algorithm menu:\n')
-# 		print('Please select the algorithm you want to seed the hillclimber with')
-# 		print('1. Random Walk')
-# 		print('2. Hierholzer')
+def algo_1(g):
 
-# 		choice = input(' >> ')
-# 		clear()
+	choice = '0'
+	while choice == '0':
+		print('Hillclimber seed algorithm menu:\n')
+		print('Please select the algorithm you want to seed the hillclimber with')
+		print('1. Random Walk')
+		print('2. Smart Random Walk')
 
-# 		# pass the chosen algorithm and the graph
-# 		if choice == '1':
-# 			pass
-# 			# TODO
-# 		elif choice == '2':
-# 			max_track_number, max_track_time, iteration = get_input()
-# 			return hh.hierholzer(g, max_track_number, max_track_time, iteration)
+		choice = input(' >> ')
+		clear()
 
-def get_input():
+		string = 'Please select small values to allow Hillclimber to \'climb\' to higher values:\n'
 
+		# pass the chosen algorithm and the graph
+		if choice == '1':
+			max_track_number, max_track_time, iteration = get_input(string)
+			return rw.random_walk(g, max_track_number, max_track_time, iteration)[0]
+		elif choice == '2':
+			max_track_number, max_track_time, iteration = get_input(string)
+			return srw.smart_random_walk(g, max_track_number, max_track_time, iteration)[0]
+
+def get_input(string):
+
+	print(string)
 	max_track_time = int(input('Input maximum track time: '))
 	max_track_number = int(input('Input maximum number of tracks per service: '))
 	iteration = int(input('Input iteration amount: '))
+
+	clear()
 
 	return max_track_number, max_track_time, iteration
 

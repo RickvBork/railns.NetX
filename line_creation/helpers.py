@@ -278,7 +278,7 @@ def delink_nodes(Start, key):
 		pass
 	return Start
 
-def generate_random_track(Graph, start, max_track_length):
+def generate_random_track(G, start, max_track_length):
 	'''
 	seperate function for generate_random_track
 	'''
