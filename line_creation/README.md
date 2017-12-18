@@ -2,7 +2,7 @@
 # Line_creation
 *@author Team Stellar Heuristiek*
 
-This file contains 
+This directory contains a map classes and a map algorithsm. The former contains the classes that model 1. The graph class that models a railnetwork, 2. The node class that models a node, i.e. the connection between two single stations, 3. The service class that models a train service (nl: 'lijnvoering') which consists of several tracks driven by several trains, 4. The track class that models the route of a single train. All these classes contain relevant information such as the time a train takes for its route, the critical edges a train rides during the route etc.
 
 van oude readme;
 The 'line_creation' map contains the python files that model the graph and the functions used to generate paths and trainservices. There are explained in greater detail in the README within the directory.
