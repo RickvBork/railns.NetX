@@ -65,6 +65,7 @@ def update_critical_connections_travesed(tuple, critical_edges, \
 			critical_edges_traversed.append(edge)
 	return critical_edges_traversed
 
+# TODO
 def ordered_counter(score_list):
 
 	# count the number of times an integer is in list
@@ -91,18 +92,6 @@ def get_prefered_neighbors(G, starting_station, track):
 			prefered_neighbors.remove(neighbor)
 
 	return prefered_neighbors
-
-
-def test(edge, critical_edges, critical_edges_traversed):
-
-	edge_reversed = (edge[1], edge[0])
-	print(edge, edge_reversed)
-
-	if not (edge in critical_edges_traversed) and not (edge_reversed in \
-		critical_edges_traversed):
-		if (edge in critical_edges) or (edge_reversed in critical_edges):
-			critical_edges_traversed.append(edge)
-	return critical_edges_traversed
 
 def get_node_list(G, nodes):
 	'''
@@ -144,7 +133,7 @@ def file_remove(path_file_name):
 			raise
 
 def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, \
-	length = 100, fill = '.', update = 100, switch = 100):
+	length = 100, fill = '█', update = 100, switch = 100):
 	'''
 	Loading bar. Two modes for faster computation of large iteration numbers. 
 	Switch sets the total iteration number where behaviour switches between 

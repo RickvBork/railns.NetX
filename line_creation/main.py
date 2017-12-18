@@ -1,8 +1,16 @@
 #!/usr/bin/env python
 
+'''
+Authors:
+Dimitri van Capelleveen
+Thom Oosterhuis
+Rick van Bork
+
+Team Stellar Heuristieken
+'''
+
 from classes import graph_class as grc
-from algorithms import hierholzer as hh, random_walk as rw, smart_random_walk \
-as srw, hillclimber as hc, hillclimber_sim_an as hs
+from algorithms import hierholzer as hh, random_walk as rw, smart_random_walk as srw, hillclimber as hc, hillclimber_sim_an as hs
 from helpers import clear
 from analysis import draw_graph
 
@@ -15,10 +23,6 @@ connections_1 = '../data/ConnectiesNationaal.csv'
 error0 = 'Please select a valid integer!\n'
 
 def main_menu():
-	'''
-	A main menu for loading different datafiles necessary to initiate a 
-	graph (object). Calls another menu function.
-	'''
 
 	choice = '0'
 	while choice == '0':
@@ -42,11 +46,6 @@ def main_menu():
 			choice = '0'
 
 def algo_menu_0(g):
-	'''
-	A simple menu for choosing between different functions. Takes a graph 
-	object, and calls another menu function passing the graph and the chosen 
-	algorithm.
-	'''
 
 	choice = '0'
 	while choice == '0':
@@ -77,14 +76,12 @@ def algo_menu_0(g):
 			choice = '0'
 
 def algo_0(algo, g, hillclimber = False):
-	'''
-	A simple menu for setting the starting values for a given algorithm. 
-	Takes an algorithm (function) and a graph (object).
-	'''
 
 	seed = None
 	if hillclimber:
 		seed = algo_1(g)
+
+		print('\nYou have created a service object!\nPlease select preferred values for the Hillclimber. Suggestions for viable simulations are behind the inputs:\n')
 
 		max_track_number, max_track_time, iteration = get_input()
 		service = algo(seed, max_track_number, max_track_time, iteration)
@@ -100,8 +97,7 @@ def algo_1(g):
 	choice = '0'
 	while choice == '0':
 		print('Hillclimber seed algorithm menu:\n')
-		print('Please select the algorithm you want to seed the hillclimber \
-			with')
+		print('Please select the algorithm you want to seed the hillclimber with')
 		print('1. Random Walk')
 		print('2. Smart Random Walk')
 
@@ -112,46 +108,30 @@ def algo_1(g):
 		if choice == '1':
 			max_track_number, max_track_time, iteration = get_small_input()
 
-			return rw.random_walk(g, max_track_number, max_track_time, \
-				iteration)[0]
+			return rw.random_walk(g, max_track_number, max_track_time, iteration)[0]
 		elif choice == '2':
 			max_track_number, max_track_time, iteration = get_small_input()
 
-			return srw.smart_random_walk(g, max_track_number, max_track_time, \
-				iteration)[0]
+			return srw.smart_random_walk(g, max_track_number, max_track_time, iteration)[0]
 		else:
 			print(error0)
 			choice = '0'
 
 def get_input():
 
-	print('\nYou have created a service object!\nPlease select preferred values for the Hillclimber. Suggestions for viable simulations are behind the inputs:\n')
-
 	max_track_time = int(input('Input maximum track time (1 - 180): '))
 	max_track_number = int(input('Input maximum number of tracks per service (1 - 20): '))
 	iteration = int(input('Input iteration amount (5 - 10.000): '))
-
-	print('\nYou have created a service object!\nPlease select preferred \
-		values for the Hillclimber Suggestions for viable simulations are \
-		behind the inputs:\n')
-
-	max_track_time = int(input('Input maximum track time (1 - 180): '))
-	max_track_number = int(input('Input maximum number of tracks per service \
-		(1 - 20): '))
-	iteration = int(input('Input iteration amount (1 - 10.000): '))
 	clear()
 
 	return max_track_number, max_track_time, iteration
 
 def get_small_input():
 
-	print('Please select small values to allow Hillclimber to \'climb\' to \
-		better services. Suggestions for generating a bad service are behind \
-		the inputs:\n')
+	print('Please select small values to allow Hillclimber to \'climb\' to better services. Suggestions for generating a bad service are behind the inputs:\n')
 
 	max_track_time = int(input('Input maximum track time (1 - 50): '))
-	max_track_number = int(input('Input maximum number of tracks per service \
-		(1 - 3): '))
+	max_track_number = int(input('Input maximum number of tracks per service (1 - 3): '))
 	iteration = int(input('Input iteration amount (1 - 10): '))
 	clear()
 
@@ -168,7 +148,7 @@ def draw_menu(services, g):
 	choice = '0'
 	while choice == '0':
 		print('\nDraw menu:\n')
-		print('Please select a service you want to visualize.\nServices are saved in: \'visualization\plots\', as seperate PNG files')
+		print('Please select a service you want to visualize.\nServices are saved in: \'visualization\plots\', as seperate PNG')
 		print('1. Service 1')
 		print('2. Service 2')
 		print('3. Service 3')
