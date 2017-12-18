@@ -21,7 +21,17 @@ This folder contains, as the name suggests, our algorithms:
 
 ### Running the algorithms
 
-Main.py is used to run the different algorithms. TODO: tekst van Rick
+Main.py is used to run the different algorithms. After you run main.py, you will be asked to:
+Please select the files you want to load, and you will be given two options: \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. North Holland \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Netherlands \
+After you choose either 1 or 2, specific .csv files will be loaded, and Networkx will be used to generate specific graphs. Now, you can choose which of the algorithms you would like to run: \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Random Walk \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Smart Random Walk \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. Hierholzer \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4. Hillclimber \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. Hillclimber w ith Simulated Annealing \
+After an algorithm is chosen, 
 
 ## Classes folder
 
@@ -47,14 +57,7 @@ This python file is used to run the algorithms. See description above: Running t
 
 ## Built With
 
-* Networkx. This library is used to generate the graphs.
-TODO?
-
-Dit hieronder was van het voorbeeld
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Networkx](https://networkx.github.io) - Used to generate the graphs.
 
 
 
