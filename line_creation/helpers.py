@@ -324,6 +324,10 @@ def generate_smart_random_track(G, start, max_track_length):
 def get_one_edge_node(all_edge_list, graph, service):
 	'''
 	For Hierholzer's. Returns a node with only one edge with a critical neighbor.
+	First makes a list of all stations that currently have one, untraversed, edge.
+	It checks which of these have a critical neighbor, and if possible, a random
+	starting station is chosen from these. If not, a station with one edge. If
+	that is impossible aswell, a starting station with no constraints is chosen.
 	'''
 
 	# make list with every station as much as they have untraversed edges
