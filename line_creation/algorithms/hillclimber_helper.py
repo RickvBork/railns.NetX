@@ -2,7 +2,6 @@
 helper for hillclimber, based on random_walk
 '''
 
-# TODO
 from classes import service_class as svc, track_class as trc 
 import helpers as hlp
 import random
