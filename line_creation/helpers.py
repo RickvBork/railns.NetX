@@ -165,7 +165,6 @@ def loading_bar(iteration, total, prefix = '', suffix = '', decimals = 1, length
 		bar = fill * filledLength + '-' * (length - filledLength)
 		print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = '\r')
 
-
 	if iteration == total: 
 		print()
 
@@ -282,6 +281,7 @@ def generate_random_track(Graph, start, max_track_length):
 	G = Graph
 	track = trc.track(G)
 	
+	# always build track one edge longer than allowed
 	while track.time < max_track_length:
 
 		# choose random neighbor node
@@ -293,7 +293,7 @@ def generate_random_track(Graph, start, max_track_length):
 		# update start
 		start = neighbor
 		
-	# make sure track is minimum of one edge
+	# make sure track is minimum of one edge, remove extra edge
 	if len(track.edges) != 1:
 		track.remove_edge()
 
