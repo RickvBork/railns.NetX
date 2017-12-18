@@ -32,7 +32,7 @@ All of these classes contain relevant information such as the time a train takes
 
 ## Analysis
 
-TODO
+This python file is used to draw visualizations of service class objects, or entire graphs. If a service class object is drawn using main.py, and the user chooses to save it, then each track within the service object is visualized in a plots folder within the vizualization folder.
 
 ## Helpers
 
