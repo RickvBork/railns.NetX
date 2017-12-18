@@ -18,7 +18,7 @@ def hillclimber_random(service, track_number):
 	track0 = service.tracks[track_number]	
 	max_track_length = 120
 	Graph = service.G
-	nodes = list(self.Graph.edges())
+	nodes = Graph.nodes
 	node_list = hlp.get_node_list(Graph, nodes)
 	
 	# generate new track
@@ -38,9 +38,9 @@ def hillclimber_random(service, track_number):
 	old_service_score_s = service.s_score
 	track0 = service.tracks[track_number]	
 	max_track_length = 120
-	Graph = service.graph
+	Graph = service.G
 	nodes = Graph.nodes
-	node_list = hlp.get_node_list(Graph.G, nodes)
+	node_list = hlp.get_node_list(Graph, nodes)
 	
 	# generate new track
 	start = random.choice(node_list) 
@@ -60,9 +60,9 @@ def hillclimber_sim_an(service, track_number, temperature):
 	old_service_score_s = service.s_score
 	track0 = service.tracks[track_number]	
 	max_track_length = 120
-	Graph = service.graph
+	Graph = service.G
 	nodes = Graph.nodes
-	node_list = hlp.get_node_list(Graph.G, nodes)
+	node_list = hlp.get_node_list(Graph, nodes)
 	
 	# generate new track
 	start = random.choice(node_list) 

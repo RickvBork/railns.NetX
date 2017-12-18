@@ -1,4 +1,5 @@
 import helpers as hlp
+import networkx as nx
 
 '''
 service class models service (nl: 'lijnvoering') consisting of several tracks
@@ -12,12 +13,14 @@ class service:
 		self.tracks = []
 
 		# OPTIMALISATIE! GEEN GRAAF! PASSEER ALLEEN critical edge list als arg
-		self.G = Graph.G
+		self.G = Graph
 
 		# Een int te geven? Want meer is niet nodig voor score
 		# self.all_critical_edges = graph_c.critical_edge_list
 
-		self.all_critical_edges = Graph.critical_edge_list
+		#self.all_critical_edges = Graph.critical_edge_list
+		critical_dict = nx.get_edge_attributes(self.G, 'color')
+		self.all_critical_edges = [edge for edge in critical_dict if critical_dict[edge] == 'r']
 		self.critical_edges_traversed = []
 		self.all_edges_traversed = []
 		self.time = 0
