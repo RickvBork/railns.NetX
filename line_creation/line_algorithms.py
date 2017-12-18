@@ -1,15 +1,17 @@
-from classes import service_class as svc, track_class as trc 
-
 import helpers as hlp
 import random
 import analysis as ana
 import networkx as nx
+#import line_node_class as N
+import track_class as T
+import service_class as S
 from copy import deepcopy
+import service_class as sc
+# from time import sleep
 from time import sleep
 import itertools # for Hierholzer's
 import collections # maar mogelijk naar helpers
 import numpy as np
-
 
 '''
 Pure, random walk. No heuristics. Takes a graph object and an iterator as arguments. Returns an unordered list of 5 best service classes.
@@ -35,7 +37,7 @@ def random_walk(Graph, iterator, max_number_of_tracks, max_time):
 	for j in range(iterator):
 
 		# build service loop
-		service = svc.service(Graph)
+		service = sc.service(G)
 
 		# rand number of tracks 1 up to including 7
 		number_of_tracks_in_service = random.randint(1, max_number_of_tracks)
@@ -99,7 +101,7 @@ def smart_random_walk(Graph, iterator, max_number_of_tracks, max_time):
 	for i in range(iterator):
 
 		# build service loop
-		service = sc.service(Graph)
+		service = sc.service(G)
 
 		# builds the service of multiple tracks
 		for k in range(max_number_of_tracks):
@@ -108,7 +110,7 @@ def smart_random_walk(Graph, iterator, max_number_of_tracks, max_time):
 			# TODO: make sure node is critical
 			start = random.choice(node_list)
 
-			track = hlp.generate_smart_random_track(G, start, max_time)
+			track = hlp.generate_smart_random_track(Graph, start, max_time)
 			
 			# add new track to service
 			service.add_track(track)
@@ -155,11 +157,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 		G = graph.G
 
 		# initialize service
-<<<<<<< HEAD
-		service = svc.service(graph)
-=======
-		service = svc.service(G)
->>>>>>> d6366e7c7477005c1b8fccca7cb5459305a69681
+		service = S.service(graph)
 
 		# adding all edges as tuples to all_edges_list
 		all_edge_list = [edge for edge in graph.edges]
@@ -183,7 +181,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 				break
 
 			# make new track object (one for each track)
-			track = trc.track(G)
+			track = T.track(G)
 
 			current_node = hlp.get_one_edge_node(all_edge_list, graph, service)
 			#current_node = random.choice(critical_station_list)
@@ -230,7 +228,7 @@ def hierholzer(graph, max_track_length, max_track_amount, iterator):
 					service.add_track(track)
 
 					# initialize new track object
-					track = trc.track(G)
+					track = T.track(G)
 
 				# if track with new edge is not longer than maximum track length
 				else:
