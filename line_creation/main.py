@@ -1,5 +1,5 @@
 from classes import graph_class as grc
-from algorithms import random_walk as rw, hierholzer as hh
+from algorithms import hierholzer as hh
 import sys, os
 
 # initialize datafiles
@@ -44,7 +44,7 @@ def algo_menu(g):
 		print('Algorithm menu:\n')
 		print('Please select the algorithm you want to run')
 		print('1. Random Walk')
-		print('1. Hierholzer')
+		print('2. Hierholzer')
 		# TODO ADD MORE ALGO's
 
 		choice = input(' >> ')
@@ -52,9 +52,11 @@ def algo_menu(g):
 
 		# pass the chosen algorithm and the graph
 		if choice == '1':
-			algo_0(rw, g)
+			# algo_0(rw, g)
+			# TODO
+			pass
 		elif choice == '2':
-			algo_0(hh, g)
+			algo_0(hh.hierholzer, g)
 
 def algo_0(algo, g):
 	'''
