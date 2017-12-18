@@ -24,7 +24,7 @@ def random_walk(Graph, max_number_of_tracks, max_time, iterator):
 	and the track is added to the service.
 	'''
 
-	print("\n======RANDOM WALK======\n")
+	print('\n======RANDOM WALK======\n')
 
 	G = Graph.G
 	minimum_weight = Graph.minimal_edge_weight
