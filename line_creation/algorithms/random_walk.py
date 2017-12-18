@@ -29,11 +29,12 @@ def random_walk(Graph, max_number_of_tracks, max_time, iterator):
 	# build node structure
 	node_list = hlp.get_node_list(G, nodes)
 
-	# initialise list for best services
+	# set lists
 	max_service_amount = 5
-	best_services = [0] * max_service_amount
-	best_score = - math.inf
-	i = 0
+	score_list = [- math.inf] * max_service_amount
+	service_list = [None] * max_service_amount
+	min_score = score_list[0]
+	min_index = 0
 
 	for j in range(iterator):
 
@@ -53,20 +54,18 @@ def random_walk(Graph, max_number_of_tracks, max_time, iterator):
 			random_time = random.randint(minimum_weight, max_time)
 			random_time = max_time
 
-			track = hlp.generate_random_track(Graph, start, random_time)
+			track = hlp.generate_random_track(G, start, random_time)
 			# add new track to service
 			service.add_track(track)
 
 		score = service.s_score
 
-		# remember best scores (unordered)
-		if score > best_score:
-			best_services[i % max_service_amount] = service
-			best_score = score
-			i += 1
+		# get key of minimum value in dict
+		if score > min_score:
+			score_list, service_list, min_score, min_index = hlp.update_lists(score, min_index, service, score_list, service_list)
 
 		# update loading bar
 		hlp.loading_bar(j, iterator, prefix = 'Progress:', suffix = 'Complete', length = 50, update = 100)
 
 	# remove empty values as list is not always filled
-	return [service for service in best_services if service != 0]
+	return service_list
