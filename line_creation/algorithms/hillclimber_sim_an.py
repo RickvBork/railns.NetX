@@ -14,7 +14,10 @@ from helpers import clear
 def run_hillclimber_sim_an(service, max_number_of_tracks, max_track_time, \
 	number_of_iterations):
 	'''
-	Runs hillclimber
+	Runs hillclimber. Hillclimber with simulated annealing is runned 
+	number_of_iterations times on
+	each single track of the service.
+	Then this process is repeated a number_of_iteration times.
 	'''
 	hillclimber_scores = []
 	last_score = 0
