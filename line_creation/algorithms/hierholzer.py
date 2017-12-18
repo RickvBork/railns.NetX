@@ -65,7 +65,7 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 		while True:
 
 			# if all edges are traversed
-			if all_edge_list == []:
+			if not all_edge_list:
 
 				# break to end making of new tracks, and continue to the combining of tracks
 				break
@@ -89,7 +89,7 @@ def hierholzer(graph, max_track_amount, max_track_length, iterator):
 				remaining_edge_check = [item for item in all_edge_list if current_node in item]
 				
 				# if current_node has no unused edges
-				if remaining_edge_check == []:
+				if not remaining_edge_check:
 
 					# if last track made track longer than maximum track length
 					if track.time > max_track_length:
