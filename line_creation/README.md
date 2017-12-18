@@ -56,8 +56,8 @@ If a non hillclimber type algorithm is chosen, the user is prompted to enter his
 
 Next the user may choose to save a generated service as several PNG files, one for each track, within the vizualization\plots folder. 
 
-If a hillclimber type algorithm is chosen, the user is first prompted to 'seed' it with a service object. This is chosen by a user preferren algorithm. The user can choose between the following algorithms:
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Random Walk \ 
+If a hillclimber type algorithm is chosen, the user is first prompted to 'seed' it with a service object. This is chosen by a user preferren algorithm. The user can choose between the following algorithms: \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Random Walk \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Smart Random Walk \
 
 The user can again enter his/her preferred settings. The user is however, advised to enter settings that will generate a service object with a low score, as this gives any hillclimber more freedom to climb to better scores.
