@@ -227,17 +227,37 @@ def generate_smart_random_track(G, start, max_track_length):
 	start = start.name
 
 	while track.time < max_track_length:
-				
-		# get list of critical neighbours of starting_station
-		critical_neighbors = [station for station in list(G[start]) if \
-		G.node[station]['color'] == 'r']
-	
+		
 		prefered_neighbors = hlp.get_prefered_neighbors(G, start, track)
 
-		if prefered_neighbors == []:
+		#  no preferred neighbors
+		if not prefered_neighbors:
 			random_neighbor = random.choice(list(G[start]))
-		else: 
-			random_neighbor = random.choice(prefered_neighbors)
+		else:
+
+			# check if start is critical
+			if G.node[start]['color'] == 'r':
+				random_neighbor = random.choice(prefered_neighbors)
+
+			else:
+
+				# get list of critical neighbours of starting_station
+				critical_neighbors = [station for station in list(G[start]) if \
+				G.node[station]['color'] == 'r']
+
+				# no critical neighbors for this node
+				if not critical_neighbors:
+					random_neighbor = random.choice(list(G[start]))
+				else:
+
+					# get list of all critical neighbors which are also preferred
+					critical_preferred_neighbors = [neighbor for neighbor in prefered_neighbors if neighbor in critical_neighbors]
+
+					# no critical preferred neighbors
+					if not critical_preferred_neighbors:
+						random_neighbor = random.choice(list(G[start]))
+					else:
+						random_neighbor = random.choice(critical_preferred_neighbors)
 
 		track.add_edge((start, random_neighbor))
 

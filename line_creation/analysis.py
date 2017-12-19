@@ -21,22 +21,22 @@ def draw_graph(Graph, service = None):
 	# get positions of nodes and edges
 	pos = nx.get_node_attributes(G, 'pos')
 
-	if service == None:
-		# make node color map and node size maps for draw function
-		node_color_map = []
-		node_size_map = []
+	# make node color map and node size maps for draw function
+	node_color_map = []
+	node_size_map = []
 
-		# make node color maps and size maps
-		for node in nodes:
-			node_color_map.append(nx.get_node_attributes(G, 'color')[node])
-			node_size_map.append(nx.get_node_attributes(G, 'size')[node])
+	# make node color maps and size maps
+	for node in nodes:
+		node_color_map.append(nx.get_node_attributes(G, 'color')[node])
+		node_size_map.append(nx.get_node_attributes(G, 'size')[node])
 
+	# list comprehension to get edge color map
+	edge_color_map = [nx.get_edge_attributes(G,'color')[edge] for edge in \
+	G.edges()]
+
+	if service is None:
 		edge_weight_map = nx.get_edge_attributes(G,'weight')
 		nx.draw_networkx_edge_labels(G, pos, edge_labels = edge_weight_map)
-
-		# list comprehension to get edge color map
-		edge_color_map = [nx.get_edge_attributes(G,'color')[edge] for edge in \
-		G.edges()]
 
 		# draw everything except labels and show plot
 		nx.draw_networkx(G, pos, node_color = node_color_map, node_size = \
@@ -56,7 +56,8 @@ def draw_graph(Graph, service = None):
 		i = 0
 		print('Writing files...')
 		for track in service.tracks:
-			nx.draw(G, pos, node_size = 40, node_color = 'k')
+			nx.draw_networkx(G, pos, node_color = node_color_map, node_size = \
+			node_size_map, edge_color = edge_color_map, with_labels = False)
 			nx.draw_networkx_edges(G, pos, edgelist = track.edges, edge_color = \
 				color[i % color_length], style = style[i % style_length], width = 5, arrows = True)
 			plt.savefig('visualization/plots/track_' + str(i) + '.png')
